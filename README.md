@@ -4,28 +4,28 @@
 
 <h1 align="center">ROLLCODE</h1>
 <p align="center"><strong>Tokens are expensive. Feeling lucky? 🎲</strong></p>
-<p align="center">A local AI coding agent with a twist: play games to win back your simulated task costs.</p>
+<p align="center">A local AI coding agent with a twist: play games to win back the credits spent on your tasks.</p>
 
-ROLLCODE is a Windows desktop fork of **[Cline](https://github.com/cline/cline)**. It builds on Cline’s coding agent, model integrations, tools, approvals, terminal, and workspaces, with a redesigned interface and a local demo credit system.
+ROLLCODE is a Windows desktop fork of **[Cline](https://github.com/cline/cline)**. It builds on Cline’s coding agent, model integrations, tools, approvals, terminal, and workspaces, with a redesigned interface and a local credit system.
 
-**All credits, winnings, and savings are simulated. Your model provider’s actual API charges stay unchanged.**
+**Credits have no cash value and cannot be redeemed. Games change your local credit balance; your model provider’s actual API charges stay unchanged.**
 
 ## What’s inside
 
 - **A coding agent that already works:** Cline’s existing agent and tools, with support for its model providers and your own API keys.
 - **A quieter desktop interface:** warm dark surfaces, readable chat typography, and selectable gambling-themed pixel art app icons.
 - **Opt-in games:** click the tokens beside a completed response to open Gamba. Games never pop up automatically.
-- **A demo wallet:** 10,000 starting credits, a visible credit balance and token counter, and a refill option.
-- **Usage and history:** actual tokens, adjusted demo costs, per-response game history, and JSON export.
+- **A credit wallet:** 10,000 starting credits, a visible credit balance and token counter, and a refill option.
+- **Usage and history:** actual tokens, adjusted costs, per-response game history, and JSON export.
 - **Local storage:** balances and game outcomes persist on your device. No ROLLCODE hosted backend is required; inference uses your configured model provider.
 
-## Demo credits
+## Credits
 
-**1 demo credit = 1,000 tokens.** The starting 10,000 credits represent 10 million demo tokens.
+**1 credit = 1,000 tokens.** The starting 10,000 credits represent 10 million tokens.
 
-A completed response deducts its reported input + output tokens from the demo wallet. Cached input is already included in input usage. For example, a 23,536-token response costs **23.536 demo credits**.
+A completed response deducts its reported input + output tokens from the wallet. Cached input is already included in input usage. For example, a 23,536-token response costs **23.536 credits**.
 
-Playing a game changes that response’s simulated cost, and the wallet refunds or deducts the difference. If you stake a response costing 10 credits in Blackjack:
+Playing a game changes that response’s adjusted cost, and the wallet refunds or deducts the difference. If you stake a response costing 10 credits in Blackjack:
 
 | Result | New response cost | Wallet adjustment |
 | --- | --- | --- |
@@ -33,15 +33,15 @@ Playing a game changes that response’s simulated cost, and the wallet refunds 
 | Tie | 10 credits | No change |
 | Lose | 20 credits | Deduct another 10 credits |
 
-You can play again using the response’s latest simulated cost. Results compound, and each game stays in that response’s history. Once a response is free, there is no remaining cost to stake.
+You can play again using the response’s latest adjusted cost. Results compound, and each game stays in that response’s history. Once a response is free, there is no remaining cost to stake.
 
-The sidebar shows your demo credit balance and its token equivalent. **Usage → Reset to 10,000** refills the wallet without deleting history. Existing saved responses count toward spending. A negative demo balance is shown explicitly and does not block actual API usage.
+The sidebar shows your credit balance and its token equivalent. **Usage → Reset to 10,000** refills the wallet without deleting history. Existing saved responses count toward spending. A negative balance is shown explicitly and does not block actual API usage.
 
 Credits have **no cash value**. Dollar estimates are displayed separately and depend on the model provider’s pricing.
 
 ## Games
 
-All displayed multipliers apply directly to the staked demo cost: **0× is free, 0.5× halves the cost, and 2× doubles it.**
+All displayed multipliers apply directly to the staked cost: **0× is free, 0.5× halves the cost, and 2× doubles it.**
 
 | Game | How it works |
 | --- | --- |
@@ -49,7 +49,7 @@ All displayed multipliers apply directly to the staked demo cost: **0× is free,
 | **Dice** | Choose a target and roll over or under. The win chance determines the winning cost multiplier; a miss costs 2×. |
 | **Plinko** | Choose risk and rows. The outermost slots are free; costs rise toward the center. |
 | **Mines** | Start at 2× and reveal safe gems to reduce the multiplier. Cash out before hitting a mine. |
-| **Roulette** | Stack demo credit chips across numbers and outside bets. Winning red/black bets refund the full amount placed; losing bets add that amount. Unplaced credits stay unchanged. |
+| **Roulette** | Stack credit chips across numbers and outside bets. Winning red/black bets refund the full amount placed; losing bets add that amount. Unplaced credits stay unchanged. |
 | **Slots** | Drag the lever down and release. Three Jackpot icons make the stake free, other triples cost 0.25×, pairs cost 0.5×, and no match costs 2×. |
 
 Rules, calculations, and slot probabilities are available through the **ⓘ** button in each game. Saved historical outcomes retain their original results.
@@ -64,7 +64,7 @@ Requirements:
 
 ```powershell
 # The ROLLCODE implementation currently lives on this branch.
-git clone --branch rollcode https://github.com/aimlloser/rollcode.git
+git clone --branch prod https://github.com/aimlloser/rollcode.git
 cd rollcode
 
 bun install
@@ -96,7 +96,7 @@ For additional development notes and accounting details, see [ROLLCODE.md](ROLLC
 
 ## Persistence
 
-The demo ledger lives at `%USERPROFILE%\.rollcode\ledger.sqlite`. Model credentials, chats, and provider settings use Cline’s existing local storage.
+The credit ledger lives at `%USERPROFILE%\.rollcode\ledger.sqlite`. Model credentials, chats, and provider settings use Cline’s existing local storage.
 
 Game logic is modular under [`sidecar/rollcode`](apps/examples/desktop-app/sidecar/rollcode). The backend uses cryptographically secure randomness. SQLite transactions save game state, outcomes, and request receipts together, so retrying an action does not draw again or charge twice.
 

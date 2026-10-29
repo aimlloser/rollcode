@@ -70,10 +70,10 @@ export function ResponseGamba({
 						type="button"
 						className="rc-token-trigger"
 						data-cost-change={settled ? costChange : undefined}
-						aria-label={`Gamba · ${usageReported ? `${roll.tokens.toLocaleString()} actual tokens${settled ? `; ${adjustedTokens.toLocaleString()} simulated tokens after game` : ""}` : "Usage unavailable"}`}
+						aria-label={`Gamba · ${usageReported ? `${roll.tokens.toLocaleString()} actual tokens${settled ? `; ${adjustedTokens.toLocaleString()} adjusted tokens after game` : ""}` : "Usage unavailable"}`}
 						title={
 							settled
-								? `Simulated cost after game. Actual API usage remains ${roll.tokens.toLocaleString()} tokens.`
+								? `Adjusted cost after game. Actual API usage remains ${roll.tokens.toLocaleString()} tokens.`
 								: "Gamba"
 						}
 					>
@@ -85,7 +85,7 @@ export function ResponseGamba({
 								<span className="rc-token-adjusted">
 									{adjustedTokens.toLocaleString()} tokens
 								</span>
-								<span className="rc-token-sim">sim.</span>
+								<span className="rc-token-sim">adj.</span>
 							</>
 						) : (
 							<span>
@@ -109,7 +109,7 @@ export function ResponseGamba({
 					<div className="rc-gamba-heading">
 						<Dice5 size={16} />
 						<h3>Gamba</h3>
-						<span>Simulated</span>
+						<span>Credits</span>
 					</div>
 					<div className="rc-gamba-price">
 						<span>
@@ -146,9 +146,9 @@ export function ResponseGamba({
 								{(
 									result.simulatedTokens ?? result.tokens * result.multiplier
 								).toLocaleString()}{" "}
-								simulated tokens
+								adjusted tokens
 							</span>
-							<span>{demoCredits(adjustedTokens)} · Demo cost</span>
+							<span>{demoCredits(adjustedTokens)} · Credit cost</span>
 						</output>
 					) : null}
 					{!active && usageReported && adjustedTokens > 0 && (
@@ -177,8 +177,7 @@ export function ResponseGamba({
 					) : null}
 					<GameHistory roll={result} />
 					<p className="rc-gamba-note">
-						Demo only · 1 credit = 1,000 tokens. Actual API charges stay the
-						same.
+						1 credit = 1,000 tokens. Actual API charges stay the same.
 					</p>
 				</PopoverContent>
 			</Popover>

@@ -84,7 +84,7 @@ export function useResponseRolls(
 			}
 			if (!supported)
 				throw new Error(
-					"The running backend is out of date. Restart ROLLCODE or your local backend to load the demo wallet, slot machine, and current payout rules. No game was started.",
+					"The running backend is out of date. Restart ROLLCODE or your local backend to load the wallet, slot machine, and current payout rules. No game was started.",
 				);
 		}
 		const result = await desktopClient.invoke<Roll>(

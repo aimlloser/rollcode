@@ -90,13 +90,13 @@ export function minesPayout(count: number, revealed: number) {
 	for (let i = 0; i < revealed; i++) probability *= (25 - count - i) / (25 - i);
 	return revealed === 0 ? 1 : Math.floor((0.99 / probability) * 10000) / 10000;
 }
-/** Direct simulated-cost multiplier: starts at 2× and falls after every safe pick. */
+/** Direct adjusted-cost multiplier: starts at 2× and falls after every safe pick. */
 export function minesCostMultiplier(count: number, revealed: number) {
 	let survival = 1;
 	for (let i = 0; i < revealed; i++) survival *= (25 - count - i) / (25 - i);
 	return Number((2 * survival).toFixed(6));
 }
-/** Original paytables for this simulated-credit implementation. */
+/** Original paytables for this adjusted-credit implementation. */
 export function plinkoPayouts(rows: number, risk: string): number[] {
 	const half: Record<string, Record<number, number[]>> = {
 		low: {

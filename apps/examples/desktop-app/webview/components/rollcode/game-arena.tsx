@@ -196,14 +196,14 @@ export function GameArena({
 					<GameIcon game={kind} />
 					<DialogTitle>{name}</DialogTitle>
 					<DialogDescription className="sr-only">
-						Play with this task’s demo credits. 1 credit = 1,000 tokens.
+						Play with this task’s credits. 1 credit = 1,000 tokens.
 					</DialogDescription>
 					<div className="rc-game-stake">
 						<span>Stake</span>
 						<strong title={`${stake.toLocaleString()} tokens`}>
 							{creditAmount(stake)}
 						</strong>
-						<span>demo credits</span>
+						<span>credits</span>
 					</div>
 					<GameInfo kind={kind} chance={chance} />
 				</header>
@@ -520,10 +520,10 @@ export function GameArena({
 							}
 							title={
 								(roll.simulatedTokens ?? 0) <= 0
-									? "No simulated tokens left to play"
+									? "No adjusted tokens left to play"
 									: kind === "roulette" && (roll.simulatedTokens ?? 0) < 1
 										? "Roulette needs at least 1 token"
-										: `Play ${name} again with your latest simulated tokens`
+										: `Play ${name} again with your latest adjusted tokens`
 							}
 							onClick={() => onPlayAgain(kind)}
 						>
@@ -533,7 +533,7 @@ export function GameArena({
 				</div>
 				<footer className="rc-arena-footer">
 					<span>
-						Demo credits · 1 credit = 1,000 tokens · API charges unchanged.
+						Credits · 1 credit = 1,000 tokens · API charges unchanged.
 					</span>
 					<span>{active ? "Progress saved" : "Every game is saved"}</span>
 				</footer>
@@ -743,7 +743,7 @@ function PlinkoBoard({
 						<g
 							key={i}
 							className={`rc-plinko-slot${state?.bucket === i && !busy ? " rc-slot-landed" : ""}`}
-							aria-label={`Slot ${i + 1}: ${p === 0 ? "Free, zero simulated token cost" : `${p} times token cost`}`}
+							aria-label={`Slot ${i + 1}: ${p === 0 ? "Free, zero adjusted token cost" : `${p} times token cost`}`}
 						>
 							<rect
 								x={slotCenter(i) - 16}

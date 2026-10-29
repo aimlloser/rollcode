@@ -98,7 +98,7 @@ export class RollLedger {
 			responses: row.responses,
 		};
 	}
-	/** A reset adds demo funds without deleting usage, games, or in-flight stakes. */
+	/** A reset adds funds without deleting usage, games, or in-flight stakes. */
 	resetWallet(requestId: string): DemoWallet {
 		if (!/^[\w-]{1,100}$/.test(requestId))
 			throw new Error("Invalid reset request");
@@ -294,7 +294,7 @@ export class RollLedger {
 				const stakeTokens =
 					roll.simulatedTokens ?? roll.tokens * (roll.multiplier ?? 1);
 				if (!Number.isFinite(stakeTokens) || stakeTokens <= 0)
-					throw new Error("This message has no simulated tokens left to play.");
+					throw new Error("This message has no adjusted tokens left to play.");
 				// Preserve outcomes saved before per-message round history was introduced.
 				if (!roll.rounds && roll.multiplier !== null)
 					roll.rounds = [
@@ -336,7 +336,7 @@ export class RollLedger {
 					(round.stakeTokens * roundMultiplier).toFixed(6),
 				);
 				if (!Number.isFinite(roll.simulatedTokens))
-					throw new Error("Simulated token balance is too large");
+					throw new Error("Adjusted token balance is too large");
 				roll.multiplier =
 					roll.tokens > 0 ? roll.simulatedTokens / roll.tokens : 0;
 				roll.simulatedCost =

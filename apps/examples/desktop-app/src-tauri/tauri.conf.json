@@ -37,7 +37,7 @@
 		"targets": "all",
 		"category": "DeveloperTool",
 		"shortDescription": "ROLLCODE AI coding agent",
-		"longDescription": "Tokens are expensive. Feeling lucky? ROLLCODE coding agent with local simulated token games. API charges remain unchanged.",
+		"longDescription": "Tokens are expensive. Feeling lucky? ROLLCODE coding agent with local adjusted token games. API charges remain unchanged.",
 		"externalBin": ["bin/cline-cli"],
 		"resources": [
 			"icons/app/*.png",

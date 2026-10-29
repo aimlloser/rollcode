@@ -18,9 +18,7 @@ export function useDemoWallet() {
 			setWallet(value);
 			setError("");
 		} catch {
-			setError(
-				"Demo balance unavailable. Restart the backend to load the demo wallet.",
-			);
+			setError("balance unavailable. Restart the backend to load the wallet.");
 		}
 	}, []);
 	useEffect(() => {

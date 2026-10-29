@@ -3,6 +3,6 @@ Upstream: https://github.com/cline/cline
 Copyright Cline contributors. Licensed under the Apache License, Version 2.0.
 The upstream LICENSE and all existing source notices are retained.
 
-ROLLCODE additions: local simulated-credit roll ledger, credit dashboard,
+ROLLCODE additions: local adjusted-credit roll ledger, credit dashboard,
 reveal animations, and desktop branding. These modifications are provided
 under the Apache License, Version 2.0. ROLLCODE is not endorsed by Cline.

@@ -16,7 +16,7 @@ export function normalizeRouletteBets(
 		budget < 1 ||
 		budget > Number.MAX_SAFE_INTEGER
 	)
-		throw new Error("Roulette needs at least one simulated token");
+		throw new Error("Roulette needs at least one adjusted token");
 	if (!Array.isArray(value) || value.length < 1 || value.length > 46)
 		throw new Error("Place tokens on at least one bet");
 	const allowed = new Set([

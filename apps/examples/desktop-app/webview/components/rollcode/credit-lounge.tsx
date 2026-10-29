@@ -133,17 +133,17 @@ export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
 				onClick={() => setOpen(true)}
 				title={
 					wallet
-						? `${demoCredits(wallet.balanceTokens)} · ${tokens(wallet.balanceTokens)} tokens remaining · Demo only`
-						: walletError || "Loading demo balance"
+						? `${demoCredits(wallet.balanceTokens)} · ${tokens(wallet.balanceTokens)} tokens remaining`
+						: walletError || "Loading balance"
 				}
 				aria-label={
 					wallet
-						? `Demo balance: ${demoCredits(wallet.balanceTokens)}, equivalent to ${tokens(wallet.balanceTokens)} tokens. Open usage.`
-						: "Demo balance loading. Open usage."
+						? `Balance: ${demoCredits(wallet.balanceTokens)}, equivalent to ${tokens(wallet.balanceTokens)} tokens. Open usage.`
+						: "Balance loading. Open usage."
 				}
 			>
 				<span className="rc-demo-counter-label">
-					{collapsed ? "Demo" : "Demo balance"}
+					{collapsed ? "CR" : "Balance"}
 				</span>
 				<strong>
 					{wallet ? creditAmount(wallet.balanceTokens) : "—"}
@@ -191,7 +191,7 @@ export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
 					<div className="rc-page-heading">
 						<DialogTitle className="rc-title">Usage</DialogTitle>
 						<DialogDescription className="rc-description">
-							Actual token usage and simulated game costs, side by side.
+							Actual token usage and adjusted game costs, side by side.
 						</DialogDescription>
 					</div>
 					{error && (
@@ -202,12 +202,9 @@ export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
 							</button>
 						</p>
 					)}
-					<section
-						className="rc-demo-wallet-panel"
-						aria-label="Demo credit wallet"
-					>
+					<section className="rc-demo-wallet-panel" aria-label="Credit wallet">
 						<div>
-							<span>Demo balance</span>
+							<span>Balance</span>
 							<strong>
 								{wallet ? demoCredits(wallet.balanceTokens) : "Unavailable"}
 							</strong>
@@ -225,15 +222,15 @@ export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
 							{resetting ? "Resetting…" : "Reset to 10,000"}
 						</button>
 						<p>
-							Each response deducts its reported tokens in demo credits. Games
-							refund or add the difference in cost. Existing saved responses are
-							included; resetting the balance keeps your history. Demo credits
-							have no cash value.
+							Each response deducts its reported tokens in credits. Games refund
+							or add the difference in cost. Existing saved responses are
+							included; resetting the balance keeps your history. Credits have
+							no cash value.
 						</p>
 						{wallet && wallet.balanceTokens < 0 && (
 							<p className="rc-demo-overdrawn">
-								Demo balance is below zero. Reset it to refill. Actual API usage
-								is unaffected.
+								Balance is below zero. Reset it to refill. Actual API usage is
+								unaffected.
 							</p>
 						)}
 						{walletError && <p role="alert">{walletError}</p>}
@@ -245,12 +242,12 @@ export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
 							detail={`${rolls.length} completed responses · input + output`}
 						/>
 						<Stat
-							name="Demo credits spent"
+							name="Credits spent"
 							value={creditAmount(simulatedTokens)}
 							detail="Latest cost per response, including unplayed responses"
 						/>
 						<Stat
-							name={savings >= 0 ? "Demo credits saved" : "Demo extra credits"}
+							name={savings >= 0 ? "Credits saved" : "Extra credits"}
 							value={creditAmount(Math.abs(savings))}
 							change={
 								savings > 0 ? "savings" : savings < 0 ? "extra" : "unchanged"
@@ -269,7 +266,7 @@ export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
 							<strong>{known.length ? dollars(base) : "Unavailable"}</strong>
 						</span>
 						<span>
-							Simulated cost estimate{" "}
+							Adjusted cost estimate{" "}
 							<strong>{known.length ? dollars(spent) : "Unavailable"}</strong>
 						</span>
 						<small>
@@ -370,7 +367,7 @@ export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
 										<tr>
 											<th>Response</th>
 											<th>Actual tokens</th>
-											<th>Demo cost (credits)</th>
+											<th>Cost (credits)</th>
 											<th>Total change</th>
 											<th>Games</th>
 										</tr>
@@ -441,7 +438,7 @@ export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
 					>
 						<div className="rc-section-heading">
 							<h3>How games work</h3>
-							<span>Replay using the latest simulated tokens</span>
+							<span>Replay using your updated credits</span>
 						</div>
 						<div className="rc-odds">
 							{[
@@ -459,17 +456,17 @@ export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
 							))}
 						</div>
 						<p className="rc-footnote">
-							New simulated tokens = staked tokens × cost multiplier. 1.4×
-							increases cost by 40%, 0.5× halves it, and 0× is free. Each new
-							game uses the previous result as its stake, so multipliers
-							compound. Roulette settles each placement separately; unplaced
-							tokens stay unchanged.
+							New credit cost = staked credits × cost multiplier. 1.4× increases
+							cost by 40%, 0.5× halves it, and 0× is free. Each new game uses
+							the previous result as its stake, so multipliers compound.
+							Roulette settles each placement separately; unplaced tokens stay
+							unchanged.
 						</p>
 					</section>
 					<p className="rc-disclaimer">
-						All game costs and savings are simulated. Actual API tokens and
-						charges stay unchanged. Expand a response’s games to see every saved
-						result. Cached input is already included in input tokens.
+						Credits have no cash value. Actual API tokens and charges stay
+						unchanged. Expand a response’s games to see every saved result.
+						Cached input is already included in input tokens.
 					</p>
 					{known.length !== rolls.length && (
 						<p className="rc-footnote">

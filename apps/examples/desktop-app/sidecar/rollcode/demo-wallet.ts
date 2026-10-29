@@ -1,4 +1,4 @@
-/** Demo accounting is independent of provider pricing and real money. */
+/** accounting is independent of provider pricing and real money. */
 export const TOKENS_PER_CREDIT = 1000;
 export const STARTING_DEMO_CREDITS = 10000;
 export const STARTING_DEMO_TOKENS = STARTING_DEMO_CREDITS * TOKENS_PER_CREDIT;
