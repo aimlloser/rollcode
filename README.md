@@ -64,7 +64,7 @@ Requirements:
 
 ```powershell
 # The ROLLCODE implementation currently lives on this branch.
-git clone --branch codex/rollcode https://github.com/aimlloser/rollcode.git
+git clone --branch rollcode https://github.com/aimlloser/rollcode.git
 cd rollcode
 
 bun install
