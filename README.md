@@ -15,7 +15,7 @@ ROLLCODE is a Windows desktop fork of **[Cline](https://github.com/cline/cline)*
 - **A coding agent that already works:** Cline’s existing agent and tools, with support for its model providers and your own API keys.
 - **A quieter desktop interface:** warm dark surfaces, readable chat typography, and selectable gambling-themed pixel art app icons.
 - **Opt-in games:** click the tokens beside a completed response to open Gamba. Games never pop up automatically.
-- **A credit wallet:** 10,000 starting credits, a visible credit balance and token counter, and a refill option.
+- **A credit wallet:** 10,000 starting credits, a visible credit balance and token counter.
 - **Usage and history:** actual tokens, adjusted costs, per-response game history, and JSON export.
 - **Local storage:** balances and game outcomes persist on your device. No ROLLCODE hosted backend is required; inference uses your configured model provider.
 
@@ -35,7 +35,7 @@ Playing a game changes that response’s adjusted cost, and the wallet refunds o
 
 You can play again using the response’s latest adjusted cost. Results compound, and each game stays in that response’s history. Once a response is free, there is no remaining cost to stake.
 
-The sidebar shows your credit balance and its token equivalent. **Usage → Reset to 10,000** refills the wallet without deleting history. Existing saved responses count toward spending. A negative balance is shown explicitly and does not block actual API usage.
+The sidebar shows your credit balance and its token equivalent. Existing saved responses count toward spending. A negative balance is shown explicitly and does not block actual API usage.
 
 Games display and stake **tokens**, including Roulette chips and game history. Credits are the wallet’s conversion: every 1,000 tokens spent or refunded equals 1 credit.
 

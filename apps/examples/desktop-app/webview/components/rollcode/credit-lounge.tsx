@@ -45,7 +45,7 @@ const dollars = (value: number) =>
 
 export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
 	const [open, setOpen] = useState(false);
-	const { wallet, error: walletError, resetting, reset } = useDemoWallet();
+	const { wallet, error: walletError } = useDemoWallet();
 	const [rolls, setRolls] = useState<Roll[]>([]);
 	const [error, setError] = useState("");
 	const initialized = useRef(false);
@@ -213,24 +213,14 @@ export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
 								1 credit = 1,000 tokens
 							</small>
 						</div>
-						<button
-							type="button"
-							className="rc-export"
-							disabled={resetting || !wallet}
-							onClick={() => void reset()}
-						>
-							{resetting ? "Resetting…" : "Reset to 10,000"}
-						</button>
 						<p>
 							Each response deducts its reported tokens in credits. Games refund
 							or add the difference in cost. Existing saved responses are
-							included; resetting the balance keeps your history. Credits have
-							no cash value.
+							included. Credits have no cash value.
 						</p>
 						{wallet && wallet.balanceTokens < 0 && (
 							<p className="rc-demo-overdrawn">
-								Balance is below zero. Reset it to refill. Actual API usage is
-								unaffected.
+								Balance is below zero. Actual API usage is unaffected.
 							</p>
 						)}
 						{walletError && <p role="alert">{walletError}</p>}
