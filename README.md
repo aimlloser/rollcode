@@ -1,245 +1,111 @@
-# ROLLCODE
-
-**Tokens are expensive. Feeling lucky? 🎲**
-
-A standalone local desktop fork of [Cline](https://github.com/cline/cline) with simulated demo credits and token games. **Forked from [cline/cline](https://github.com/cline/cline)**, including its coding agent, model integrations, and desktop shell. [Run, build, test, and architecture →](ROLLCODE.md). API charges remain unchanged. See [NOTICE](NOTICE) for attribution; the upstream Apache 2.0 [LICENSE](LICENSE) is retained.
-
----
-
-## Upstream Cline documentation
-
 <p align="center">
-  <img src="assets/icons/icon.png" width="80" alt="Cline" />
+  <img src="apps/examples/desktop-app/webview/public/app-icons/lucky-dice.png" width="96" alt="ROLLCODE pixel dice" />
 </p>
 
-<h1 align="center">Cline</h1>
+<h1 align="center">ROLLCODE</h1>
+<p align="center"><strong>Tokens are expensive. Feeling lucky? 🎲</strong></p>
+<p align="center">A local AI coding agent with a twist: play games to win back your simulated task costs.</p>
 
-<p align="center">
-The open source coding agent in your IDE, terminal, & desktop!
-</p>
+ROLLCODE is a Windows desktop fork of **[Cline](https://github.com/cline/cline)**. It builds on Cline’s coding agent, model integrations, tools, approvals, terminal, and workspaces, with a redesigned interface and a local demo credit system.
 
-<div align="center">
+**All credits, winnings, and savings are simulated. Your model provider’s actual API charges stay unchanged.**
 
-<div align="center">
-<table>
-<tbody>
-<td align="center">
-<a href="https://docs.cline.bot" target="_blank"><strong>Docs</strong></a>
-</td>
-<td align="center">
-<a href="https://discord.gg/cline" target="_blank"><strong>Discord</strong></a>
-</td>
-<td align="center">
-<a href="https://www.reddit.com/r/cline/" target="_blank"><strong>r/cline</strong></a>
-</td>
-<td align="center">
-<a href="https://github.com/cline/cline/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop" target="_blank"><strong>Feature Requests</strong></a>
-</td>
-<td align="center">
-<a href="https://cline.bot/join-us" target="_blank"><strong>Join us!</strong></a>
-</td>
-</tbody>
-</table>
-</div>
+## What’s inside
 
-</div>
+- **A coding agent that already works:** Cline’s existing agent and tools, with support for its model providers and your own API keys.
+- **A quieter desktop interface:** warm dark surfaces, readable chat typography, and selectable gambling-themed pixel art app icons.
+- **Opt-in games:** click the tokens beside a completed response to open Gamba. Games never pop up automatically.
+- **A demo wallet:** 10,000 starting credits, a visible credit balance and token counter, and a refill option.
+- **Usage and history:** actual tokens, adjusted demo costs, per-response game history, and JSON export.
+- **Local storage:** balances and game outcomes persist on your device. No ROLLCODE hosted backend is required; inference uses your configured model provider.
 
-<br>
+## Demo credits
 
-<div align="center">
-<table>
-<tr>
-<td align="center" width="50%">
+**1 demo credit = 1,000 tokens.** The starting 10,000 credits represent 10 million demo tokens.
 
-### CLI
+A completed response deducts its reported input + output tokens from the demo wallet. Cached input is already included in input usage. For example, a 23,536-token response costs **23.536 demo credits**.
 
-Run Cline in your terminal.
-Interactive chat or fully headless 
-for CI/CD and scripting.
+Playing a game changes that response’s simulated cost, and the wallet refunds or deducts the difference. If you stake a response costing 10 credits in Blackjack:
 
-```
-npm i -g cline
-```
+| Result | New response cost | Wallet adjustment |
+| --- | --- | --- |
+| Win | 0 credits | Refund 10 credits |
+| Tie | 10 credits | No change |
+| Lose | 20 credits | Deduct another 10 credits |
 
-<a href="./apps/cli/README.md">Learn more</a>
-<br><br>
+You can play again using the response’s latest simulated cost. Results compound, and each game stays in that response’s history. Once a response is free, there is no remaining cost to stake.
 
-</td>
-<td align="center" width="50%">
+The sidebar shows your demo credit balance and its token equivalent. **Usage → Reset to 10,000** refills the wallet without deleting history. Existing saved responses count toward spending. A negative demo balance is shown explicitly and does not block actual API usage.
 
-### Desktop App
+Credits have **no cash value**. Dollar estimates are displayed separately and depend on the model provider’s pricing.
 
-Cline as a native app for macOS and Windows.
-Run agent sessions in any folder, schedule
-routines, and manage models, plugins, and MCP servers.
+## Games
 
-<a href="https://cline.bot/desktop">Download for macOS and Windows</a>
-<br><br>
+All displayed multipliers apply directly to the staked demo cost: **0× is free, 0.5× halves the cost, and 2× doubles it.**
 
-</td>
-</tr>
-<tr>
-<td align="center" width="50%">
+| Game | How it works |
+| --- | --- |
+| **Blackjack** | Hit or stand. Any win makes the stake free; a loss costs 2×; a tie stays at 1×. Dealer stands on all 17s. |
+| **Dice** | Choose a target and roll over or under. The win chance determines the winning cost multiplier; a miss costs 2×. |
+| **Plinko** | Choose risk and rows. The outermost slots are free; costs rise toward the center. |
+| **Mines** | Start at 2× and reveal safe gems to reduce the multiplier. Cash out before hitting a mine. |
+| **Roulette** | Stack demo credit chips across numbers and outside bets. Winning red/black bets refund the full amount placed; losing bets add that amount. Unplaced credits stay unchanged. |
+| **Slots** | Drag the lever down and release. Three Jackpot icons make the stake free, other triples cost 0.25×, pairs cost 0.5×, and no match costs 2×. |
 
-### VS Code Extension
+Rules, calculations, and slot probabilities are available through the **ⓘ** button in each game. Saved historical outcomes retain their original results.
 
-AI coding assistant in your editor.
-Create files, run commands, browse the web,
-and use tools with human-in-the-loop approval.
+## Run from source
 
-<a href="https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev">Install from VS Marketplace</a>
-<br><br>
+Requirements:
 
-</td>
-<td align="center" width="50%">
+- **Bun 1.4.2+** and **Node.js 22+**. Use Bun for dependencies and scripts.
+- A supported model provider API key or supported provider login.
+- For the native Windows app: Rust stable with the MSVC toolchain, Visual Studio C++ Build Tools with the Windows SDK, and WebView2 Runtime.
 
-### JetBrains Plugin
+```powershell
+# The ROLLCODE implementation currently lives on this branch.
+git clone --branch codex/rollcode https://github.com/aimlloser/rollcode.git
+cd rollcode
 
-The same Cline experience in IntelliJ IDEA,
-PyCharm, WebStorm, GoLand, and the rest of
-the JetBrains family.
+bun install
+bun run build:sdk
 
-<a href="https://plugins.jetbrains.com/plugin/28247-cline">Install from JetBrains Marketplace</a>
-<br><br>
-
-</td>
-</tr>
-</table>
-</div>
-
-<div align="center">
-<table>
-<tr>
-<td align="center">
-
-### SDK
-
-Build your own AI agents and integrations powered by the same engine that runs the CLI, desktop app, VS Code extension, and JetBrains plugin. Custom tools, multi-agent teams, connectors, scheduled automations, and more.
-
-```
-npm install @cline/sdk
+# Native Windows desktop app
+bun run rollcode:desktop
 ```
 
-<a href="https://docs.cline.bot/cline-sdk/overview">Documentation</a>
-<br><br>
+For development without the native shell:
 
-</td>
-</tr>
-</table>
-</div>
-
----
-
-## Index
-
-| Product | Description | Location | CHANGELOG |
-|---------|------------|--------------|--------------|
-| **SDK** | Node.js programmatic agent API and extension exports. | [`sdk/`](https://github.com/cline/cline/tree/main/sdk) | [CHANGELOG.md](https://github.com/cline/cline/blob/main/sdk/CHANGELOG.md) |
-| **CLI** | Terminal UI, headless mode, shell commands, and CLI-specific flows. | [`apps/cli/`](https://github.com/cline/cline/tree/main/apps/cli) | [CHANGELOG.md](https://github.com/cline/cline/blob/main/apps/cli/CHANGELOG.md) |
-| **VS Code Extension** | The Marketplace extension and extension host integration. | [`apps/vscode/`](https://github.com/cline/cline/tree/main/apps/vscode) | [CHANGELOG.md](https://github.com/cline/cline/blob/main/CHANGELOG.md) |
-| **Desktop App** | Native macOS and Windows app (Tauri shell, Bun sidecar, Next.js UI). | [`apps/examples/desktop-app/`](https://github.com/cline/cline/tree/main/apps/examples/desktop-app) | [CHANGELOG.md](https://github.com/cline/cline/blob/main/apps/examples/desktop-app/CHANGELOG.md) |
-| **JetBrains Plugin** | JetBrains-hosted client that talks to the shared agent core. | Currently we are not open-sourcing JetBrains plugins | - |
-| **Docs site** | Public documentation pages. | [`docs/`](https://docs.cline.bot/) | - |
-
-## Edits Code Across Your Project
-
-Cline reads your project structure, understands the relationships between files, and makes coordinated changes across your codebase. It monitors linter and compiler errors as it works, fixing issues like missing imports, type mismatches, and syntax errors before you even see them. In VS Code and JetBrains, every edit shows up as a diff you can review, modify, or revert. All changes are tracked with checkpoints, so you can easily undo the agent's work.
-
-## Runs Bash Commands
-
-Cline executes commands directly in your terminal and watches the output in real time. Install packages, run build scripts, execute tests, deploy applications, manage databases. For long-running processes like dev servers, Cline continues working in the background and reacts to new output as it appears, catching compile errors, test failures, and server crashes as they happen.
-
-## Plan and Act
-
-Toggle between Plan mode and Act mode. In Plan mode, Cline explores your codebase, asks clarifying questions, and lays out a strategy. Once you're aligned, switch to Act mode and Cline executes the plan. Every file edit and terminal command requires your approval, so you stay in control of what actually changes. Or toggle auto-approve and let Cline run autonomously.
-
-## Rules and Skills
-
-Define project-specific rules in `.clinerules` files that guide how Cline works in your codebase: coding standards, architecture conventions, deployment procedures, testing requirements. Rules are picked up automatically by the CLI, VS Code extension, and JetBrains plugin. Use skills to let the model load specific rules when needed.
-
-## Works With Every Model
-
-Cline is not locked to a single AI provider. Use whichever model fits your workflow:
-
-| Provider | Models |
-|----------|--------|
-| Anthropic | Claude Opus, Sonnet, Haiku |
-| OpenAI | GPT series models |
-| Google | Gemini series models |
-| OpenRouter | 200+ models from any provider |
-| Vercel AI Gateway | Route to many providers through one gateway |
-| AWS Bedrock | Claude, Llama, and more |
-| Azure / GCP Vertex | All hosted models |
-| Cerebras / Groq | Fast inference models |
-| Ollama / LM Studio | Run local models on your machine |
-| Any OpenAI-compatible API | Self-hosted or third-party endpoints |
-
-## Extend With Plugins or MCP Servers
-
-Extend Cline's capabilities with plugins. Using the SDK, register tools and lifecycle hooks programmatically through the plugin system for logging, auditing, policy enforcement, or adding domain-specific capabilities. Simple plugin example below.
-
-```typescript
-import { Agent, createTool } from "@cline/sdk"
-
-const deployTool = createTool({
-  name: "deploy",
-  description: "Deploy the current branch to staging.",
-  inputSchema: { type: "object", properties: { env: { type: "string" } }, required: ["env"] },
-  execute: async (input) => {
-    // your deployment logic
-  },
-})
-
-const agent = new Agent({ tools: [deployTool], /* ... */ })
-```
-...or use [MCPs](https://github.com/modelcontextprotocol) to connect to databases, query APIs, manage cloud infrastructure, and interact with external systems. Use [community-built servers](https://github.com/modelcontextprotocol/servers) or ask Cline to create custom tools on the fly. In the CLI, manage servers with `cline mcp`.
-
-## Multi-Agent Teams
-
-Coordinate multiple agents working together on complex tasks. A coordinator agent breaks the work into subtasks and delegates to specialist agents, each with their own tools and context. Team state persists across sessions so you can pick up where you left off.
-
-```bash
-cline --team-name auth-sprint "Plan and implement user authentication with tests"
+```powershell
+bun run rollcode
 ```
 
-## Scheduled Agents
+Open `http://localhost:3125`. The local backend runs on `127.0.0.1:3126`. Optional upstream cloud and account features still use their respective services; they are not required for local use with your own API key.
 
-Run agents on cron schedules for recurring automations. Daily PR summaries, weekly dependency checks, codebase health reports. Schedules persist across restarts and run independently of any terminal session.
+SDK dependencies resolve through compiled files. Rebuild with `bun run build:sdk` after changing SDK source. Restart the backend after backend changes.
 
-```bash
-cline schedule create "PR summary" \
-  --cron "0 9 * * MON-FRI" \
-  --prompt "List all open PRs and their review status" \
-  --workspace /path/to/repo
+## Build a Windows installer
+
+```powershell
+bun run rollcode:build
 ```
 
-## Connect to Slack, Telegram, Discord, and More
+The packaging script copies installers into `apps/examples/desktop-app/dist/desktop/`. Packaged users do not need Bun or Node.js installed.
 
-Chat with your agent from any messaging platform: Telegram, Slack, Discord, Google Chat, WhatsApp, and Linear. Each conversation thread maps to an agent session with full context. Set up access control to restrict who can interact with your agent.
+For additional development notes and accounting details, see [ROLLCODE.md](ROLLCODE.md). ROLLCODE is currently a development MVP.
 
-```bash
-# Connect to Telegram
-cline connect telegram -k $BOT_TOKEN
-# Connect to Slack through webhook
-cline connect slack --bot-token $SLACK_TOKEN --signing-secret $SECRET --base-url $URL
-# Connect to Slack using socket mode
-cline connect slack --bot-token $SLACK_TOKEN --app-token $SLACK_APP_TOKEN
-```
+## Persistence
 
-## Headless CLI for CI/CD
+The demo ledger lives at `%USERPROFILE%\.rollcode\ledger.sqlite`. Model credentials, chats, and provider settings use Cline’s existing local storage.
 
-Run Cline with zero interaction for scripting and automation. Pipe input, get JSON output, chain commands, integrate into CI/CD pipelines.
+Game logic is modular under [`sidecar/rollcode`](apps/examples/desktop-app/sidecar/rollcode). The backend uses cryptographically secure randomness. SQLite transactions save game state, outcomes, and request receipts together, so retrying an action does not draw again or charge twice.
 
-```bash
-cline "Run tests and fix any failures"
-git diff origin/main | cline "Review these changes for issues"
-cline --json "List all TODO comments" | jq -r 'select(.type == "agent_event" and .event.text) | .event.text'
-```
+The wallet derives spending from saved response costs rather than replaying debit events. Keep the database and its WAL/SHM files together when backing up a running app, or quit before copying it.
 
-## Contributing
+## Built on Cline
 
-Start with the [Contributing Guide](CONTRIBUTING.md). Join our [Discord](https://discord.gg/cline) and head to the `#contributors` channel to connect with other contributors. Check our [careers page](https://cline.bot/join-us) for full-time roles.
+ROLLCODE is **forked from [cline/cline](https://github.com/cline/cline)**, including the [desktop implementation](https://github.com/cline/cline/tree/main/apps/examples/desktop-app). The underlying coding agent is reused rather than rebuilt.
 
-## License
+The upstream **[Apache License 2.0](LICENSE)**, copyright notices, and **[NOTICE](NOTICE)** are retained. ROLLCODE is an independent modification and is not endorsed by Cline. Bundled fonts retain their respective license notices.
 
-[Apache 2.0 © 2026 Cline Bot Inc.](./LICENSE)
+Game interfaces use original code and artwork inspired by casino games. ROLLCODE is not affiliated with Stake and does not include Stake branding or assets.
