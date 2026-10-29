@@ -28,9 +28,10 @@ export function AutoGambaSettings() {
 			</div>
 			<p className="mt-3 max-w-xl text-xs leading-relaxed text-muted-foreground">
 				Uses the latest token stake each round. Costs can increase before a win.
-				A live mini player shows the games; stop any response or turn this off
-				at any time. Turning it off stops queued runs. An unfinished hand can be
-				continued manually. Actual API charges stay unchanged.
+				Each response plays independently in its own mini player; cancel a run
+				or turn this off at any time. Turning it off stops queued runs. An
+				unfinished hand can be continued manually. Actual API charges stay
+				unchanged.
 			</p>
 			{error && (
 				<p className="mt-2 text-xs text-destructive" role="alert">

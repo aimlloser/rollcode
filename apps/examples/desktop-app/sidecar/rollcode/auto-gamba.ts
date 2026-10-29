@@ -94,7 +94,9 @@ export class AutoGamba {
 	snapshot(): AutoGambaSnapshot {
 		const rows = this.db
 			.prepare(`SELECT j.id,j.status,j.steps,j.error,r.data FROM auto_gamba_jobs j JOIN rolls r ON r.id=j.id
-   ORDER BY CASE WHEN j.status='running' THEN 0 ELSE 1 END,j.updated_at DESC LIMIT 8`)
+   WHERE j.status='running' OR j.id IN
+    (SELECT id FROM auto_gamba_jobs WHERE status!='running' ORDER BY updated_at DESC LIMIT 8)
+   ORDER BY CASE WHEN j.status='running' THEN 0 ELSE 1 END,j.updated_at DESC`)
 			.all() as (Job & { data: string })[];
 		return {
 			enabled: this.enabled(),
@@ -110,7 +112,37 @@ export class AutoGamba {
 			}),
 		};
 	}
-	tick(): { roll?: Roll; changed: boolean } {
+	/** Advance every active response once per beat instead of sharing one turn between them. */
+	tick(): { rolls: Roll[]; changed: boolean } {
+		const rolls: Roll[] = [];
+		let changed = false;
+		if (!this.enabled()) return { rolls, changed };
+		const jobs = this.db
+			.prepare(
+				"SELECT id FROM auto_gamba_jobs WHERE status='running' ORDER BY updated_at ASC",
+			)
+			.all() as { id: string }[];
+		for (const job of jobs) {
+			try {
+				const update = this.tickJob(job.id);
+				if (update.roll) rolls.push(update.roll);
+				changed ||= update.changed;
+			} catch (error) {
+				this.db
+					.prepare(
+						"UPDATE auto_gamba_jobs SET status='error',error=?,updated_at=? WHERE id=? AND status='running'",
+					)
+					.run(
+						error instanceof Error ? error.message : "Auto Gamba stopped.",
+						Date.now(),
+						job.id,
+					);
+				changed = true;
+			}
+		}
+		return { rolls, changed };
+	}
+	private tickJob(id: string): { roll?: Roll; changed: boolean } {
 		let job: Job | null = null;
 		let request: GameRequest | undefined;
 		this.db.exec("BEGIN IMMEDIATE");
@@ -118,9 +150,9 @@ export class AutoGamba {
 			if (this.enabled())
 				job = this.db
 					.prepare(
-						"SELECT id,status,steps,pending,error FROM auto_gamba_jobs WHERE status='running' ORDER BY updated_at ASC LIMIT 1",
+						"SELECT id,status,steps,pending,error FROM auto_gamba_jobs WHERE id=? AND status='running'",
 					)
-					.get() as Job | null;
+					.get(id) as Job | null;
 			if (job) {
 				const row = this.db
 					.prepare("SELECT data FROM rolls WHERE id=?")

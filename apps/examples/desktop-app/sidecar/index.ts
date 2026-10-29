@@ -140,7 +140,8 @@ async function main(desktopCliPath?: string) {
 		if (shuttingDown) return;
 		try {
 			const update = rollLedger().auto.tick();
-			if (update.roll) broadcastEvent(ctx, "rollcode_roll", update.roll);
+			for (const roll of update.rolls)
+				broadcastEvent(ctx, "rollcode_roll", roll);
 			if (update.changed)
 				broadcastEvent(ctx, "rollcode_auto", rollLedger().auto.snapshot());
 		} catch (error) {
