@@ -1956,6 +1956,11 @@ export async function handleCommand(
 ): Promise<unknown> {
 	if (command === "rollcode_list") return rollLedger().list();
 	if (command === "rollcode_auto") return rollLedger().auto.snapshot();
+	if (command === "rollcode_auto_rule") {
+		const state = rollLedger().auto.setRule(args?.mode, args?.targetPercent);
+		broadcastEvent(ctx, "rollcode_auto", state);
+		return state;
+	}
 	if (command === "rollcode_auto_setting") {
 		if (typeof args?.enabled !== "boolean") throw new Error("Auto Gamba setting required");
 		const state = rollLedger().auto.setEnabled(args.enabled);

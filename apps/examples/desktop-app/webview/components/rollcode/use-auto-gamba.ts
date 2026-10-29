@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { desktopClient } from "@/lib/desktop-client";
 import type { AutoGambaSnapshot } from "../../../sidecar/rollcode/auto-gamba";
+import type { AutoStopMode } from "../../../sidecar/rollcode/auto-rules";
 
 export function useAutoGamba() {
 	const [state, setState] = useState<AutoGambaSnapshot | null>(null);
@@ -14,6 +15,8 @@ export function useAutoGamba() {
 			if (
 				!value ||
 				typeof value.enabled !== "boolean" ||
+				(value.mode !== "all-or-nothing" && value.mode !== "percent") ||
+				!Number.isFinite(value.targetPercent) ||
 				!Array.isArray(value.jobs)
 			)
 				throw new Error("Unavailable");
@@ -60,6 +63,8 @@ export function useAutoGamba() {
 		saving,
 		setEnabled: (enabled: boolean) =>
 			change("rollcode_auto_setting", { enabled }),
+		setRule: (mode: AutoStopMode, targetPercent: number) =>
+			change("rollcode_auto_rule", { mode, targetPercent }),
 		stop: (id: string) => change("rollcode_auto_stop", { id }),
 	};
 }

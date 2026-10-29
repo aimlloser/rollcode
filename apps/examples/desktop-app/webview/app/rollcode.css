@@ -3145,3 +3145,85 @@ body {
 	max-width: 100%;
 	box-sizing: border-box;
 }
+
+.rc-auto-stop-rules {
+	margin-top: 16px;
+	padding: 0 0 0 16px;
+	border-left: 1px solid #ffffff16;
+	max-width: 520px;
+}
+.rc-auto-stop-rules > legend {
+	padding: 0;
+	margin-bottom: 12px;
+	font-size: 11px;
+	color: var(--muted-foreground);
+}
+.rc-auto-rule-option {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	margin-bottom: 14px;
+	cursor: pointer;
+}
+.rc-auto-rule-option > input {
+	margin-top: 3px;
+	accent-color: #c5b99d;
+}
+.rc-auto-rule-option > span {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+}
+.rc-auto-rule-option b {
+	font-size: 13px;
+	font-weight: 500;
+}
+.rc-auto-rule-option small {
+	font-size: 11px;
+	color: var(--muted-foreground);
+	line-height: 1.5;
+}
+.rc-auto-percent {
+	margin: 4px 0 12px 23px;
+}
+.rc-auto-percent > label {
+	display: block;
+	color: var(--muted-foreground);
+	font-size: 11px;
+	margin-bottom: 7px;
+}
+.rc-auto-percent > div {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	width: 112px;
+	padding: 7px 10px;
+	border: 1px solid #ffffff20;
+	border-radius: 6px;
+	background: #ffffff04;
+}
+.rc-auto-percent input {
+	width: 65px;
+	min-width: 0;
+	background: transparent;
+	outline: none;
+	font-size: 13px;
+	font-variant-numeric: tabular-nums;
+}
+.rc-auto-percent > div:focus-within {
+	border-color: #a69a80;
+}
+.rc-auto-percent > div > span {
+	color: var(--muted-foreground);
+	font-size: 12px;
+}
+.rc-auto-percent > p,
+.rc-auto-rule-note {
+	font-size: 10px;
+	color: var(--muted-foreground);
+	line-height: 1.6;
+	margin-top: 8px;
+}
+.rc-auto-stop-rules:disabled {
+	opacity: 0.6;
+}

@@ -141,7 +141,13 @@ function AutoGambaPlayer({
 				</span>
 				<b
 					aria-live="polite"
-					title={job.status === "free" ? "Free task" : undefined}
+					title={
+						job.status === "free"
+							? "Free task"
+							: job.status === "won"
+								? `${job.targetPercent}% reduction target reached`
+								: `Target: ${tokenLabel(job.targetTokens)}`
+					}
 				>
 					{tokenLabel(balance)}
 				</b>

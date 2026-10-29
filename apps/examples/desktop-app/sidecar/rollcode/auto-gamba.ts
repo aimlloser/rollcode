@@ -2,19 +2,32 @@ import { randomInt, randomUUID } from "node:crypto";
 import type { SqliteDb } from "@cline/shared/db";
 import { cardScore, GAME_IDS, type GameRequest } from "./game-types";
 import type { Roll } from "./ledger";
+import {
+	autoTargetTokens,
+	validateAutoRule,
+	type AutoStopMode,
+	type AutoStopRule,
+} from "./auto-rules";
 
-export type AutoJobStatus = "running" | "free" | "stopped" | "error";
+export type AutoJobStatus = "running" | "free" | "won" | "stopped" | "error";
 export type AutoGambaSnapshot = {
 	enabled: boolean;
+	mode: AutoStopMode;
+	targetPercent: number;
 	jobs: {
 		id: string;
 		status: AutoJobStatus;
 		steps: number;
+		mode: AutoStopMode;
+		targetPercent: number;
+		targetTokens: number;
 		error: string | null;
 		roll: Roll;
 	}[];
 };
 type Job = {
+	mode: AutoStopMode;
+	target_percent: number;
 	id: string;
 	status: AutoJobStatus;
 	steps: number;
@@ -31,6 +44,31 @@ export class AutoGamba {
 		db.exec(`CREATE TABLE IF NOT EXISTS auto_gamba_preferences (id INTEGER PRIMARY KEY CHECK(id=1), enabled INTEGER NOT NULL DEFAULT 0);
    INSERT OR IGNORE INTO auto_gamba_preferences(id,enabled) VALUES(1,0);
    CREATE TABLE IF NOT EXISTS auto_gamba_jobs (id TEXT PRIMARY KEY, status TEXT NOT NULL, steps INTEGER NOT NULL DEFAULT 0, pending TEXT, error TEXT, updated_at INTEGER NOT NULL);`);
+		// Serialize additive migration against any other local backend opening the ledger.
+		db.exec("BEGIN IMMEDIATE");
+		try {
+			for (const table of ["auto_gamba_preferences", "auto_gamba_jobs"]) {
+				const columns = new Set(
+					(
+						db.prepare(`PRAGMA table_info(${table})`).all() as {
+							name: string;
+						}[]
+					).map((row) => row.name),
+				);
+				if (!columns.has("mode"))
+					db.exec(
+						`ALTER TABLE ${table} ADD COLUMN mode TEXT NOT NULL DEFAULT 'all-or-nothing'`,
+					);
+				if (!columns.has("target_percent"))
+					db.exec(
+						`ALTER TABLE ${table} ADD COLUMN target_percent REAL NOT NULL DEFAULT 50`,
+					);
+			}
+			db.exec("COMMIT");
+		} catch (error) {
+			db.exec("ROLLBACK");
+			throw error;
+		}
 	}
 	enabled() {
 		return !!(
@@ -39,13 +77,32 @@ export class AutoGamba {
 				.get() as { enabled: number }
 		).enabled;
 	}
+	rule(): AutoStopRule {
+		const row = this.db
+			.prepare(
+				"SELECT mode,target_percent FROM auto_gamba_preferences WHERE id=1",
+			)
+			.get() as { mode: AutoStopMode; target_percent: number };
+		return { mode: row.mode, targetPercent: row.target_percent };
+	}
+	setRule(mode: unknown, targetPercent: unknown) {
+		const rule = validateAutoRule(mode, targetPercent);
+		this.db
+			.prepare(
+				"UPDATE auto_gamba_preferences SET mode=?,target_percent=? WHERE id=1",
+			)
+			.run(rule.mode, rule.targetPercent);
+		return this.snapshot();
+	}
 	enqueue(roll: Roll) {
-		if (this.enabled() && roll.usageReported !== false && roll.tokens > 0)
+		if (this.enabled() && roll.usageReported !== false && roll.tokens > 0) {
+			const rule = this.rule();
 			this.db
 				.prepare(
-					"INSERT OR IGNORE INTO auto_gamba_jobs(id,status,updated_at) VALUES (?,'running',?)",
+					"INSERT OR IGNORE INTO auto_gamba_jobs(id,status,updated_at,mode,target_percent) VALUES (?,'running',?,?,?)",
 				)
-				.run(roll.id, Date.now());
+				.run(roll.id, Date.now(), rule.mode, rule.targetPercent);
+		}
 	}
 	isRunning(id: string) {
 		return !!this.db
@@ -93,19 +150,26 @@ export class AutoGamba {
 	}
 	snapshot(): AutoGambaSnapshot {
 		const rows = this.db
-			.prepare(`SELECT j.id,j.status,j.steps,j.error,r.data FROM auto_gamba_jobs j JOIN rolls r ON r.id=j.id
+			.prepare(`SELECT j.id,j.status,j.steps,j.error,j.mode,j.target_percent,r.data FROM auto_gamba_jobs j JOIN rolls r ON r.id=j.id
    WHERE j.status='running' OR j.id IN
     (SELECT id FROM auto_gamba_jobs WHERE status!='running' ORDER BY updated_at DESC LIMIT 8)
    ORDER BY CASE WHEN j.status='running' THEN 0 ELSE 1 END,j.updated_at DESC`)
 			.all() as (Job & { data: string })[];
 		return {
 			enabled: this.enabled(),
+			...this.rule(),
 			jobs: rows.map((row) => {
 				const roll = JSON.parse(row.data) as Roll;
 				return {
 					id: row.id,
 					status: row.status,
 					steps: row.steps,
+					mode: row.mode,
+					targetPercent: row.target_percent,
+					targetTokens: autoTargetTokens(roll.tokens, {
+						mode: row.mode,
+						targetPercent: row.target_percent,
+					}),
 					error: row.error,
 					roll: { ...roll, rounds: roll.rounds?.slice(-5) },
 				};
@@ -150,7 +214,7 @@ export class AutoGamba {
 			if (this.enabled())
 				job = this.db
 					.prepare(
-						"SELECT id,status,steps,pending,error FROM auto_gamba_jobs WHERE id=? AND status='running'",
+						"SELECT id,status,steps,pending,error,mode,target_percent FROM auto_gamba_jobs WHERE id=? AND status='running'",
 					)
 					.get(id) as Job | null;
 			if (job) {
@@ -162,16 +226,30 @@ export class AutoGamba {
 					job = null;
 				} else {
 					const roll = JSON.parse(row.data) as Roll;
-					if ((roll.simulatedTokens ?? roll.tokens) <= 0) {
+					if (
+						roll.game?.phase !== "active" &&
+						(roll.simulatedTokens ?? roll.tokens) <=
+							autoTargetTokens(roll.tokens, {
+								mode: job.mode,
+								targetPercent: job.target_percent,
+							})
+					) {
 						this.db
 							.prepare(
-								"UPDATE auto_gamba_jobs SET status='free',pending=NULL,updated_at=? WHERE id=?",
+								"UPDATE auto_gamba_jobs SET status=?,pending=NULL,updated_at=? WHERE id=?",
 							)
-							.run(Date.now(), job.id);
+							.run(
+								(roll.simulatedTokens ?? roll.tokens) === 0 ? "free" : "won",
+								Date.now(),
+								job.id,
+							);
 					} else {
 						request = job.pending
 							? (JSON.parse(job.pending) as GameRequest)
-							: nextAutoRequest(roll);
+							: nextAutoRequest(roll, {
+									mode: job.mode,
+									targetPercent: job.target_percent,
+								});
 						this.db
 							.prepare(
 								"UPDATE auto_gamba_jobs SET pending=?,updated_at=? WHERE id=?",
@@ -192,7 +270,16 @@ export class AutoGamba {
 				.prepare(`UPDATE auto_gamba_jobs SET status=?,steps=steps+1,pending=NULL,error=NULL,updated_at=?
     WHERE id=? AND pending=? AND status='running'`)
 				.run(
-					roll.simulatedTokens === 0 ? "free" : "running",
+					roll.simulatedTokens === 0
+						? "free"
+						: roll.game?.phase === "complete" &&
+								(roll.simulatedTokens ?? roll.tokens) <=
+									autoTargetTokens(roll.tokens, {
+										mode: job.mode,
+										targetPercent: job.target_percent,
+									})
+							? "won"
+							: "running",
 					Date.now(),
 					job.id,
 					JSON.stringify(request),
@@ -216,7 +303,7 @@ export class AutoGamba {
 	}
 }
 
-function nextAutoRequest(roll: Roll): GameRequest {
+function nextAutoRequest(roll: Roll, rule: AutoStopRule): GameRequest {
 	const state = roll.game;
 	const base = { requestId: randomUUID(), revision: state?.revision ?? 0 };
 	if (state?.phase === "active") {
@@ -227,6 +314,13 @@ function nextAutoRequest(roll: Roll): GameRequest {
 				action: cardScore(state.player) < 17 ? "hit" : "stand",
 			};
 		if (state.kind === "mines") {
+			const stake =
+				roll.activeRound?.stakeTokens ?? roll.simulatedTokens ?? roll.tokens;
+			if (
+				state.costFactor !== undefined &&
+				stake * state.costFactor <= autoTargetTokens(roll.tokens, rule)
+			)
+				return { ...base, game: "mines", action: "cashout" };
 			if (state.revealed.length >= 3 && randomInt(2) === 0)
 				return { ...base, game: "mines", action: "cashout" };
 			const hidden = Array.from({ length: 25 }, (_, i) => i).filter(

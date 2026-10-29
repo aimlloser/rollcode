@@ -15,7 +15,7 @@ ROLLCODE is a Windows desktop fork of **[Cline](https://github.com/cline/cline)*
 - **A coding agent that already works:** Cline’s existing agent and tools, with support for its model providers and your own API keys.
 - **A quieter desktop interface:** warm dark surfaces, readable chat typography, and selectable gambling-themed pixel art app icons.
 - **Opt-in games:** click the tokens beside a completed response to open Gamba. Games open on demand by default.
-- **Auto Gamba:** an optional setting plays random games for each new completed response until its token cost is free, with a live mini player and stop controls.
+- **Auto Gamba:** an optional setting plays random games for each new completed response until its token cost is free or reaches a chosen percentage reduction, with a live mini player and stop controls.
 - **A credit wallet:** 10,000 starting credits, a visible credit balance and token counter.
 - **Usage and history:** actual tokens, adjusted costs, per-response game history, and JSON export.
 - **Local storage:** balances and game outcomes persist on your device. No ROLLCODE hosted backend is required; inference uses your configured model provider.
@@ -44,7 +44,7 @@ Credits have **no cash value**. Dollar estimates are displayed separately and de
 
 ## Auto Gamba
 
-Enable **Settings → General → Auto Gamba** to automatically play on new completed responses. It starts disabled and does not process older history when enabled. Each active response plays independently at the same time, with a compact player directly below its token row. Players take up space in the chat layout so they cannot overlap, and hide when you leave Chat or open Usage while runs continue in the background. Expand History to see recent results. Each new round uses that response’s updated token stake; costs can increase before a free result.
+Enable **Settings → General → Auto Gamba** to automatically play on new completed responses. Choose **All or nothing** to play until free, or **Percent wins** and enter a 1–100% token reduction. For example, 25% stops a 10,000-token response at 7,500 tokens or below. The target is based on original token usage; games may overshoot it. The value saves when you leave the box or press Enter. Each run keeps the goal saved when that response completed, so changed goals apply to new responses. It starts disabled and does not process older history when enabled. Each active response plays independently at the same time, with a compact player directly below its token row. Players take up space in the chat layout so they cannot overlap, and hide when you leave Chat or open Usage while runs continue in the background. Expand History to see recent results. Each new round uses that response’s updated token stake; costs can increase before a free result.
 
 Use **Cancel** on a player to stop only that response, or disable Auto Gamba in Settings to stop all queued runs. An unfinished Blackjack hand or Mines board can be continued manually. Progress and pending requests persist locally, so an enabled run can resume after a backend restart without replaying a move. Games do not affect actual API billing.
 
