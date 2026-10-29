@@ -3086,3 +3086,21 @@ body {
 		animation: none !important;
 	}
 }
+
+.rc-auto-summary b {
+	margin-left: auto;
+}
+.rc-auto-close {
+	display: grid;
+	place-items: center;
+	width: 20px;
+	height: 20px;
+	flex-shrink: 0;
+	border-radius: 4px;
+	color: #a99e8d;
+	cursor: pointer;
+}
+.rc-auto-close:hover {
+	background: #ffffff0c;
+	color: #e9e2d9;
+}

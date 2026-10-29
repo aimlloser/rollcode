@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { ChevronDown, Dice5, History, Square } from "lucide-react";
+import { ChevronDown, Dice5, History, Square, X } from "lucide-react";
 import {
 	Popover,
 	PopoverAnchor,
@@ -22,6 +22,7 @@ export function AutoGambaMonitor() {
 	const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 	const [visible, setVisible] = useState(false);
 	const [manualOpen, setManualOpen] = useState(false);
+	const [dismissed, setDismissed] = useState<Set<string>>(() => new Set());
 	// Bind to the actual message badge. Radix follows scrolling, resizes and edge collisions.
 	useEffect(() => {
 		if (!state?.enabled || !job?.id) {
@@ -61,7 +62,13 @@ export function AutoGambaMonitor() {
 	const game = job.roll.game;
 	const balance = job.roll.simulatedTokens ?? job.roll.tokens;
 	return (
-		<Popover open={visible && !manualOpen}>
+		<Popover
+			open={visible && !manualOpen && !dismissed.has(job.id)}
+			onOpenChange={(open) => {
+				if (!open && job.status !== "running")
+					setDismissed((previous) => new Set(previous).add(job.id));
+			}}
+		>
 			<PopoverAnchor virtualRef={{ current: anchor }} />
 			<PopoverContent
 				className="rc-auto-monitor"
@@ -87,6 +94,18 @@ export function AutoGambaMonitor() {
 					>
 						{tokenLabel(balance)}
 					</b>
+					{job.status !== "running" && (
+						<button
+							type="button"
+							className="rc-auto-close"
+							aria-label="Close completed Auto Gamba player"
+							onClick={() =>
+								setDismissed((previous) => new Set(previous).add(job.id))
+							}
+						>
+							<X size={13} />
+						</button>
+					)}
 				</div>
 				<div
 					key={job.id + ":" + String(game?.revision ?? 0)}
