@@ -159,7 +159,7 @@ function AutoGamePreview({ game }: { game: PublicGame }) {
 						key={i}
 						src={`/app-icons/${SLOT_SYMBOLS[n]!.id}.png`}
 						alt={SLOT_SYMBOLS[n]!.label}
-						style={{ animationDelay: `${i * 120}ms` }}
+						style={{ animationDelay: `${i * 60}ms` }}
 					/>
 				))}
 			</div>

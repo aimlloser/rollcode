@@ -146,7 +146,7 @@ async function main(desktopCliPath?: string) {
 		} catch (error) {
 			ctx.logger?.error?.("Auto Gamba worker failed", { error });
 		}
-	}, 2800);
+	}, 800);
 	let handlingFatalError = false;
 	const shutdown = async (reason = "code_sidecar_shutdown"): Promise<void> => {
 		if (shuttingDown) {

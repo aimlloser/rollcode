@@ -1095,7 +1095,7 @@ body {
 	letter-spacing: 1px;
 }
 .rc-playing-card:not(.rc-card-back) {
-	animation: rc-card-in 0.52s cubic-bezier(0.2, 0.8, 0.2, 1)
+	animation: rc-card-in 0.22s cubic-bezier(0.2, 0.8, 0.2, 1)
 		var(--deal-delay, 0ms) both;
 }
 .rc-dice-board {
@@ -1170,7 +1170,7 @@ body {
 	font-size: 11px;
 }
 .rc-board-busy .rc-dice-value {
-	animation: rc-dice-slide 0.9s cubic-bezier(0.15, 0.8, 0.2, 1) both;
+	animation: rc-dice-slide 0.35s cubic-bezier(0.15, 0.8, 0.2, 1) both;
 }
 .rc-plinko {
 	width: 100%;
@@ -1207,7 +1207,7 @@ body {
 	transform: translateY(3px);
 }
 .rc-plinko-ball {
-	animation: rc-ball-drop var(--drop-duration, 1.6s)
+	animation: rc-ball-drop var(--drop-duration, 0.6s)
 		cubic-bezier(0.3, 0.05, 0.6, 1) both;
 }
 .rc-mines-grid {
@@ -1278,7 +1278,7 @@ body {
 	font-size: 16px;
 }
 .rc-wheel-spin {
-	animation: rc-wheel-turn 2.6s cubic-bezier(0.12, 0.74, 0.18, 1) both;
+	animation: rc-wheel-turn 1s cubic-bezier(0.12, 0.74, 0.18, 1) both;
 }
 .rc-roulette-grid {
 	display: grid;
@@ -1428,14 +1428,14 @@ body {
 	font-variant-numeric: tabular-nums;
 }
 .rc-settlement strong {
-	animation: rc-result-in 0.3s ease-out both;
+	animation: rc-result-in 0.16s ease-out both;
 	font-family: var(--font-sans);
 }
 .rc-gem svg {
-	animation: rc-gem-in 0.38s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+	animation: rc-gem-in 0.16s cubic-bezier(0.2, 1.4, 0.4, 1) both;
 }
 .rc-hit {
-	animation: rc-mine-shake 0.35s ease-out;
+	animation: rc-mine-shake 0.16s ease-out;
 }
 .rc-roulette-orbit {
 	position: absolute;
@@ -1454,7 +1454,7 @@ body {
 	box-shadow: 0 1px 5px #0007;
 }
 .rc-ball-orbit {
-	animation: rc-orbit 2.6s cubic-bezier(0.12, 0.74, 0.18, 1) both;
+	animation: rc-orbit 1s cubic-bezier(0.12, 0.74, 0.18, 1) both;
 }
 @keyframes rc-dice-slide {
 	0% {
@@ -1717,7 +1717,7 @@ body {
 	font-size: 17px;
 	font-weight: 600;
 	font-variant-numeric: tabular-nums;
-	animation: rc-result-in 0.3s ease-out;
+	animation: rc-result-in 0.16s ease-out;
 }
 .rc-game-settled.rc-cost-loss strong {
 	color: #efb398;
@@ -2939,7 +2939,7 @@ body {
 	height: 62px;
 	border-radius: 9px;
 	image-rendering: pixelated;
-	animation: rc-auto-reel 0.85s cubic-bezier(0.15, 0.7, 0.2, 1) both;
+	animation: rc-auto-reel 0.35s cubic-bezier(0.15, 0.7, 0.2, 1) both;
 }
 .rc-auto-dice {
 	display: flex;
@@ -2952,7 +2952,7 @@ body {
 	font-size: 28px;
 	font-weight: 500;
 	font-variant-numeric: tabular-nums;
-	animation: rc-auto-reel 0.7s ease-out;
+	animation: rc-auto-reel 0.3s ease-out;
 }
 .rc-auto-dice > small {
 	font-size: 10px;
@@ -3005,7 +3005,7 @@ body {
 	border: 4px solid #806940;
 	background: repeating-conic-gradient(#b84d54 0deg 10deg, #36322a 10deg 20deg);
 	box-shadow: inset 0 0 0 3px #c4a66a;
-	animation: rc-auto-spin 1.1s cubic-bezier(0.1, 0.6, 0.2, 1) both;
+	animation: rc-auto-spin 0.45s cubic-bezier(0.1, 0.6, 0.2, 1) both;
 }
 .rc-auto-wheel b {
 	position: relative;
@@ -3047,7 +3047,7 @@ body {
 .rc-auto-plinko polyline {
 	stroke-dasharray: 200;
 	stroke-dashoffset: 0;
-	animation: rc-auto-path 1s ease-out;
+	animation: rc-auto-path 0.45s ease-out;
 }
 .rc-auto-wait {
 	color: #b99e6b;

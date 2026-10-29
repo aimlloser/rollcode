@@ -57,7 +57,7 @@ export function SlotsBoard({
 										style={
 											{
 												"--stop": stop,
-												"--reel-time": `${1.8 + column * 0.45}s`,
+												"--reel-time": `${0.65 + column * 0.15}s`,
 												"--reel-delay": `${column * -0.14}s`,
 											} as CSSProperties
 										}

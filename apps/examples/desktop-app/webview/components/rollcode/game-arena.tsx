@@ -134,21 +134,21 @@ export function GameArena({
 			pending.current = null;
 			const duration =
 				result.game?.kind === "slots"
-					? 2900
+					? 1050
 					: result.game?.kind === "plinko"
-						? 850 + result.game.rows * 75
+						? 350 + result.game.rows * 30
 						: result.game?.kind === "roulette"
-							? 2700
+							? 1100
 							: result.game?.kind === "blackjack"
-								? 600 +
+								? 300 +
 									Math.max(
 										result.game.player.length,
 										result.game.dealer.length,
 									) *
-										130
+										55
 								: result.game?.kind === "dice"
-									? 950
-									: 450;
+									? 400
+									: 200;
 			if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches)
 				await new Promise((resolve) => setTimeout(resolve, duration));
 		} catch (cause) {
@@ -558,7 +558,7 @@ function BlackjackBoard({
 						<PlayingCard
 							key={`${i}-${c}`}
 							value={c}
-							delay={busy ? i * 130 : 0}
+							delay={busy ? i * 55 : 0}
 						/>
 					))}
 				</div>
@@ -572,7 +572,7 @@ function BlackjackBoard({
 						<PlayingCard
 							key={`${i}-${c}`}
 							value={c}
-							delay={busy ? i * 130 + 120 : 0}
+							delay={busy ? i * 55 + 50 : 0}
 						/>
 					))}
 				</div>
@@ -687,7 +687,7 @@ function PlinkoBoard({
 	return (
 		<div
 			className="rc-plinko"
-			style={{ "--drop-duration": `${650 + n * 75}ms` } as CSSProperties}
+			style={{ "--drop-duration": `${250 + n * 30}ms` } as CSSProperties}
 		>
 			<svg
 				viewBox={`0 0 ${boardWidth} ${slotY + 38}`}
