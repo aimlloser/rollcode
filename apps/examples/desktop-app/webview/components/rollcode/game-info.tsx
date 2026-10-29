@@ -18,7 +18,7 @@ export function GameInfo({ kind, chance }: { kind: GameId; chance: number }) {
 		mines:
 			"The cost multiplier starts at 2× and decreases after each safe gem. It equals 2 × the probability of surviving that many picks on this board. Cashing out applies the displayed multiplier directly to the stake. Hitting a mine costs 2×. Finding every gem automatically cashes out. The board is fixed when the game starts.",
 		roulette:
-			"Chips represent credits at 1 credit per 1,000 tokens. A winning number applies a 1/36× cost multiplier to those tokens; a winning dozen applies 1/3×; red and black pay 1:1 profit: a winning placement reduces the adjusted cost by the full staked amount (1,000 tokens staked saves 1,000). Other winning outside bets apply 0.5×. Losing bets cost 2×, including outside bets when zero lands. Unplaced tokens remain at 1×. The costs of all placements plus unplaced tokens are added to get the new balance.",
+			"Chips represent tokens. A winning number applies a 1/36× cost multiplier to those tokens; a winning dozen applies 1/3×; red and black pay 1:1 profit: a winning placement reduces the adjusted cost by the full staked amount (1,000 tokens staked saves 1,000). Other winning outside bets apply 0.5×. Losing bets cost 2×, including outside bets when zero lands. Unplaced tokens remain at 1×. The costs of all placements plus unplaced tokens are added to get the new balance.",
 	};
 	return (
 		<Popover>
@@ -35,9 +35,9 @@ export function GameInfo({ kind, chance }: { kind: GameId; chance: number }) {
 			<PopoverContent className="rc-game-info" align="end" sideOffset={10}>
 				<h3>Rules &amp; calculations</h3>
 				<p>{rules[kind]}</p>
-				<h4>Credit cost</h4>
+				<h4>Token cost</h4>
 				<p className="rc-game-formula">
-					new cost = staked credits × cost multiplier
+					new token cost = staked tokens × cost multiplier
 				</p>
 				<p>
 					Every displayed cost multiplier is literal: above 1× increases token

@@ -438,7 +438,7 @@ export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
 					>
 						<div className="rc-section-heading">
 							<h3>How games work</h3>
-							<span>Replay using your updated credits</span>
+							<span>Replay using your updated tokens</span>
 						</div>
 						<div className="rc-odds">
 							{[
@@ -456,7 +456,7 @@ export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
 							))}
 						</div>
 						<p className="rc-footnote">
-							New credit cost = staked credits × cost multiplier. 1.4× increases
+							New token cost = staked tokens × cost multiplier. 1.4× increases
 							cost by 40%, 0.5× halves it, and 0× is free. Each new game uses
 							the previous result as its stake, so multipliers compound.
 							Roulette settles each placement separately; unplaced tokens stay

@@ -28,10 +28,7 @@ import { PlayingCard } from "./playing-card";
 import { games } from "./game-picker";
 import { RouletteBoard } from "./roulette-board";
 import { SlotsBoard } from "./slots-board";
-import {
-	creditAmount,
-	demoCredits,
-} from "../../../sidecar/rollcode/demo-wallet";
+import { tokenAmount, tokenLabel } from "./game-units";
 
 export function GameArena({
 	open,
@@ -196,14 +193,14 @@ export function GameArena({
 					<GameIcon game={kind} />
 					<DialogTitle>{name}</DialogTitle>
 					<DialogDescription className="sr-only">
-						Play with this task’s credits. 1 credit = 1,000 tokens.
+						Play with this task’s tokens.
 					</DialogDescription>
 					<div className="rc-game-stake">
 						<span>Stake</span>
 						<strong title={`${stake.toLocaleString()} tokens`}>
-							{creditAmount(stake)}
+							{tokenAmount(stake)}
 						</strong>
-						<span>credits</span>
+						<span>tokens</span>
 					</div>
 					<GameInfo kind={kind} chance={chance} />
 				</header>
@@ -307,7 +304,7 @@ export function GameArena({
 								</span>
 								<span>
 									Cash-out cost
-									<b>{demoCredits(stake * mineCost)}</b>
+									<b>{tokenLabel(stake * mineCost)}</b>
 								</span>
 							</div>
 						</>
@@ -505,7 +502,7 @@ export function GameArena({
 							<strong>
 								{roll.multiplier === 0
 									? "Free task"
-									: demoCredits(roll.simulatedTokens ?? stake * roundCost)}
+									: tokenLabel(roll.simulatedTokens ?? stake * roundCost)}
 							</strong>
 							<small>{Number(roundCost.toFixed(6))}× this game’s stake</small>
 						</output>
@@ -532,9 +529,7 @@ export function GameArena({
 					)}
 				</div>
 				<footer className="rc-arena-footer">
-					<span>
-						Credits · 1 credit = 1,000 tokens · API charges unchanged.
-					</span>
+					<span>Token stakes · API charges unchanged.</span>
 					<span>{active ? "Progress saved" : "Every game is saved"}</span>
 				</footer>
 			</DialogContent>

@@ -1,4 +1,4 @@
-import { creditAmount } from "../../../sidecar/rollcode/demo-wallet";
+import { tokenAmount } from "./game-units";
 import type { Roll, RoundHistory } from "../../../sidecar/rollcode/ledger";
 import { games } from "./game-picker";
 import { GameIcon } from "./game-icon";
@@ -60,9 +60,9 @@ export function GameHistory({ roll }: { roll: Roll }) {
 										{games.find((g) => g.id === kind)?.name ?? "Original roll"}
 									</span>
 									<span className="rc-history-tokens">
-										{creditAmount(round.stakeTokens)}{" "}
+										{tokenAmount(round.stakeTokens)}{" "}
 										<span aria-hidden="true">→</span>{" "}
-										<strong>{creditAmount(round.resultTokens)}</strong> credits
+										<strong>{tokenAmount(round.resultTokens)}</strong> tokens
 									</span>
 								</div>
 								<time

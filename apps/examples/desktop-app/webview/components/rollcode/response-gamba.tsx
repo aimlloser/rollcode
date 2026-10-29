@@ -12,7 +12,7 @@ import { GamePicker, type GameId } from "./game-picker";
 import { GameArena } from "./game-arena";
 import { GameHistory } from "./game-history";
 import type { Gamble } from "./use-response-rolls";
-import { demoCredits } from "../../../sidecar/rollcode/demo-wallet";
+import { tokenLabel } from "./game-units";
 
 export function ResponseGamba({
 	roll,
@@ -109,7 +109,7 @@ export function ResponseGamba({
 					<div className="rc-gamba-heading">
 						<Dice5 size={16} />
 						<h3>Gamba</h3>
-						<span>Credits</span>
+						<span>Tokens</span>
 					</div>
 					<div className="rc-gamba-price">
 						<span>
@@ -117,7 +117,7 @@ export function ResponseGamba({
 								? `${roll.tokens.toLocaleString()} actual tokens`
 								: "Token usage not reported"}
 						</span>
-						<b>{usageReported ? demoCredits(roll.tokens) : "—"}</b>
+						<b>{usageReported ? `${tokenLabel(adjustedTokens)} stake` : "—"}</b>
 					</div>
 					<dl className="rc-gamba-breakdown">
 						<div>
@@ -148,14 +148,14 @@ export function ResponseGamba({
 								).toLocaleString()}{" "}
 								adjusted tokens
 							</span>
-							<span>{demoCredits(adjustedTokens)} · Credit cost</span>
+							<span>Saved to history</span>
 						</output>
 					) : null}
 					{!active && usageReported && adjustedTokens > 0 && (
 						<>
 							<p className="rc-game-status">
 								{settled
-									? `Play again with ${demoCredits(adjustedTokens)}`
+									? `Play again with ${tokenLabel(adjustedTokens)}`
 									: "Choose a game"}
 							</p>
 							<GamePicker selected={game} onSelect={choose} />

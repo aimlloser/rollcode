@@ -1,9 +1,6 @@
 "use client";
 import type { CSSProperties } from "react";
-import {
-	creditAmount,
-	demoCredits,
-} from "../../../sidecar/rollcode/demo-wallet";
+import { tokenAmount, tokenLabel } from "./game-units";
 import {
 	CHIP_DENOMINATIONS,
 	RED_NUMBERS,
@@ -61,7 +58,7 @@ export function RouletteBoard({
 	const remaining = Math.max(0, stake - total);
 	const index = state ? WHEEL.indexOf(state.number) : 0;
 	const label = (bet: string) =>
-		`${betName(bet)} · ${demoCredits(amount(bet))}${disabled ? "" : ` · click to place ${demoCredits(denomination)}`}`;
+		`${betName(bet)} · ${tokenLabel(amount(bet))}${disabled ? "" : ` · click to place ${tokenLabel(denomination)}`}`;
 	const marker = (bet: string) =>
 		amount(bet) > 0 ? (
 			<span
@@ -217,10 +214,10 @@ export function RouletteBoard({
 							type="button"
 							key={value}
 							data-chip={value}
-							aria-label={demoCredits(value)}
+							aria-label={tokenLabel(value)}
 							aria-pressed={denomination === value}
 							disabled={disabled || value > remaining}
-							title={`${demoCredits(value)} per chip · ${value.toLocaleString()} tokens`}
+							title={`${tokenLabel(value)} per chip`}
 							onClick={() => onDenomination(value)}
 						>
 							{chipText(value)}
@@ -246,12 +243,12 @@ export function RouletteBoard({
 			</div>
 			<div className="rc-chip-summary">
 				<output>
-					{creditAmount(total)} / {demoCredits(stake)} placed
+					{tokenAmount(total)} / {tokenLabel(stake)} placed
 				</output>
 				<span>
 					{state
-						? `${demoCredits(state.returnedChips !== undefined ? state.returnedChips * (state.chipUnit === "tokens" ? 1 : stake / 100) : (state.payout ?? 0) * stake)} gross return (includes stake)`
-						: `${demoCredits(remaining)} available`}
+						? `${tokenLabel(state.returnedChips !== undefined ? state.returnedChips * (state.chipUnit === "tokens" ? 1 : stake / 100) : (state.payout ?? 0) * stake)} gross return (includes stake)`
+						: `${tokenLabel(remaining)} available`}
 				</span>
 			</div>
 			{!state && stake < 1 && (
@@ -277,5 +274,7 @@ function chipColor(amount: number) {
 }
 
 function chipText(value: number) {
-	return creditAmount(value);
+	return value >= 1000
+		? `${Number((value / 1000).toFixed(1))}K`
+		: tokenAmount(value);
 }

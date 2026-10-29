@@ -37,6 +37,8 @@ You can play again using the response’s latest adjusted cost. Results compound
 
 The sidebar shows your credit balance and its token equivalent. **Usage → Reset to 10,000** refills the wallet without deleting history. Existing saved responses count toward spending. A negative balance is shown explicitly and does not block actual API usage.
 
+Games display and stake **tokens**, including Roulette chips and game history. Credits are the wallet’s conversion: every 1,000 tokens spent or refunded equals 1 credit.
+
 Credits have **no cash value**. Dollar estimates are displayed separately and depend on the model provider’s pricing.
 
 ## Games
@@ -49,7 +51,7 @@ All displayed multipliers apply directly to the staked cost: **0× is free, 0.5�
 | **Dice** | Choose a target and roll over or under. The win chance determines the winning cost multiplier; a miss costs 2×. |
 | **Plinko** | Choose risk and rows. The outermost slots are free; costs rise toward the center. |
 | **Mines** | Start at 2× and reveal safe gems to reduce the multiplier. Cash out before hitting a mine. |
-| **Roulette** | Stack credit chips across numbers and outside bets. Winning red/black bets refund the full amount placed; losing bets add that amount. Unplaced credits stay unchanged. |
+| **Roulette** | Stack token chips across numbers and outside bets. Winning red/black bets refund the full amount placed; losing bets add that amount. Unplaced tokens stay unchanged. |
 | **Slots** | Drag the lever down and release. Three Jackpot icons make the stake free, other triples cost 0.25×, pairs cost 0.5×, and no match costs 2×. |
 
 Rules, calculations, and slot probabilities are available through the **ⓘ** button in each game. Saved historical outcomes retain their original results.
