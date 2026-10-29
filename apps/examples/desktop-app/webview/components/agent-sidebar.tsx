@@ -1240,7 +1240,10 @@ export function AgentSidebar({
 						isCollapsed ? "px-1.5" : "px-2",
 					)}
 				>
-					<CreditLounge collapsed={isCollapsed} />
+					<CreditLounge
+						collapsed={isCollapsed}
+						showAutoPlayers={view === "chat"}
+					/>
 					{user && !isCollapsed ? (
 						<div className="flex min-w-0 items-center gap-2">
 							<button

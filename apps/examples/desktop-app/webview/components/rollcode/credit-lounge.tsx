@@ -44,7 +44,13 @@ const dollars = (value: number) =>
 		maximumFractionDigits: value > 0 && value < 0.01 ? 6 : 2,
 	}).format(value);
 
-export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
+export function CreditLounge({
+	collapsed = false,
+	showAutoPlayers = true,
+}: {
+	collapsed?: boolean;
+	showAutoPlayers?: boolean;
+}) {
 	const [open, setOpen] = useState(false);
 	const { wallet, error: walletError } = useDemoWallet();
 	const [rolls, setRolls] = useState<Roll[]>([]);
@@ -178,7 +184,7 @@ export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
 				<Dice5 className="size-4" />
 				{!collapsed ? "Usage" : null}
 			</Button>
-			<AutoGambaMonitor />
+			<AutoGambaMonitor visible={showAutoPlayers && !open} />
 			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogContent className="rc-lounge">
 					<header className="rc-topbar">

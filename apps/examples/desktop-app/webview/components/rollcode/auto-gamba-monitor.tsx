@@ -1,11 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { ChevronDown, Dice5, History, Square, X } from "lucide-react";
-import {
-	Popover,
-	PopoverAnchor,
-	PopoverContent,
-} from "@/components/ui/popover";
 import { useAutoGamba } from "./use-auto-gamba";
 import { GameIcon } from "./game-icon";
 import { games } from "./game-picker";
@@ -17,9 +13,10 @@ import type { AutoGambaSnapshot } from "../../../sidecar/rollcode/auto-gamba";
 import type { PublicGame } from "../../../sidecar/rollcode/game-types";
 import { RED_NUMBERS } from "../../../sidecar/rollcode/game-types";
 
-export function AutoGambaMonitor() {
+export function AutoGambaMonitor({ visible = true }: { visible?: boolean }) {
 	const { state, error, saving, stop } = useAutoGamba();
 	const [tracked, setTracked] = useState<Set<string>>(() => new Set());
+	const [dismissed, setDismissed] = useState<Set<string>>(() => new Set());
 	useEffect(() => {
 		if (!state?.enabled) {
 			setTracked((previous) => (previous.size ? new Set() : previous));
@@ -42,20 +39,24 @@ export function AutoGambaMonitor() {
 			return next;
 		});
 	}, [state]);
-	if (!state?.enabled) return null;
+	if (!state?.enabled || !visible) return null;
 	const jobs = state.jobs.filter(
-		(job) => job.status === "running" || tracked.has(job.id),
+		(job) =>
+			!dismissed.has(job.id) &&
+			(job.status === "running" || tracked.has(job.id)),
 	);
 	return (
 		<>
-			{jobs.map((job, index) => (
+			{jobs.map((job) => (
 				<AutoGambaPlayer
 					key={job.id}
 					job={job}
 					error={error}
 					saving={saving}
 					stop={stop}
-					below={jobs.length > 1 && index === 0}
+					onDismiss={() =>
+						setDismissed((previous) => new Set(previous).add(job.id))
+					}
 				/>
 			))}
 		</>
@@ -67,145 +68,137 @@ function AutoGambaPlayer({
 	error,
 	saving,
 	stop,
-	below,
+	onDismiss,
 }: {
 	job: AutoGambaSnapshot["jobs"][number];
 	error: string;
 	saving: boolean;
 	stop: (id: string) => Promise<void>;
-	below: boolean;
+	onDismiss: () => void;
 }) {
-	const [anchor, setAnchor] = useState<HTMLElement | null>(null);
-	const [visible, setVisible] = useState(false);
-	const [manualOpen, setManualOpen] = useState(false);
-	const [dismissed, setDismissed] = useState<Set<string>>(() => new Set());
-	// Bind to the actual message badge. Radix follows scrolling, resizes and edge collisions.
+	const [host, setHost] = useState<HTMLElement | null>(null);
+	const [inset, setInset] = useState(0);
 	useEffect(() => {
-		if (!job.id) {
-			setAnchor(null);
-			return;
-		}
-		const findAnchor = () => {
-			const badge =
+		const findHost = () => {
+			const target =
 				Array.from(
 					document.querySelectorAll<HTMLElement>(
-						".rc-token-trigger[data-roll-id]",
+						".rc-auto-player-mount[data-roll-id]",
 					),
-				).find((el) => el.dataset.rollId === job?.id) ?? null;
-			setAnchor((previous) => (previous === badge ? previous : badge));
-			setManualOpen(badge?.dataset.state === "open");
+				).find((el) => el.dataset.rollId === job.id) ?? null;
+			setHost((previous) => (previous === target ? previous : target));
 		};
-		findAnchor();
-		const observer = new MutationObserver(findAnchor);
-		observer.observe(document.body, {
-			childList: true,
-			subtree: true,
-			attributes: true,
-			attributeFilter: ["data-state", "data-roll-id"],
-		});
+		findHost();
+		const observer = new MutationObserver(findHost);
+		observer.observe(document.body, { childList: true, subtree: true });
 		return () => observer.disconnect();
 	}, [job.id]);
 	useEffect(() => {
-		setVisible(false);
-		if (!anchor) return;
-		const observer = new IntersectionObserver(([entry]) =>
-			setVisible(!!entry?.isIntersecting),
-		);
-		observer.observe(anchor);
-		return () => observer.disconnect();
-	}, [anchor]);
-	if (!anchor) return null;
+		if (!host) return;
+		const badge = Array.from(
+			document.querySelectorAll<HTMLElement>(".rc-token-trigger[data-roll-id]"),
+		).find((el) => el.dataset.rollId === job.id);
+		const align = () => {
+			if (!badge) return;
+			const panelWidth = Math.min(280, window.innerWidth - 24);
+			setInset(
+				Math.max(
+					0,
+					Math.min(
+						badge.getBoundingClientRect().left -
+							host.getBoundingClientRect().left,
+						host.clientWidth - panelWidth,
+					),
+				),
+			);
+		};
+		const observer = new ResizeObserver(align);
+		observer.observe(host);
+		if (badge) observer.observe(badge);
+		window.addEventListener("resize", align);
+		align();
+		return () => {
+			observer.disconnect();
+			window.removeEventListener("resize", align);
+		};
+	}, [host, job.id]);
+	if (!host) return null;
 	const game = job.roll.game;
 	const balance = job.roll.simulatedTokens ?? job.roll.tokens;
-	return (
-		<Popover
-			open={visible && !manualOpen && !dismissed.has(job.id)}
-			onOpenChange={(open) => {
-				if (!open && job.status !== "running")
-					setDismissed((previous) => new Set(previous).add(job.id));
+	return createPortal(
+		<section
+			className="rc-auto-monitor rc-auto-inline"
+			style={{ marginInlineStart: inset }}
+			aria-label="Auto Gamba live game"
+			onKeyDown={(event) => {
+				if (event.key === "Escape" && job.status !== "running") onDismiss();
 			}}
 		>
-			<PopoverAnchor virtualRef={{ current: anchor }} />
-			<PopoverContent
-				className="rc-auto-monitor"
-				side={below ? "bottom" : "top"}
-				align="start"
-				sideOffset={6}
-				collisionPadding={12}
-				aria-label="Auto Gamba live game"
-				onOpenAutoFocus={(e) => e.preventDefault()}
-				onCloseAutoFocus={(e) => e.preventDefault()}
-				onInteractOutside={(e) => e.preventDefault()}
-			>
-				<div className="rc-auto-summary">
-					<span>
-						{game ? <GameIcon game={game.kind} /> : <Dice5 size={16} />}
-						{game
-							? games.find((g) => g.id === game.kind)?.name
-							: "Choosing game"}
-					</span>
-					<b
-						aria-live="polite"
-						title={job.status === "free" ? "Free task" : undefined}
-					>
-						{tokenLabel(balance)}
-					</b>
-					{job.status !== "running" && (
-						<button
-							type="button"
-							className="rc-auto-close"
-							aria-label="Close completed Auto Gamba player"
-							onClick={() =>
-								setDismissed((previous) => new Set(previous).add(job.id))
-							}
-						>
-							<X size={13} />
-						</button>
-					)}
-				</div>
-				<div
-					key={job.id + ":" + String(game?.revision ?? 0)}
-					className="rc-auto-stage"
-					data-running={job.status === "running"}
+			<div className="rc-auto-summary">
+				<span>
+					{game ? <GameIcon game={game.kind} /> : <Dice5 size={16} />}
+					{game ? games.find((g) => g.id === game.kind)?.name : "Choosing game"}
+				</span>
+				<b
+					aria-live="polite"
+					title={job.status === "free" ? "Free task" : undefined}
 				>
-					{game ? (
-						<AutoGamePreview game={game} />
-					) : (
-						<Dice5 size={36} className="rc-auto-wait" />
-					)}
-				</div>
-				<div className="rc-auto-footer">
-					<details className="rc-auto-history">
-						<summary>
-							<History size={12} />
-							History
-							<ChevronDown size={12} />
-						</summary>
-						<GameHistory roll={job.roll} />
-						{!job.roll.rounds?.length && (
-							<p className="rc-auto-idle">No completed games yet.</p>
-						)}
-					</details>
-					{job.status === "running" && (
-						<button
-							type="button"
-							className="rc-auto-cancel"
-							disabled={saving}
-							onClick={() => void stop(job.id)}
-							aria-label="Cancel this Auto Gamba run"
-						>
-							<Square size={10} fill="currentColor" />
-							Cancel
-						</button>
-					)}
-				</div>
-				{(job.error || error) && (
-					<p className="rc-auto-error" role="alert">
-						{job.error || error}
-					</p>
+					{tokenLabel(balance)}
+				</b>
+				{job.status !== "running" && (
+					<button
+						type="button"
+						className="rc-auto-close"
+						aria-label="Close completed Auto Gamba player"
+						onClick={() => onDismiss()}
+					>
+						<X size={13} />
+					</button>
 				)}
-			</PopoverContent>
-		</Popover>
+			</div>
+			<div
+				key={job.id + ":" + String(game?.revision ?? 0)}
+				className="rc-auto-stage"
+				data-running={job.status === "running"}
+			>
+				{game ? (
+					<AutoGamePreview game={game} />
+				) : (
+					<Dice5 size={36} className="rc-auto-wait" />
+				)}
+			</div>
+			<div className="rc-auto-footer">
+				<details className="rc-auto-history">
+					<summary>
+						<History size={12} />
+						History
+						<ChevronDown size={12} />
+					</summary>
+					<GameHistory roll={job.roll} />
+					{!job.roll.rounds?.length && (
+						<p className="rc-auto-idle">No completed games yet.</p>
+					)}
+				</details>
+				{job.status === "running" && (
+					<button
+						type="button"
+						className="rc-auto-cancel"
+						disabled={saving}
+						onClick={() => void stop(job.id)}
+						aria-label="Cancel this Auto Gamba run"
+					>
+						<Square size={10} fill="currentColor" />
+						Cancel
+					</button>
+				)}
+			</div>
+			{(job.error || error) && (
+				<p className="rc-auto-error" role="alert">
+					{job.error || error}
+				</p>
+			)}
+		</section>,
+		host,
 	);
 }
 

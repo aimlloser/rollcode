@@ -2820,11 +2820,12 @@ body {
 }
 
 /* Minimal automatic game screen anchored to its message token badge. */
-.rc-auto-monitor[data-slot="popover-content"] {
+.rc-auto-monitor[data-slot="popover-content"],
+.rc-auto-monitor.rc-auto-inline {
 	position: relative;
 	inset: auto;
 	width: min(280px, calc(100vw - 24px));
-	max-height: min(420px, var(--radix-popover-content-available-height));
+	max-height: min(420px, var(--radix-popover-content-available-height, 420px));
 	overflow-y: auto;
 	padding: 10px;
 	border: 1px solid #ffffff1a;
@@ -3130,4 +3131,17 @@ body {
 .rc-auto-cancel:hover {
 	color: #f0b5ac;
 	background: #ffffff08;
+}
+
+.rc-auto-player-mount {
+	width: 100%;
+	min-width: 0;
+	align-self: stretch;
+}
+.rc-auto-player-mount:empty {
+	display: none;
+}
+.rc-auto-inline {
+	max-width: 100%;
+	box-sizing: border-box;
 }
