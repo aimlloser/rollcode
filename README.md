@@ -14,7 +14,8 @@ ROLLCODE is a Windows desktop fork of **[Cline](https://github.com/cline/cline)*
 
 - **A coding agent that already works:** Cline’s existing agent and tools, with support for its model providers and your own API keys.
 - **A quieter desktop interface:** warm dark surfaces, readable chat typography, and selectable gambling-themed pixel art app icons.
-- **Opt-in games:** click the tokens beside a completed response to open Gamba. Games never pop up automatically.
+- **Opt-in games:** click the tokens beside a completed response to open Gamba. Games open on demand by default.
+- **Auto Gamba:** an optional setting plays random games for each new completed response until its token cost is free, with a live mini player and stop controls.
 - **A credit wallet:** 10,000 starting credits, a visible credit balance and token counter.
 - **Usage and history:** actual tokens, adjusted costs, per-response game history, and JSON export.
 - **Local storage:** balances and game outcomes persist on your device. No ROLLCODE hosted backend is required; inference uses your configured model provider.
@@ -40,6 +41,12 @@ The sidebar shows your credit balance and its token equivalent. Existing saved r
 Games display and stake **tokens**, including Roulette chips and game history. Credits are the wallet’s conversion: every 1,000 tokens spent or refunded equals 1 credit.
 
 Credits have **no cash value**. Dollar estimates are displayed separately and depend on the model provider’s pricing.
+
+## Auto Gamba
+
+Enable **Settings → General → Auto Gamba** to automatically play on new completed responses. It starts disabled and does not process older history when enabled. A small live player shows the current game, latest token cost, and recent results. Each new round uses that response’s updated token stake; costs can increase before a free result.
+
+Use **Stop this run** to stop a response, or **Off** to disable the setting and stop all queued runs. An unfinished Blackjack hand or Mines board can be continued manually. Progress and pending requests persist locally, so an enabled run can resume after a backend restart without replaying a move. Games do not affect actual API billing.
 
 ## Games
 

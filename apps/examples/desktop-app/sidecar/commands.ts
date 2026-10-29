@@ -1955,6 +1955,19 @@ export async function handleCommand(
 	options?: { connection?: SidecarWebSocketClient },
 ): Promise<unknown> {
 	if (command === "rollcode_list") return rollLedger().list();
+	if (command === "rollcode_auto") return rollLedger().auto.snapshot();
+	if (command === "rollcode_auto_setting") {
+		if (typeof args?.enabled !== "boolean") throw new Error("Auto Gamba setting required");
+		const state = rollLedger().auto.setEnabled(args.enabled);
+		broadcastEvent(ctx, "rollcode_auto", state);
+		return state;
+	}
+	if (command === "rollcode_auto_stop") {
+		if (typeof args?.id !== "string") throw new Error("Response id required");
+		const state = rollLedger().auto.stop(args.id);
+		broadcastEvent(ctx, "rollcode_auto", state);
+		return state;
+	}
 	if (command === "rollcode_wallet") return rollLedger().wallet();
 	if (command === "rollcode_reset_wallet") {
 		if (typeof args?.requestId !== "string") throw new Error("Missing reset request id");

@@ -126,3 +126,9 @@ After settlement, the message badge strikes through actual token usage and shows
 Repeat games use monotonic revisions and per-request receipts: a fresh start at the current revision creates a new round, while retries return saved state. Each completed round stores its game, timestamps, stake, multiplier, and resulting tokens atomically with the message balance. The Gamba popup shows all rounds in a compact scrollable history. Original API token usage is never changed.
 
 
+
+## Auto Gamba
+
+Settings → General exposes an off-by-default Auto Gamba toggle. Only newly inserted, completed root-agent responses with reported positive tokens are queued while it is enabled. Existing history and duplicate completion events do not create new runs. The sidecar advances one persisted decision every 2.8 seconds, using all six games and the latest response stake. Blackjack hits below 17 and otherwise stands; Mines makes random unrevealed picks and may cash out after three gems; Roulette chooses red or black and places the available whole tokens. Fractional stakes below one token use another game.
+
+The next request is committed before play and reused after interruption. The existing ledger saves the move, hidden state and receipt atomically; the queue then conditionally advances that request. Concurrent workers or restarts cannot reroll a committed action. Manual actions are rejected while an automatic run owns the response. Stop disables future moves, leaving any active hand recoverable for manual play. Turning the setting off stops every queued run; re-enabling applies to future responses. The mini player shows public state only and honors reduced motion. Auto Gamba stops on a zero-cost result, explicit stop, or an accounting error; it never silently retries a failed move with a fresh draw. No round limit is imposed, so costs can rise during a run.

@@ -29,6 +29,7 @@ import { HubStartup } from "./hub-startup";
 import { createDesktopObservability } from "./observability";
 import { resolveWorkspaceRoot } from "./paths";
 import { startServer } from "./server";
+import { rollLedger } from "./rollcode/ledger";
 import { BunRuntime, SIDECAR_HOST, SIDECAR_MODE, SIDECAR_PORT } from "./types";
 
 const SHUTDOWN_TIMEOUT_MS = 5_000;
@@ -135,12 +136,24 @@ async function main(desktopCliPath?: string) {
 	);
 
 	let shuttingDown = false;
+	const autoGambaTimer = setInterval(() => {
+		if (shuttingDown) return;
+		try {
+			const update = rollLedger().auto.tick();
+			if (update.roll) broadcastEvent(ctx, "rollcode_roll", update.roll);
+			if (update.changed)
+				broadcastEvent(ctx, "rollcode_auto", rollLedger().auto.snapshot());
+		} catch (error) {
+			ctx.logger?.error?.("Auto Gamba worker failed", { error });
+		}
+	}, 2800);
 	let handlingFatalError = false;
 	const shutdown = async (reason = "code_sidecar_shutdown"): Promise<void> => {
 		if (shuttingDown) {
 			return;
 		}
 		shuttingDown = true;
+		clearInterval(autoGambaTimer);
 		observability.logger.log("Desktop sidecar shutting down", { reason });
 		await withTimeout(
 			(async () => {

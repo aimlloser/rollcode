@@ -2818,3 +2818,293 @@ body {
 	opacity: 0.5;
 	cursor: default;
 }
+
+/* Compact live view for opt-in automatic token games. */
+.rc-auto-monitor {
+	position: fixed;
+	right: 18px;
+	bottom: 18px;
+	z-index: 40;
+	width: min(310px, calc(100vw - 24px));
+	border: 1px solid #ffffff20;
+	border-radius: 12px;
+	background: #211e1bf5;
+	color: #e9e2d9;
+	box-shadow: 0 12px 38px #0005;
+	overflow: hidden;
+	font-family: var(--font-sans);
+}
+.rc-auto-monitor > header {
+	display: flex;
+	align-items: center;
+	padding: 10px 12px;
+	gap: 10px;
+}
+.rc-auto-heading {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex: 1;
+	min-width: 0;
+	cursor: pointer;
+}
+.rc-auto-heading strong {
+	font-size: 12px;
+	font-weight: 500;
+	white-space: nowrap;
+}
+.rc-auto-heading > span {
+	margin-left: auto;
+	font-size: 10px;
+	color: #a69b88;
+}
+.rc-auto-heading .rc-auto-pulse {
+	color: #95cca8;
+}
+.rc-auto-off {
+	font-size: 10px;
+	padding: 3px 5px;
+	color: #b2a795;
+	cursor: pointer;
+	border-radius: 4px;
+}
+.rc-auto-off:hover {
+	background: #ffffff10;
+}
+.rc-auto-content {
+	padding: 0 12px 12px;
+	border-top: 1px solid #ffffff0d;
+}
+.rc-auto-summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	font-size: 11px;
+	padding: 12px 0 8px;
+}
+.rc-auto-summary > span {
+	color: #b1a592;
+}
+.rc-auto-summary b {
+	font-weight: 500;
+	font-variant-numeric: tabular-nums;
+}
+.rc-auto-stage {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 132px;
+	gap: 10px;
+	border-radius: 8px;
+	padding: 12px 8px;
+	background: #191714;
+}
+.rc-auto-stage > p {
+	color: #b9ab94;
+	font-size: 10px;
+	line-height: 1.5;
+	text-align: center;
+	margin: 0;
+}
+.rc-auto-controls {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	padding: 10px 0 0;
+	font-size: 9px;
+	color: #8e8373;
+}
+.rc-auto-controls button {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	color: #d7a49a;
+	cursor: pointer;
+	padding: 5px;
+}
+.rc-auto-monitor button:focus-visible {
+	outline: 2px solid #cbb990;
+	outline-offset: 2px;
+}
+.rc-auto-monitor button:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+.rc-auto-monitor .rc-game-history {
+	margin-top: 10px;
+	padding-top: 10px;
+}
+.rc-auto-monitor .rc-game-history ol {
+	max-height: 125px;
+}
+.rc-auto-error {
+	font-size: 10px;
+	line-height: 1.5;
+	color: #e69b96;
+	margin-top: 10px;
+}
+.rc-auto-idle {
+	color: #a69b88;
+	font-size: 11px;
+	line-height: 1.7;
+	margin: 14px 0 2px;
+}
+.rc-auto-slot-reels {
+	display: flex;
+	gap: 8px;
+}
+.rc-auto-slot-reels img {
+	width: 62px;
+	height: 62px;
+	border-radius: 9px;
+	image-rendering: pixelated;
+	animation: rc-auto-reel 0.85s cubic-bezier(0.15, 0.7, 0.2, 1) both;
+}
+.rc-auto-dice {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+.rc-auto-dice > strong {
+	font-size: 28px;
+	font-weight: 500;
+	font-variant-numeric: tabular-nums;
+	animation: rc-auto-reel 0.7s ease-out;
+}
+.rc-auto-dice > small {
+	font-size: 10px;
+	color: #a59a89;
+}
+.rc-auto-cards {
+	display: flex;
+	justify-content: space-around;
+	gap: 20px;
+	width: 100%;
+}
+.rc-auto-cards > div {
+	min-width: 0;
+}
+.rc-auto-cards small {
+	display: block;
+	text-align: center;
+	font-size: 9px;
+	color: #a69b88;
+	margin-bottom: 6px;
+}
+.rc-auto-cards > div > div {
+	display: flex;
+	justify-content: center;
+}
+.rc-auto-cards .rc-playing-card {
+	width: 36px;
+	height: 51px;
+	min-width: 36px;
+	margin-left: -10px;
+	border-radius: 4px;
+}
+.rc-auto-cards .rc-playing-card:first-child {
+	margin-left: 0;
+}
+.rc-auto-cards .rc-card-corner {
+	font-size: 9px;
+}
+.rc-auto-wheel {
+	position: relative;
+	width: 86px;
+	height: 86px;
+	display: grid;
+	place-items: center;
+}
+.rc-auto-wheel-ring {
+	position: absolute;
+	inset: 0;
+	border-radius: 50%;
+	border: 4px solid #806940;
+	background: repeating-conic-gradient(#b84d54 0deg 10deg, #36322a 10deg 20deg);
+	box-shadow: inset 0 0 0 3px #c4a66a;
+	animation: rc-auto-spin 1.1s cubic-bezier(0.1, 0.6, 0.2, 1) both;
+}
+.rc-auto-wheel b {
+	position: relative;
+	display: grid;
+	place-items: center;
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	background: #211d17;
+	font-size: 24px;
+	font-weight: 500;
+}
+.rc-auto-mines {
+	display: grid;
+	grid-template-columns: repeat(5, 18px);
+	gap: 4px;
+}
+.rc-auto-mines span {
+	display: grid;
+	place-items: center;
+	height: 18px;
+	border: 1px solid #ffffff0d;
+	background: #383229;
+	border-radius: 3px;
+	font-size: 12px;
+}
+.rc-auto-mines [data-gem="true"] {
+	color: #81d49b;
+	background: #294133;
+}
+.rc-auto-mines [data-mine="true"] {
+	color: #e3958b;
+	background: #52332e;
+}
+.rc-auto-plinko {
+	width: 180px;
+	height: 110px;
+}
+.rc-auto-plinko polyline {
+	stroke-dasharray: 200;
+	stroke-dashoffset: 0;
+	animation: rc-auto-path 1s ease-out;
+}
+.rc-auto-wait {
+	color: #b99e6b;
+	animation: rc-auto-spin 2s linear infinite;
+}
+@keyframes rc-auto-reel {
+	from {
+		opacity: 0.2;
+		transform: translateY(-25px);
+		filter: blur(2px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+		filter: blur(0);
+	}
+}
+@keyframes rc-auto-spin {
+	from {
+		transform: rotate(-360deg);
+	}
+	to {
+		transform: rotate(0);
+	}
+}
+@keyframes rc-auto-path {
+	from {
+		stroke-dashoffset: 200;
+	}
+	to {
+		stroke-dashoffset: 0;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.rc-auto-monitor * {
+		animation: none !important;
+	}
+}

@@ -14,6 +14,7 @@ import type { Roll } from "../../../sidecar/rollcode/ledger";
 import { GameHistory, getRoundHistory } from "./game-history";
 import { games } from "./game-picker";
 import { useDemoWallet } from "./use-demo-wallet";
+import { AutoGambaMonitor } from "./auto-gamba-monitor";
 import {
 	creditAmount,
 	demoCredits,
@@ -177,6 +178,7 @@ export function CreditLounge({ collapsed = false }: { collapsed?: boolean }) {
 				<Dice5 className="size-4" />
 				{!collapsed ? "Usage" : null}
 			</Button>
+			<AutoGambaMonitor />
 			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogContent className="rc-lounge">
 					<header className="rc-topbar">

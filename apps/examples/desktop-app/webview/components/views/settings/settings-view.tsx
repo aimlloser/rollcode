@@ -1,4 +1,5 @@
 import { Switch } from "@cline/ui";
+import { AutoGambaSettings } from "@/components/rollcode/auto-gamba-settings";
 import { Minus, Plus, RotateCcw } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -838,6 +839,7 @@ function GeneralSettingsContent() {
 			/>
 			<section className="max-w-344">
 				<NotificationSettings />
+				<AutoGambaSettings />
 				<div className="flex py-4 items-center justify-between gap-5 border-b max-[720px]:flex-col max-[720px]:items-stretch max-[720px]:py-4">
 					<div className="flex flex-col gap-1">
 						<p className="text-base font-semibold text-foreground">Dark mode</p>

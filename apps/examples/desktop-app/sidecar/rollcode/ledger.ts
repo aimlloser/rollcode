@@ -10,6 +10,7 @@ import {
 	type PrivateGame,
 } from "./game-engine";
 import { costMultiplier, type PublicGame } from "./game-types";
+import { AutoGamba } from "./auto-gamba";
 import {
 	STARTING_DEMO_TOKENS,
 	TOKENS_PER_CREDIT,
@@ -58,6 +59,7 @@ export function multiplierFor(
 /** Local, durable, multi-process safe. Randomness is drawn only inside the write lock. */
 export class RollLedger {
 	private db: SqliteDb;
+	readonly auto: AutoGamba;
 	constructor(path: string) {
 		mkdirSync(dirname(path), { recursive: true });
 		this.db = loadSqliteDb(path);
@@ -73,6 +75,9 @@ export class RollLedger {
 				"INSERT OR IGNORE INTO demo_wallet(id,funding_tokens) VALUES (1,?)",
 			)
 			.run(STARTING_DEMO_TOKENS);
+		this.auto = new AutoGamba(this.db, (id, request) =>
+			this.play(id, request, true),
+		);
 	}
 	/** Derive charges from durable response costs: retries never debit twice. */
 	wallet(): DemoWallet {
@@ -207,6 +212,7 @@ export class RollLedger {
 			this.db
 				.prepare("INSERT INTO rolls(id, data) VALUES (?, ?)")
 				.run(id, JSON.stringify(roll));
+			this.auto.enqueue(roll);
 			this.db.exec("COMMIT");
 			return roll;
 		} catch (error) {
@@ -224,6 +230,10 @@ export class RollLedger {
 			if (!row) throw new Error("Completed task not found");
 			const existing = JSON.parse(row.data) as Roll;
 			let roll = { ...existing, acknowledged: !!row.acknowledged };
+			if (this.auto.isRunning(id))
+				throw new Error(
+					"Auto Gamba is playing this response. Stop it before playing manually.",
+				);
 			if (roll.multiplier === null) {
 				if (roll.game) throw new Error("Finish the active game first");
 				if (roll.usageReported === false)
@@ -249,7 +259,7 @@ export class RollLedger {
 		}
 	}
 	/** All decisions, hidden state, receipts and settlement commit in one SQLite transaction. */
-	play(id: string, request: unknown): Roll {
+	play(id: string, request: unknown, automatic = false): Roll {
 		validateRequest(request);
 		this.db.exec("BEGIN IMMEDIATE");
 		try {
@@ -270,6 +280,16 @@ export class RollLedger {
 				this.db.exec("COMMIT");
 				return roll;
 			}
+			if (
+				automatic
+					? !this.auto.ownsRequest(id, request.requestId)
+					: this.auto.isRunning(id)
+			)
+				throw new Error(
+					automatic
+						? "Auto Gamba was stopped."
+						: "Auto Gamba is playing this response. Stop it before playing manually.",
+				);
 			if (roll.usageReported === false)
 				throw new Error("Token usage was not reported for this task.");
 			const stored = this.db
