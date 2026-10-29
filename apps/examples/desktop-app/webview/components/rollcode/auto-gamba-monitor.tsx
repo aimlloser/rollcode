@@ -1,7 +1,11 @@
 "use client";
-import { useState } from "react";
-import { createPortal } from "react-dom";
-import { ChevronDown, ChevronUp, Dice5, Square } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ChevronDown, Dice5, History, Square } from "lucide-react";
+import {
+	Popover,
+	PopoverAnchor,
+	PopoverContent,
+} from "@/components/ui/popover";
 import { useAutoGamba } from "./use-auto-gamba";
 import { GameIcon } from "./game-icon";
 import { games } from "./game-picker";
@@ -13,114 +17,117 @@ import type { PublicGame } from "../../../sidecar/rollcode/game-types";
 import { RED_NUMBERS } from "../../../sidecar/rollcode/game-types";
 
 export function AutoGambaMonitor() {
-	const { state, error, saving, stop, setEnabled } = useAutoGamba();
-	const [expanded, setExpanded] = useState(true);
-	if (!state) return null;
-	if (!state.enabled && !state.jobs.some((j) => j.status === "running"))
-		return null;
-	const running = state.jobs.filter((j) => j.status === "running");
-	const job = running[0] ?? state.jobs[0];
-	const game = job?.roll.game;
-	const balance = job?.roll.simulatedTokens ?? job?.roll.tokens ?? 0;
-	return createPortal(
-		<aside className="rc-auto-monitor" aria-label="Auto Gamba live player">
-			<header>
-				<button
-					type="button"
-					className="rc-auto-heading"
-					onClick={() => setExpanded(!expanded)}
-					aria-expanded={expanded}
-				>
-					<Dice5 size={15} />
-					<strong>Auto Gamba</strong>
-					<span className={running.length ? "rc-auto-pulse" : ""}>
-						{running.length ? "Playing" : "Watching"}
+	const { state, error, saving, stop } = useAutoGamba();
+	const job = state?.jobs.find((j) => j.status === "running") ?? state?.jobs[0];
+	const [anchor, setAnchor] = useState<HTMLElement | null>(null);
+	const [visible, setVisible] = useState(false);
+	const [manualOpen, setManualOpen] = useState(false);
+	// Bind to the actual message badge. Radix follows scrolling, resizes and edge collisions.
+	useEffect(() => {
+		if (!state?.enabled || !job?.id) {
+			setAnchor(null);
+			return;
+		}
+		const findAnchor = () => {
+			const badge =
+				Array.from(
+					document.querySelectorAll<HTMLElement>(
+						".rc-token-trigger[data-roll-id]",
+					),
+				).find((el) => el.dataset.rollId === job?.id) ?? null;
+			setAnchor((previous) => (previous === badge ? previous : badge));
+			setManualOpen(badge?.dataset.state === "open");
+		};
+		findAnchor();
+		const observer = new MutationObserver(findAnchor);
+		observer.observe(document.body, {
+			childList: true,
+			subtree: true,
+			attributes: true,
+			attributeFilter: ["data-state", "data-roll-id"],
+		});
+		return () => observer.disconnect();
+	}, [job?.id, state?.enabled]);
+	useEffect(() => {
+		setVisible(false);
+		if (!anchor) return;
+		const observer = new IntersectionObserver(([entry]) =>
+			setVisible(!!entry?.isIntersecting),
+		);
+		observer.observe(anchor);
+		return () => observer.disconnect();
+	}, [anchor]);
+	if (!state?.enabled || !job || !anchor) return null;
+	const game = job.roll.game;
+	const balance = job.roll.simulatedTokens ?? job.roll.tokens;
+	return (
+		<Popover open={visible && !manualOpen}>
+			<PopoverAnchor virtualRef={{ current: anchor }} />
+			<PopoverContent
+				className="rc-auto-monitor"
+				side="top"
+				align="start"
+				sideOffset={6}
+				collisionPadding={12}
+				aria-label="Auto Gamba live game"
+				onOpenAutoFocus={(e) => e.preventDefault()}
+				onCloseAutoFocus={(e) => e.preventDefault()}
+				onInteractOutside={(e) => e.preventDefault()}
+			>
+				<div className="rc-auto-summary">
+					<span>
+						{game ? <GameIcon game={game.kind} /> : <Dice5 size={16} />}
+						{game
+							? games.find((g) => g.id === game.kind)?.name
+							: "Choosing game"}
 					</span>
-					{expanded ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
-				</button>
-				<button
-					type="button"
-					className="rc-auto-off"
-					onClick={() => void setEnabled(false)}
-					disabled={saving}
-					title="Turn off Auto Gamba"
+					<b
+						aria-live="polite"
+						title={job.status === "free" ? "Free task" : undefined}
+					>
+						{tokenLabel(balance)}
+					</b>
+				</div>
+				<div
+					key={job.id + ":" + String(game?.revision ?? 0)}
+					className="rc-auto-stage"
+					data-running={job.status === "running"}
 				>
-					Off
-				</button>
-			</header>
-			{expanded && (
-				<div className="rc-auto-content">
-					{job ? (
-						<>
-							<div className="rc-auto-summary">
-								<span title={job.roll.sessionId}>
-									{game
-										? games.find((g) => g.id === game.kind)?.name
-										: "Choosing a game…"}
-								</span>
-								<b>{tokenLabel(balance)}</b>
-							</div>
-							<div
-								key={`${job.id}:${game?.revision ?? 0}`}
-								className="rc-auto-stage"
-								data-running={job.status === "running"}
-							>
-								{game ? (
-									<AutoGamePreview game={game} />
-								) : (
-									<Dice5 size={44} className="rc-auto-wait" />
-								)}
-								<p>
-									{job.status === "free"
-										? "Free task!"
-										: job.status === "error"
-											? "Run stopped"
-											: job.status === "stopped"
-												? "Stopped"
-												: (game?.message ?? "First game starts shortly")}
-								</p>
-							</div>
-							<div className="rc-auto-controls">
-								<span>
-									{job.roll.rounds?.length
-										? "Recent games below"
-										: "Progress saved"}
-									{running.length > 1
-										? ` · ${running.length} responses queued`
-										: ""}
-								</span>
-								{job.status === "running" && (
-									<button
-										type="button"
-										onClick={() => void stop(job.id)}
-										disabled={saving}
-									>
-										<Square size={10} fill="currentColor" />
-										Stop this run
-									</button>
-								)}
-							</div>
-							{job.error && (
-								<p className="rc-auto-error" role="alert">
-									{job.error}
-								</p>
-							)}
-							<GameHistory roll={job.roll} />
-						</>
+					{game ? (
+						<AutoGamePreview game={game} />
 					) : (
-						<p className="rc-auto-idle">
-							Ready for your next response. Games start after the AI finishes.
-						</p>
-					)}
-					{error && (
-						<p className="rc-auto-error" role="alert">
-							{error}
-						</p>
+						<Dice5 size={36} className="rc-auto-wait" />
 					)}
 				</div>
-			)}
-		</aside>,
-		document.body,
+				<details className="rc-auto-history">
+					<summary>
+						<History size={12} />
+						History
+						<ChevronDown size={12} />
+					</summary>
+					<GameHistory roll={job.roll} />
+					{!job.roll.rounds?.length && (
+						<p className="rc-auto-idle">No completed games yet.</p>
+					)}
+					{job.status === "running" && (
+						<button
+							type="button"
+							className="rc-auto-stop"
+							disabled={saving}
+							onClick={() => void stop(job.id)}
+						>
+							<Square size={10} fill="currentColor" />
+							Stop this run
+						</button>
+					)}
+				</details>
+				{(job.error || error) && (
+					<p className="rc-auto-error" role="alert">
+						{job.error || error}
+					</p>
+				)}
+			</PopoverContent>
+		</Popover>
 	);
 }
 

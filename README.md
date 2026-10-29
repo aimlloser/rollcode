@@ -44,9 +44,9 @@ Credits have **no cash value**. Dollar estimates are displayed separately and de
 
 ## Auto Gamba
 
-Enable **Settings → General → Auto Gamba** to automatically play on new completed responses. It starts disabled and does not process older history when enabled. A small live player shows the current game, latest token cost, and recent results. Each new round uses that response’s updated token stake; costs can increase before a free result.
+Enable **Settings → General → Auto Gamba** to automatically play on new completed responses. It starts disabled and does not process older history when enabled. A compact player hugs the active response’s token badge, showing the game and token cost. Expand History to see recent results. Each new round uses that response’s updated token stake; costs can increase before a free result.
 
-Use **Stop this run** to stop a response, or **Off** to disable the setting and stop all queued runs. An unfinished Blackjack hand or Mines board can be continued manually. Progress and pending requests persist locally, so an enabled run can resume after a backend restart without replaying a move. Games do not affect actual API billing.
+Use **History → Stop this run** to stop a response, or disable Auto Gamba in Settings to stop all queued runs. An unfinished Blackjack hand or Mines board can be continued manually. Progress and pending requests persist locally, so an enabled run can resume after a backend restart without replaying a move. Games do not affect actual API billing.
 
 ## Games
 

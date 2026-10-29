@@ -69,6 +69,7 @@ export function ResponseGamba({
 					<button
 						type="button"
 						className="rc-token-trigger"
+						data-roll-id={roll.id}
 						data-cost-change={settled ? costChange : undefined}
 						aria-label={`Gamba · ${usageReported ? `${roll.tokens.toLocaleString()} actual tokens${settled ? `; ${adjustedTokens.toLocaleString()} adjusted tokens after game` : ""}` : "Usage unavailable"}`}
 						title={

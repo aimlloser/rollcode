@@ -2819,72 +2819,39 @@ body {
 	cursor: default;
 }
 
-/* Compact live view for opt-in automatic token games. */
-.rc-auto-monitor {
-	position: fixed;
-	right: 18px;
-	bottom: 18px;
-	z-index: 40;
-	width: min(310px, calc(100vw - 24px));
-	border: 1px solid #ffffff20;
-	border-radius: 12px;
-	background: #211e1bf5;
+/* Minimal automatic game screen anchored to its message token badge. */
+.rc-auto-monitor[data-slot="popover-content"] {
+	position: relative;
+	inset: auto;
+	width: min(280px, calc(100vw - 24px));
+	max-height: min(420px, var(--radix-popover-content-available-height));
+	overflow-y: auto;
+	padding: 10px;
+	border: 1px solid #ffffff1a;
+	border-radius: 10px;
+	background: #211e1b;
 	color: #e9e2d9;
-	box-shadow: 0 12px 38px #0005;
-	overflow: hidden;
+	box-shadow: 0 8px 24px #0004;
 	font-family: var(--font-sans);
-}
-.rc-auto-monitor > header {
-	display: flex;
-	align-items: center;
-	padding: 10px 12px;
-	gap: 10px;
-}
-.rc-auto-heading {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	flex: 1;
-	min-width: 0;
-	cursor: pointer;
-}
-.rc-auto-heading strong {
-	font-size: 12px;
-	font-weight: 500;
-	white-space: nowrap;
-}
-.rc-auto-heading > span {
-	margin-left: auto;
-	font-size: 10px;
-	color: #a69b88;
-}
-.rc-auto-heading .rc-auto-pulse {
-	color: #95cca8;
-}
-.rc-auto-off {
-	font-size: 10px;
-	padding: 3px 5px;
-	color: #b2a795;
-	cursor: pointer;
-	border-radius: 4px;
-}
-.rc-auto-off:hover {
-	background: #ffffff10;
-}
-.rc-auto-content {
-	padding: 0 12px 12px;
-	border-top: 1px solid #ffffff0d;
 }
 .rc-auto-summary {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	gap: 8px;
+	gap: 10px;
+	padding: 0 0 9px;
 	font-size: 11px;
-	padding: 12px 0 8px;
 }
 .rc-auto-summary > span {
-	color: #b1a592;
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	color: #b7ad9e;
+}
+.rc-auto-summary .rc-game-icon {
+	width: 20px;
+	height: 20px;
+	filter: none;
 }
 .rc-auto-summary b {
 	font-weight: 500;
@@ -2895,37 +2862,55 @@ body {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	min-height: 132px;
-	gap: 10px;
-	border-radius: 8px;
-	padding: 12px 8px;
+	min-height: 116px;
+	padding: 10px 8px;
+	border-radius: 6px;
 	background: #191714;
 }
-.rc-auto-stage > p {
-	color: #b9ab94;
+.rc-auto-history {
+	margin-top: 8px;
+}
+.rc-auto-history > summary {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	list-style: none;
+	padding: 5px 0;
+	color: #a99e8d;
 	font-size: 10px;
-	line-height: 1.5;
-	text-align: center;
-	margin: 0;
-}
-.rc-auto-controls {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 8px;
-	padding: 10px 0 0;
-	font-size: 9px;
-	color: #8e8373;
-}
-.rc-auto-controls button {
-	display: flex;
-	align-items: center;
-	gap: 5px;
-	color: #d7a49a;
 	cursor: pointer;
-	padding: 5px;
 }
-.rc-auto-monitor button:focus-visible {
+.rc-auto-history > summary::-webkit-details-marker {
+	display: none;
+}
+.rc-auto-history > summary > svg:last-child {
+	margin-left: auto;
+	transition: transform 120ms;
+}
+.rc-auto-history[open] > summary > svg:last-child {
+	transform: rotate(180deg);
+}
+.rc-auto-history .rc-game-history {
+	margin-top: 5px;
+	padding-top: 5px;
+}
+.rc-auto-history .rc-game-history > h4 {
+	display: none;
+}
+.rc-auto-history .rc-game-history ol {
+	max-height: 140px;
+}
+.rc-auto-stop {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 0 2px;
+	color: #d5a29b;
+	font-size: 10px;
+	cursor: pointer;
+}
+.rc-auto-monitor button:focus-visible,
+.rc-auto-history > summary:focus-visible {
 	outline: 2px solid #cbb990;
 	outline-offset: 2px;
 }
@@ -2933,24 +2918,17 @@ body {
 	opacity: 0.5;
 	cursor: default;
 }
-.rc-auto-monitor .rc-game-history {
-	margin-top: 10px;
-	padding-top: 10px;
-}
-.rc-auto-monitor .rc-game-history ol {
-	max-height: 125px;
-}
 .rc-auto-error {
 	font-size: 10px;
 	line-height: 1.5;
 	color: #e69b96;
-	margin-top: 10px;
+	margin: 8px 0 0;
 }
 .rc-auto-idle {
+	font-size: 10px;
+	line-height: 1.6;
 	color: #a69b88;
-	font-size: 11px;
-	line-height: 1.7;
-	margin: 14px 0 2px;
+	margin: 6px 0;
 }
 .rc-auto-slot-reels {
 	display: flex;
