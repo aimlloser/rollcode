@@ -301,12 +301,16 @@ function WelcomeStep({ onContinue }: { onContinue: () => void }) {
 				<div className="w-full">
 					<AgentWelcomeHero variant="bot-only" />
 				</div>
-				<h1 className="mt-5 text-4xl font-semibold text-foreground">Cline</h1>
-				<p className="mt-2 text-lg text-foreground">Build software your way</p>
+				<h1 className="mt-5 text-4xl font-semibold text-foreground">
+					ROLLCODE
+				</h1>
+				<p className="mt-2 text-lg text-foreground">
+					Tokens are expensive. Feeling lucky? 🎲
+				</p>
 				<p className="mt-6 text-md text-muted-foreground">
-					Cline is an AI coding agent. It reads your code, edits files, runs
-					commands, and works through tasks with you — in any project on your
-					machine.
+					ROLLCODE is powered by Cline’s AI coding agent. It reads your code,
+					edits files, runs commands, and works through tasks with you — in any
+					project on your machine.
 				</p>
 				<Button
 					className="mt-8 w-full max-w-64"
@@ -384,7 +388,7 @@ function ConnectStep({
 				// A typed not-authenticated result means the sidecar found no
 				// usable credential after the save — the key did not stick.
 				if (isClineAccountNotAuthenticatedResult(verified)) {
-					throw new Error("no Cline account credentials were found");
+					throw new Error("no provider account credentials were found");
 				}
 			} catch (verifyError) {
 				// Roll back the persisted key so an unusable credential does
@@ -504,10 +508,10 @@ function ConnectStep({
 					<ArrowLeft className="size-4" />
 				</IconButton>
 				<h1 className="mt-6 text-2xl font-semibold tracking-tight text-foreground">
-					Set up Cline
+					Set up ROLLCODE
 				</h1>
 				<p className="mt-4 text-sm text-muted-foreground">
-					Choose how Cline connects to models. You can add more providers
+					Choose how ROLLCODE connects to models. You can add more providers
 					anytime in Settings.
 				</p>
 			</div>
@@ -516,7 +520,7 @@ function ConnectStep({
 				<SetupOptionCard
 					id="cline"
 					onSelect={() => setSelectedMethod("cline")}
-					selectLabel="Sign in with Cline"
+					selectLabel="Connect provider account"
 					selected={selectedMethod === "cline"}
 				>
 					<SetupOptionHeader
@@ -542,7 +546,7 @@ function ConnectStep({
 							</ul>
 						}
 						icon={<ClineLogo className="size-5" />}
-						title="Sign in with Cline"
+						title="Connect provider account"
 					/>
 					{user ? (
 						<div className="mt-6 flex flex-wrap items-center justify-end gap-6">
@@ -926,8 +930,8 @@ function ImportHistoryStep({
 				</h1>
 				<p className="mt-3 text-md text-muted-foreground">
 					{imported
-						? "Your sessions are in Cline's history now. You can import more anytime from the Sessions page."
-						: `Cline found ${found.count} session${found.count === 1 ? "" : "s"} from ${toolList} on this machine. Import them to keep your past conversations — and continue them here.`}
+						? "Your sessions are in ROLLCODE's history now. You can import more anytime from the Sessions page."
+						: `ROLLCODE found ${found.count} session${found.count === 1 ? "" : "s"} from ${toolList} on this machine. Import them to keep your past conversations — and continue them here.`}
 				</p>
 				{imported ? (
 					<Button
@@ -1064,7 +1068,7 @@ function DoneStep({
 				<p className="mt-3 text-md text-muted-foreground">
 					{connection?.kind === "provider"
 						? `${connection.providerName} is connected.`
-						: "Your Cline account is connected."}
+						: "Your provider account is connected."}
 				</p>
 				{connection?.kind === "cline" ? <ClineModelsSummary /> : null}
 				<Button

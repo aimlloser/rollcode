@@ -1307,3 +1307,20 @@ session’s tool approval policies or approval callback, matching generic subage
 and teammates. The parent’s `subagent_<name>` delegation call still follows the
 parent’s approval policy. Tool allowlists and disabled-tool filtering remain in
 effect when constructing child tools. Inherited runtime hooks are unchanged.
+# ROLLCODE desktop additions
+
+Completion events now carry stable `runId` and current-run source message IDs.
+The desktop projects the source ID into assistant message metadata and uses it
+to associate usage with the final answer, including restored history. Completion
+records a pending ledger entry at normal cost. Only `rollcode_gamble` draws a
+cryptographic multiplier inside the SQLite write transaction; later requests
+return the same persisted outcome. The response token control opens a small
+opt-in popover; no completion event opens the Usage dashboard.
+
+The desktop app seeds its local Hub observer subscription with `sinceSequence: 0`
+on startup to replay retained completion events. `NodeHubClient.subscribe` accepts
+an optional initial cursor; reconnects continue from its newer in-memory cursor.
+The desktop-only SQLite ledger deduplicates canonical `agent.done` event IDs and
+tracks only sessions submitted through ROLLCODE. Completion payloads carry parent
+and team-role metadata so the ledger excludes teammate/subagent completions.
+No inference, approval, provider billing, or agent execution code is replaced.

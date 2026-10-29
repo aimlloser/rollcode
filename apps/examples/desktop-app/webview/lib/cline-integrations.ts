@@ -38,7 +38,7 @@ export async function fetchGitHubInstallUrl(): Promise<string> {
 		operation: "githubInstallUrl",
 	});
 	if (isClineAccountNotAuthenticatedResult(result)) {
-		throw new Error("sign in to your Cline account first");
+		throw new Error("connect your provider account first");
 	}
 	const url = (result as { url?: unknown } | null)?.url;
 	if (typeof url !== "string" || !url.trim()) {

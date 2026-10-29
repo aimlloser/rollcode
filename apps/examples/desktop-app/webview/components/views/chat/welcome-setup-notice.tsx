@@ -28,7 +28,8 @@ export function WelcomeSetupNotice({
 						Connect a model to start building
 					</p>
 					<p className="mt-0.5 text-[13px] text-muted-foreground">
-						Sign in with Cline or add an API key — it takes under a minute.
+						Connect provider account or add an API key — it takes under a
+						minute.
 					</p>
 				</div>
 			</div>

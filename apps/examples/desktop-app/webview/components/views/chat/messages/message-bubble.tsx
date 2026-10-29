@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import { memo, useMemo } from "react";
 import { Button } from "@/components/ui/button";
+import { ResponseGamba } from "@/components/rollcode/response-gamba";
+import type { Roll, Gamble } from "@/components/rollcode/use-response-rolls";
 import { resolveCredentialFailureAction } from "@/hooks/chat-session/helpers";
 import type {
 	ChatMessage,
@@ -146,6 +148,8 @@ export const MessageBubble = memo(function MessageBubble({
 	reasoningContent,
 	reasoningRedacted,
 	thoughtDurationMilliseconds,
+	completedRoll,
+	onGamble,
 }: {
 	agentRole: AgentMessageRole;
 	message: ChatMessage;
@@ -183,6 +187,8 @@ export const MessageBubble = memo(function MessageBubble({
 	reasoningContent: string;
 	reasoningRedacted: boolean;
 	thoughtDurationMilliseconds?: number;
+	completedRoll?: Roll;
+	onGamble?: Gamble;
 }) {
 	const isUser = message.role === "user";
 	const isError = message.role === "error";
@@ -217,7 +223,13 @@ export const MessageBubble = memo(function MessageBubble({
 		!isStreaming &&
 		!isError &&
 		Boolean(displayContent.trim()) &&
-		Boolean(onCopyMessage || onForkSession);
+		Boolean(
+			onCopyMessage ||
+				onForkSession ||
+				completedRoll ||
+				message.meta?.inputTokens !== undefined ||
+				message.meta?.outputTokens !== undefined,
+		);
 	const shouldRenderUserActions =
 		isUser &&
 		Boolean(
@@ -231,7 +243,10 @@ export const MessageBubble = memo(function MessageBubble({
 		Boolean(restoreError) ||
 		Boolean(editError);
 	const keepAssistantActionsVisible =
-		isLastAssistantMessage || forkPending || Boolean(forkError);
+		isLastAssistantMessage ||
+		forkPending ||
+		Boolean(forkError) ||
+		Boolean(completedRoll);
 
 	const messageDate = new Date(message.createdAt);
 	const hasValidMessageDate = !Number.isNaN(messageDate.getTime());
@@ -411,6 +426,19 @@ export const MessageBubble = memo(function MessageBubble({
 						</MessageAction>
 					) : null}
 					{messageTimestamp}
+					{completedRoll && onGamble ? (
+						<ResponseGamba roll={completedRoll} onGamble={onGamble} />
+					) : !isStreaming &&
+						(message.meta?.inputTokens !== undefined ||
+							message.meta?.outputTokens !== undefined) ? (
+						<span className="text-xs text-muted-foreground/70">
+							{(
+								(message.meta?.inputTokens ?? 0) +
+								(message.meta?.outputTokens ?? 0)
+							).toLocaleString()}{" "}
+							tokens
+						</span>
+					) : null}
 					{forkError ? (
 						<span className="text-[11px] text-destructive">{forkError}</span>
 					) : null}

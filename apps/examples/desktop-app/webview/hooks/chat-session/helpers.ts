@@ -282,12 +282,12 @@ export function resolveCredentialFailureHint(
 		return `Sign in again with the \`${cli.command}\` CLI in a terminal, then try again.`;
 	}
 	if (normalizeProviderId(providerId) === "cline") {
-		return "Sign in to Cline again in Settings → Account, then try again.";
+		return "Reconnect your provider account in Settings → Account, then try again.";
 	}
 	if (!providerAuth) {
 		return "Sign in again using your provider's authentication method, then try again.";
 	}
-	return "Check your model connection in Settings → Providers (or sign in with Cline), then try again.";
+	return "Check your model connection in Settings → Providers (or connect a provider account), then try again.";
 }
 
 /**
@@ -314,7 +314,7 @@ export function resolveCredentialFailureAction(
 	auth?: ProviderAuthInfo,
 ): { label: string; target: "account" | "models" } | null {
 	if (normalizeProviderId(providerId) === "cline") {
-		return { label: "Sign in to Cline", target: "account" };
+		return { label: "Connect provider account", target: "account" };
 	}
 	const providerAuth = matchingProviderAuth(providerId, auth);
 	if (!providerAuth || providerAuth.localCli) {

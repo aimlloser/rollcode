@@ -468,7 +468,7 @@ export function AccountView() {
 				</div>
 				<div>
 					<h3 className="text-lg font-semibold text-foreground">
-						Sign in to Cline
+						Connect provider account
 					</h3>
 					<p className="mt-2 text-sm text-muted-foreground">
 						Connect your Cline account to review credits, usage, billing, and

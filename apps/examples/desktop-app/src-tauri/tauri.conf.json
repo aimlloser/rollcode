@@ -1,8 +1,8 @@
 {
 	"$schema": "https://schema.tauri.app/config/2",
-	"productName": "Cline",
+	"productName": "ROLLCODE",
 	"version": "0.0.48",
-	"identifier": "bot.cline.app",
+	"identifier": "app.rollcode.desktop",
 	"build": {
 		"beforeDevCommand": "bun run build:runtime && bun run dev:web",
 		"devUrl": "http://localhost:3125",
@@ -11,17 +11,15 @@
 	},
 	"plugins": {
 		"updater": {
-			"pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IENEMTJDNzk2RUExQUY3RDEKUldUUjl4cnFsc2NTelYxNzlFR1NkWnI0VTM1V0hvQXRyOW0xV2c0bFhkL3dhdkdpNGhNRW1MQXEK",
-			"endpoints": [
-				"https://github.com/cline/cline/releases/download/desktop-latest/latest.json"
-			]
+			"pubkey": "",
+			"endpoints": []
 		}
 	},
 	"app": {
 		"windows": [
 			{
 				"label": "main",
-				"title": "Cline",
+				"title": "ROLLCODE",
 				"width": 1500,
 				"height": 980,
 				"resizable": true,
@@ -38,23 +36,18 @@
 		"active": true,
 		"targets": "all",
 		"category": "DeveloperTool",
-		"shortDescription": "Cline AI coding agent",
-		"longDescription": "Cline is an AI coding agent. It reads your code, edits files, runs commands, and works through tasks with you in any project on your machine.",
-		"homepage": "https://cline.bot",
+		"shortDescription": "ROLLCODE AI coding agent",
+		"longDescription": "Tokens are expensive. Feeling lucky? ROLLCODE coding agent with local simulated token games. API charges remain unchanged.",
 		"externalBin": ["bin/cline-cli"],
 		"resources": [
 			"icons/app/*.png",
 			"icons/app/macos/*.png",
 			"bin/remote-helpers/*",
-			"bin/desktop-backend/**/*"
+			"bin/desktop-backend/**/*",
+			"../../../../LICENSE",
+			"../../../../NOTICE"
 		],
-		"icon": [
-			"icons/32x32.png",
-			"icons/128x128.png",
-			"icons/128x128@2x.png",
-			"icons/icon.icns",
-			"icons/icon.ico"
-		],
+		"icon": ["icons/rollcode.png", "icons/rollcode.ico"],
 		"linux": {
 			"deb": {
 				"files": {

@@ -483,6 +483,7 @@ export function readSessionMessagesSync(
 		const messageIdBase =
 			(typeof message.id === "string" && message.id.trim()) ||
 			`history_message_${idx}`;
+		if (role === "assistant" && typeof message.id === "string") textMeta = { ...textMeta, sourceMessageId: message.id };
 		const contentBlocks = Array.isArray(message.content)
 			? (message.content as unknown[])
 			: null;
@@ -534,7 +535,7 @@ export function readSessionMessagesSync(
 				// segment around tool blocks. Only its first segment represents
 				// the run; later segments must not acquire a fallback ordinal in
 				// the webview.
-				meta: textMeta ?? (role === "user" ? { userRunSpan: 0 } : undefined),
+				meta: role === "assistant" && typeof message.id === "string" ? { ...textMeta, sourceMessageId: message.id } : textMeta ?? (role === "user" ? { userRunSpan: 0 } : undefined),
 			};
 			out.push(textRow);
 			reasoningTextTarget = textRow;

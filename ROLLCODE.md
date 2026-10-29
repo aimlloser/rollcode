@@ -1,0 +1,126 @@
+# ROLLCODE
+
+**Tokens are expensive. Feeling lucky? 🎲**
+
+ROLLCODE is a local Windows desktop fork of [Cline](https://github.com/cline/cline),
+using the actual upstream Tauri shell, Next.js UI, bundled CLI/Hub, coding agent,
+model providers, tools, approvals, terminal, workspaces, and settings. The full
+upstream source is retained. There is no ROLLCODE server or payment service.
+
+## Run
+
+Prerequisites: Windows 10/11, Bun 1.4.2 or newer, Node 22+, and a model provider
+API key (or an existing supported Cline login). For the native shell/build, install
+Rust stable with the MSVC target, Microsoft Visual Studio C++ Build Tools with the
+Windows SDK, and Microsoft Edge WebView2 Runtime.
+
+From the repository root:
+
+On this checkout, `./Start-ROLLCODE.ps1` uses the workspace-local Bun/Rust tools
+prepared during development. Use `./Start-ROLLCODE.ps1 web` for the local browser
+UI, `./Start-ROLLCODE.ps1 build` for the installer, or `./Start-ROLLCODE.ps1 test`.
+
+```powershell
+bun install
+bun run build:sdk
+bun run rollcode            # local backend + UI at http://localhost:3125
+bun run rollcode:desktop    # native Windows desktop development app
+bun run rollcode:build      # standalone Windows installer
+```
+
+The packaged app includes the runtime; end users do not need Bun or Node.
+Windows installers are copied into `apps/examples/desktop-app/dist/desktop/`.
+Choose **your own API key** during onboarding to use direct model APIs without a
+Cline account. Keys, provider settings and tasks use Cline's existing local
+storage. Upstream optional account, cloud, MCP, and connector features remain;
+they are not required to use the local agent. ROLLCODE's upstream Cline desktop
+auto-update endpoint is removed to prevent replacing this fork with Cline.
+
+The workspace-local Bun downloaded during development can be added to this
+PowerShell session if Bun is not on PATH:
+
+```powershell
+$env:PATH = "$PWD\.tools\bun-windows-x64;$env:PATH"
+```
+
+## Credits and games
+
+Completed root-agent tasks record real reported input + output tokens and the normal estimated cost without drawing a result or opening anything. Cached input is already included in input, so it is not counted twice. Click the tokens beside a response timestamp to open **Gamba**, choose a game, and explicitly start it. See **Local games** below for rules and payout mapping. Open **Usage**, above **Settings**, for totals, history and export. Existing outcomes keep their original values.
+
+**Demo credits are simulated, have no monetary value, and never change actual API charges.** The local wallet starts with 10,000 credits, with 1 credit = 1,000 tokens (10 million starting tokens). Each completed response deducts its token count; games refund or add the change in its simulated cost. The wallet derives charges from saved outcomes, so repeated events and retries never debit twice. Existing responses count toward spending. Usage can refill the balance to 10,000 credits without deleting response or game history; reset retries are idempotent. A negative demo balance is displayed explicitly and never blocks actual API usage. The sidebar shows credits and their token equivalent. Dollar estimates are separate and depend on provider pricing. This is not invoice reconciliation. Failed/interrupted tasks and teammate completions are excluded. Cline's original usage displays remain available.
+## Persistence and boundaries
+
+- Modular backend: `apps/examples/desktop-app/sidecar/rollcode/ledger.ts`.
+- Node `crypto.randomInt(max)` gives unbiased cryptographic draws.
+- SQLite WAL, FULL synchronous writes, an immediate transaction and a primary
+  key on the session/runtime run ID serialize concurrent consumers (legacy
+  events use their durable Hub event ID). Completion captures normal usage;
+  only explicit game actions draw or advance a game. Duplicate events and game
+  requests reuse the saved entry without drawing again.
+- Ledger: `%USERPROFILE%\.rollcode\ledger.sqlite`. Back up the database together
+  with its WAL/SHM files while running, or quit before copying it. An optional
+  `ROLLCODE_LEDGER_PATH` overrides the path for testing.
+- Sessions are registered before sending a prompt; unrelated CLI sessions are
+  excluded. Errors, cancellation, iteration limits and teammate completions do
+  not roll. Refreshing the UI and switching sessions cannot reroll.
+- On startup the Hub observer requests replay from sequence zero; saved event
+  IDs deduplicate retained completions. Recovery of a completion never received
+  by the backend depends on the upstream Hub event log retention. Deleting the
+  ledger or the Hub event log defeats recovery; this is a local simulation, not
+  an immutable or tamper-resistant financial record.
+- A disk-write failure surfaces an error without changing agent execution.
+  Correct disk access and restart to replay retained completion events.
+- Reduced-motion settings skip the dice animation. All dashboard actions work
+  by keyboard through the existing accessible dialog primitives.
+
+## Tests
+
+```powershell
+cd apps/examples/desktop-app
+bun run test:rollcode
+bun run typecheck
+bun run build:web
+bun x vitest run sidecar/chat-session.test.ts sidecar/server.test.ts --config vitest.config.ts
+```
+
+The ledger suite tests all 100 ticket allocations, missing/invalid prices,
+normal cost before opt-in, duplicate delivery, two database connections,
+reopen/restart recovery and failed-draw rollback. UI tests check that completion
+opens nothing automatically, the compact popover rolls only on explicit action,
+and reopening shows the same outcome. Runtime tests cover exact response identity
+and exclusion of previous turns. The SDK Hub client tests cover replay cursors.
+
+## Attribution
+
+Based on Cline, Apache License 2.0. The original [LICENSE](LICENSE), source notices
+and [NOTICE](NOTICE) are included. ROLLCODE modifications cover desktop branding,
+the simulated-credit ledger/dashboard, completion metadata and replay cursor
+initialization. ROLLCODE is independent and is not endorsed by Cline.
+
+
+## Local games
+
+The game room uses original artwork and code, inspired by the supplied casino UI references. It does not use Stake branding, assets, source code or exact proprietary paytables, and is not affiliated with Stake.
+
+Each completed root-agent message can play multiple games. The first stake starts at reported input + output tokens; every subsequent stake is the latest simulated token cost. Outcomes compound on that balance. An active Blackjack or Mines game must finish before starting another game; closing never cancels or redraws it. Previous games remain in the message history, including legacy rolls. A free message with zero simulated tokens has nothing left to stake.
+
+All displayed multipliers are direct token-cost multipliers: **new simulated tokens = staked simulated tokens × displayed cost multiplier**. 1.4× increases tokens by 40%; 0.5× halves them; 1× is unchanged. Plinko applies its slot value directly. Mines starts at 2× and decreases after each safe gem; cash-out applies that value, while a mine costs 2×. Dice and Blackjack show their resulting cost factors. Roulette applies the cost factor of each placement independently and keeps unplaced tokens unchanged. Saved historical outcomes are never recalculated. Actual API charges stay unchanged.
+
+- **Blackjack:** single shuffled 52-card deck; hit and stand; dealer stands on soft and hard 17. Blackjack pays 2.5× including stake (3:2 profit), normal wins 2×, pushes 1×, losses 0×. No insurance, split, surrender or double.
+- **Dice:** integer targets from 2 to 98. A uniform cryptographic draw produces 0.00–99.99. Over wins at or above the target; under wins strictly below. Payout on a win is 99 divided by the win-chance percentage. At target 50 the chance is 50% and the payout is 1.98×.
+- **Plinko:** 8, 12 or 16 rows, with low/medium/high risk. Each row independently draws left/right with equal chance; the number of right turns selects the bucket. Symmetric payout tables peak at the center (2× low, 2.5× medium, 3× high) and taper toward the edges. The slots are rendered in the same SVG coordinate system and 20-unit spacing as the pegs and ball path; each slot center is exactly between the corresponding last-row pegs. Tables are defined in `sidecar/rollcode/game-types.ts` and saved with each new round. The animation follows the persisted path; physics do not select the result.
+- **Mines:** 5×5 board with 1–10 mines. The board is fixed on start. The cost multiplier starts at 2×, then decreases to 2 × the probability of surviving the current number of safe selections, rounded to six decimals. Cash-out applies that multiplier to the round stake. A mine costs 2×; finding every gem automatically cashes out. Cashing out before any picks costs 2×.
+- **Roulette:** European single-zero wheel. Straight numbers pay 36×; dozens pay 3×; red/black, odd/even and low/high pay 2×. Zero loses all outside bets. Chips are denominated directly in tokens: 1, 10, 100, 1K and 10K tokens per chip. Place and stack any combination across numbers and outside bets, undo or clear before spinning. The total tokens placed cannot exceed the task’s reported token stake. Unplaced tokens keep their normal cost; total payout is (unplaced tokens + gross winning-token returns) / task stake. All placements settle in one saved spin, with no repeat bets.
+
+The backend owns all random draws (`node:crypto.randomInt`), hidden cards/boards, decisions and settlement. SQLite transactions persist private state, public progress, request receipts and final costs atomically. A unique request ID makes retries return current saved state without replaying a decision. Expected revisions reject stale actions from other windows. Public ledger responses never include a hidden deck or an active Mines board. This is a local simulation; users with direct filesystem access can modify their own database.
+
+Run all ledger and engine tests with `bun test sidecar/rollcode` from the desktop app directory. UI tests cover all five boards, explicit play, Mines picks/cash-out, Blackjack stand and saved results. Unknown model prices remain separate from token-based play.
+
+
+
+After settlement, the message badge strikes through actual token usage and shows simulated tokens beside it: green below normal cost, red above it, neutral if unchanged. The sim. label and accessible description distinguish this from actual API consumption.
+
+
+Repeat games use monotonic revisions and per-request receipts: a fresh start at the current revision creates a new round, while retries return saved state. Each completed round stores its game, timestamps, stake, multiplier, and resulting tokens atomically with the message balance. The Gamba popup shows all rounds in a compact scrollable history. Original API token usage is never changed.
+
+

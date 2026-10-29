@@ -1,5 +1,5 @@
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
 	resolve: {
@@ -8,6 +8,7 @@ export default defineConfig({
 		},
 	},
 	test: {
+		exclude: [...configDefaults.exclude, "**/*.bun.test.ts"],
 		environment: "node",
 		// First test in a file pays the @cline/core → llms module-graph import
 		// cost, which sits near the 5s default under CI contention.

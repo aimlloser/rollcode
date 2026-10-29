@@ -63,6 +63,7 @@ import type {
 	AgentUsage,
 	LegacyAgentUsage,
 } from "@cline/shared";
+import { getUserRunSpan } from "../../session/user-run-messages";
 
 // =============================================================================
 // Helpers
@@ -402,11 +403,18 @@ export class RuntimeEventAdapter {
 	}
 
 	private translateRunFinished(result: {
+		runId?: string;
+		messages?: readonly AgentMessage[];
 		status: "completed" | "aborted" | "failed";
 		outputText: string;
 		iterations: number;
 		usage: AgentUsage;
 	}): AgentEvent[] {
+		const messages = result.messages ?? [];
+		let runStart = 0;
+		for (let index = messages.length - 1; index >= 0; index--) {
+			if (getUserRunSpan(messages[index]) > 0) { runStart = index; break; }
+		}
 		const usage: LegacyAgentUsage = {
 			inputTokens: result.usage.inputTokens,
 			outputTokens: result.usage.outputTokens,
@@ -423,6 +431,8 @@ export class RuntimeEventAdapter {
 		return [
 			{
 				type: "done",
+				runId: result.runId,
+				messageIds: result.messages ? messages.slice(Math.max(0, runStart)).map(message => message.id) : undefined,
 				reason: statusToLegacyFinishReason(result.status),
 				text: result.outputText,
 				iterations: result.iterations,

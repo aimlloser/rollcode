@@ -161,19 +161,27 @@ export function stripModeNotices(input?: string): string {
 // end of the string from every unmatched opening tag, which is polynomial on
 // adversarial transcript content (CodeQL js/polynomial-redos).
 function removeTagElements(input: string, tag: string): string {
-	const open = `<${tag}>`;
+	const open = `<${tag}`;
 	const close = `</${tag}>`;
-	let result = input;
-	let start = result.indexOf(open);
+	const parts: string[] = [];
+	let cursor = 0;
+	let start = input.indexOf(open);
 	while (start !== -1) {
-		const end = result.indexOf(close, start + open.length);
-		if (end === -1) {
-			break;
+		const boundary = input[start + open.length];
+		if (boundary !== ">" && !/\s/.test(boundary ?? "")) {
+			start = input.indexOf(open, start + open.length);
+			continue;
 		}
-		result = result.slice(0, start) + result.slice(end + close.length);
-		start = result.indexOf(open, start);
+		const openingEnd = input.indexOf(">", start + open.length);
+		if (openingEnd === -1) break;
+		const end = input.indexOf(close, openingEnd + 1);
+		if (end === -1) break;
+		parts.push(input.slice(cursor, start));
+		cursor = end + close.length;
+		start = input.indexOf(open, cursor);
 	}
-	return result;
+	parts.push(input.slice(cursor));
+	return parts.join("");
 }
 
 export function formatDisplayUserInput(input?: string): string {

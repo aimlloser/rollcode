@@ -573,8 +573,7 @@ describe("WelcomeScreen", () => {
 
 		const heading = container.querySelector("h1");
 		expect(heading?.textContent).toBe("What would you like to build?");
-		expect(heading?.classList.contains("sr-only")).toBe(true);
-		expect(container.querySelector("[data-welcome-hero]")).not.toBeNull();
+		expect(container.querySelector(".rc-hero")).not.toBeNull();
 		await clickButton("project-1");
 
 		for (let index = 1; index <= workspaces.length; index += 1) {

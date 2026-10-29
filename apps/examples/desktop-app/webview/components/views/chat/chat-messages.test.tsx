@@ -6,6 +6,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChatMessage } from "@/lib/chat-schema";
 import { MAX_LIVE_COMMAND_OUTPUT_CHARS } from "@/lib/command-output";
 import { ChatMessages } from "./chat-messages";
+vi.mock("@/components/rollcode/use-response-rolls", () => ({
+	useResponseRolls: () => ({ byMessage: new Map(), gamble: vi.fn() }),
+}));
 
 // @pierre/diffs' custom element adopts constructable stylesheets, which jsdom
 // does not implement; without this the suite exits nonzero on an unhandled

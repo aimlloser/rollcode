@@ -834,6 +834,8 @@ describe("RuntimeEventAdapter — run lifecycle", () => {
 		});
 		expect(out[0]).toEqual({
 			type: "done",
+			runId: "run_test",
+			messageIds: [],
 			reason: "completed",
 			text: "done",
 			iterations: 3,
@@ -845,6 +847,17 @@ describe("RuntimeEventAdapter — run lifecycle", () => {
 				totalCost: 0.015,
 			},
 		});
+	});
+
+	it("attaches only the current response's source identities to completion", () => {
+		const messages = [
+			makeMessage({id:"old-user",role:"user"}, [{type:"text",text:"Old prompt"}]),
+			makeMessage({id:"old-answer"}, [{type:"text",text:"Old answer"}]),
+			makeMessage({id:"new-user",role:"user"}, [{type:"text",text:"New prompt"}]),
+			makeMessage({id:"new-answer"}, [{type:"text",text:"New answer"}]),
+		];
+		const output = adapter.translate({type:"run-finished",snapshot:makeSnapshot(),result:makeResult({runId:"new-run",messages})});
+		expect(output[0]).toMatchObject({type:"done",runId:"new-run",messageIds:["new-user","new-answer"]});
 	});
 
 	it("maps run-finished { status:aborted } → done { reason:aborted }", () => {

@@ -194,6 +194,25 @@ describe("NodeHubClient", () => {
 			}
 		});
 
+		it("seeds a durable subscription cursor after a consumer process restart", async () => {
+			vi.stubGlobal("WebSocket", MockWebSocket);
+			const client = new NodeHubClient({ url: "ws://127.0.0.1:25463/hub" });
+			try {
+				await client.connect();
+				client.subscribe(() => {}, { sinceSequence: 0 });
+				expect(MockWebSocket.instances[0].sentFrames).toContainEqual({
+					kind: "stream.subscribe",
+					clientId: client.getClientId(),
+					sinceSequence: 0,
+				});
+				expect(() =>
+					client.subscribe(() => {}, { sessionId: "bad", sinceSequence: -1 }),
+				).toThrow("Invalid subscription sequence");
+			} finally {
+				await client.dispose();
+			}
+		});
+
 		it("re-subscribes global listeners without sending the wildcard sentinel", async () => {
 			vi.stubGlobal("WebSocket", MockWebSocket);
 

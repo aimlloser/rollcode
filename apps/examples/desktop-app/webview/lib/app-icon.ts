@@ -1,25 +1,25 @@
 import { desktopClient, isTauriAvailable } from "@/lib/desktop-client";
 
-export const APP_ICON_STORAGE_KEY = "cline.code.app-icon.v1";
+export const APP_ICON_STORAGE_KEY = "rollcode.app-icon.v1";
 
-/**
- * App icon variants selectable in Settings. "midnight" is the icon bundled
- * with the app; the others live in webview/public/app-icons (picker +
- * browser favicon) and src-tauri/icons/app (runtime app icon resources).
- */
+/** Pixel-art ROLLCODE icons bundled for the picker and native shell. */
 export const APP_ICONS = [
-	{ id: "classic", label: "Classic" },
-	{ id: "midnight", label: "Midnight" },
-	{ id: "hologram", label: "Hologram" },
-	{ id: "chip", label: "Chip" },
+	{ id: "lucky-dice", label: "Lucky Dice" },
+	{ id: "ace-high", label: "Ace High" },
+	{ id: "casino-chip", label: "Casino Chip" },
+	{ id: "jackpot", label: "Jackpot" },
 ] as const;
 
 export type AppIconId = (typeof APP_ICONS)[number]["id"];
 
-export const DEFAULT_APP_ICON: AppIconId = "midnight";
+export const DEFAULT_APP_ICON: AppIconId = "lucky-dice";
 
 const RETIRED_APP_ICON_MIGRATIONS = {
-	sunrise: "hologram",
+	classic: "ace-high",
+	midnight: "lucky-dice",
+	hologram: "jackpot",
+	chip: "casino-chip",
+	sunrise: "jackpot",
 	steel: DEFAULT_APP_ICON,
 } as const satisfies Record<string, AppIconId>;
 
@@ -50,7 +50,9 @@ export function appIconSurface(
 
 export function readStoredAppIcon(): AppIconId {
 	try {
-		const stored = window.localStorage.getItem(APP_ICON_STORAGE_KEY);
+		const stored =
+			window.localStorage.getItem(APP_ICON_STORAGE_KEY) ??
+			window.localStorage.getItem("cline.code.app-icon.v1");
 		if (isRetiredAppIconId(stored)) {
 			const migrated = RETIRED_APP_ICON_MIGRATIONS[stored];
 			window.localStorage.setItem(APP_ICON_STORAGE_KEY, migrated);
@@ -99,7 +101,5 @@ export async function setStoredAppIcon(icon: AppIconId): Promise<void> {
  */
 export async function syncAppIcon(): Promise<void> {
 	const icon = readStoredAppIcon();
-	if (icon !== DEFAULT_APP_ICON) {
-		await applyAppIcon(icon);
-	}
+	await applyAppIcon(icon);
 }

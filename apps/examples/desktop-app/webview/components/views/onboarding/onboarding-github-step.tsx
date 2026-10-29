@@ -83,7 +83,7 @@ export function GitHubConnectStep({ onContinue }: { onContinue: () => void }) {
 					// arrive, so stop polling instead of spinning forever.
 					stop();
 					setConnectError(
-						"Your Cline account session ended. Sign in again to connect GitHub.",
+						"Your provider account session ended. Sign in again to connect GitHub.",
 					);
 					setPhase("connect");
 					return;
@@ -161,7 +161,7 @@ export function GitHubConnectStep({ onContinue }: { onContinue: () => void }) {
 				Connect GitHub
 			</h1>
 			<p className="mt-2 text-sm text-muted-foreground">
-				Grant Cline access to your GitHub repositories to supercharge it with
+				Grant ROLLCODE access to your GitHub repositories to supercharge it with
 				real-world context. You can always do this later from your dashboard.
 			</p>
 

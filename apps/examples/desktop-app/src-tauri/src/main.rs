@@ -573,7 +573,7 @@ fn spawn_desktop_backend_process(context: &AppContext) -> Result<Child, String> 
         command
     } else {
         return Err(format!(
-            "desktop backend not found: needs the bundled Cline CLI ({}) and backend bundle. checked under workspace_root={} and launch_cwd={}",
+            "desktop backend not found: needs the bundled ROLLCODE CLI runtime ({}) and backend bundle. checked under workspace_root={} and launch_cwd={}",
             if cli_path.is_some() { "found" } else { "missing" },
             context.workspace_root,
             context.launch_cwd
@@ -1045,7 +1045,7 @@ fn handle_check_for_updates_menu(app: &tauri::AppHandle) {
 /// webview/lib/app-icon.ts. Every id has a matching bundled resource at
 /// icons/app/<id>.png, plus a macOS variant at icons/app/macos/<id>.png with
 /// the transparent margin the Dock expects (artwork fills ~80% of the canvas).
-const APP_ICONS: [&str; 4] = ["classic", "midnight", "hologram", "chip"];
+const APP_ICONS: [&str; 4] = ["lucky-dice", "ace-high", "casino-chip", "jackpot"];
 
 #[cfg(target_os = "macos")]
 const APP_ICON_RESOURCE_DIR: &str = "icons/app/macos";
@@ -1761,6 +1761,9 @@ mod tests {
     fn backend_bundle_uses_only_the_running_apps_resource_directory() {
         let relative = Path::new("bin").join("desktop-backend").join("index.js");
         for resource_dir in [
+            Path::new("/Applications/ROLLCODE.app/Contents/Resources"),
+            Path::new("C:/Program Files/ROLLCODE"),
+            Path::new("/usr/lib/ROLLCODE"),
             Path::new("/Applications/Cline.app/Contents/Resources"),
             Path::new("C:/Program Files/Cline"),
             Path::new("/usr/lib/Cline"),

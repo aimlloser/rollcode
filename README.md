@@ -1,3 +1,13 @@
+# ROLLCODE
+
+**Tokens are expensive. Feeling lucky? 🎲**
+
+A standalone local desktop fork of [Cline](https://github.com/cline/cline) with simulated demo credits and token games. **Forked from [cline/cline](https://github.com/cline/cline)**, including its coding agent, model integrations, and desktop shell. [Run, build, test, and architecture →](ROLLCODE.md). API charges remain unchanged. See [NOTICE](NOTICE) for attribution; the upstream Apache 2.0 [LICENSE](LICENSE) is retained.
+
+---
+
+## Upstream Cline documentation
+
 <p align="center">
   <img src="assets/icons/icon.png" width="80" alt="Cline" />
 </p>

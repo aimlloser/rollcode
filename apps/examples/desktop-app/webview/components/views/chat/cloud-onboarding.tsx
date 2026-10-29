@@ -82,16 +82,16 @@ export function CloudOnboardingCard({
 						</p>
 						<h2 className="mt-3 text-lg font-semibold text-foreground">
 							{isSignedOut
-								? "Run Cline in the cloud"
+								? "Run ROLLCODE in the cloud"
 								: isNoRepositories
-									? "Give Cline access to a repository"
+									? "Give ROLLCODE access to a repository"
 									: "Connect GitHub to get started"}
 						</h2>
 						<p className="mt-1.5 max-w-xl text-sm leading-relaxed text-muted-foreground">
 							Cloud sessions run on secure, isolated sandboxes on Cline's
-							infrastructure. Cline clones your repository, works on a branch,
-							and keeps going even when you close the app — check back in from
-							any device.
+							infrastructure. ROLLCODE clones your repository, works on a
+							branch, and keeps going even when you close the app — check back
+							in from any device.
 						</p>
 					</div>
 					<CloudFlowIllustration className="shrink-0 max-[720px]:self-center" />
@@ -102,7 +102,7 @@ export function CloudOnboardingCard({
 						<OnboardingStep
 							icon={<LogIn aria-hidden="true" className="size-4" />}
 							index={1}
-							title="Sign in with Cline"
+							title="Connect provider account"
 						>
 							Cloud sessions are part of your Cline account.
 						</OnboardingStep>
@@ -129,7 +129,7 @@ export function CloudOnboardingCard({
 						index={3}
 						title="Start a session"
 					>
-						Pick a repo and branch here, describe the task, and Cline gets to
+						Pick a repo and branch here, describe the task, and ROLLCODE gets to
 						work in the cloud.
 					</OnboardingStep>
 				</ol>
@@ -139,7 +139,9 @@ export function CloudOnboardingCard({
 						<>
 							<Button disabled={signingIn} onClick={onSignIn} size="sm">
 								<LogIn aria-hidden="true" className="size-3.5" />
-								{signingIn ? "Waiting for browser…" : "Sign in with Cline"}
+								{signingIn
+									? "Waiting for browser…"
+									: "Connect provider account"}
 							</Button>
 							{signingIn && onCancelSignIn && (
 								<Button

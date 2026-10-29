@@ -930,7 +930,8 @@ function GeneralSettingsContent() {
 					<div className="flex flex-col gap-1">
 						<p className="text-base font-semibold text-foreground">App icon</p>
 						<p className="text-sm text-muted-foreground">
-							Pick the icon Cline shows in the {appIconLocation}.
+							A little luck for your {appIconLocation}. Choose a ROLLCODE pixel
+							icon.
 						</p>
 						{appIconError ? (
 							<p className="mt-2 text-xs text-destructive" role="alert">
@@ -938,7 +939,7 @@ function GeneralSettingsContent() {
 							</p>
 						) : null}
 					</div>
-					<div className="flex shrink-0 items-start gap-2.5">
+					<div className="flex shrink-0 flex-wrap items-start gap-3">
 						{APP_ICONS.map((icon) => (
 							<button
 								aria-label={icon.label}
@@ -951,13 +952,14 @@ function GeneralSettingsContent() {
 								<img
 									alt=""
 									className={cn(
-										"size-14 rounded-2xl transition-transform group-hover:scale-105",
+										"size-16 rounded-2xl transition-transform group-hover:scale-105",
 										appIcon === icon.id &&
 											"ring-2 ring-ring ring-offset-2 ring-offset-background",
 									)}
 									draggable={false}
 									height={112}
 									src={appIconAssetPath(icon.id)}
+									style={{ imageRendering: "pixelated" }}
 									width={112}
 								/>
 								<span
@@ -1001,7 +1003,7 @@ function GeneralSettingsContent() {
 					<div className="flex flex-col gap-1">
 						<p className="text-base font-semibold text-foreground">Telemetry</p>
 						<p className="text-sm text-muted-foreground">
-							Enable error and usage reports to help improve Cline.
+							Enable error and usage reports to help improve ROLLCODE.
 						</p>
 						{telemetryError ? (
 							<p className="mt-2 text-xs text-destructive" role="alert">
@@ -1022,8 +1024,8 @@ function GeneralSettingsContent() {
 							New user experience
 						</p>
 						<p className="text-sm text-muted-foreground">
-							Replay the first-run experience new users see when they open Cline
-							for the first time.
+							Replay the first-run experience new users see when they open
+							ROLLCODE for the first time.
 						</p>
 					</div>
 					<Button

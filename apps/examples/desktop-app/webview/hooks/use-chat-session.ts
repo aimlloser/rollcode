@@ -2052,7 +2052,7 @@ export function useChatSession(environmentId: string) {
 						parsed.metadata as { hubReconnect?: unknown } | undefined
 					)?.hubReconnect;
 					if (hubReconnect === "started") {
-						setActivityLabel("Reconnecting to Cline Hub...");
+						setActivityLabel("Reconnecting to ROLLCODE Hub...");
 					} else if (hubReconnect === "finished") {
 						setActivityLabel(null);
 					}
@@ -2125,9 +2125,34 @@ export function useChatSession(environmentId: string) {
 					const parsed = JSON.parse(payload.chunk) as {
 						reason?: string;
 						text?: string;
+						runId?: string;
+						usage?: { inputTokens?: number; outputTokens?: number };
 					};
 					doneReason = parsed.reason?.trim() ?? "";
 					doneText = typeof parsed.text === "string" ? parsed.text.trim() : "";
+					if (parsed.reason === "completed" && parsed.runId) {
+						setMessages((previous) => {
+							const target = previous.findLast(
+								(message) =>
+									message.sessionId === listeningSessionId &&
+									message.role === "assistant" &&
+									message.content.trim(),
+							);
+							return previous.map((message) =>
+								message === target
+									? {
+											...message,
+											meta: {
+												...message.meta,
+												rollRunId: parsed.runId,
+												inputTokens: parsed.usage?.inputTokens,
+												outputTokens: parsed.usage?.outputTokens,
+											},
+										}
+									: message,
+							);
+						});
+					}
 				} catch {
 					// Missing reason still means the turn ended.
 				}

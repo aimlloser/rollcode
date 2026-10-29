@@ -107,9 +107,14 @@ async function main(desktopCliPath?: string) {
 					desktopCliPath,
 					workspaceRoot,
 				);
-				observability.logger.log("Hub ready via Cline CLI", { url: hub.url });
+				observability.logger.log("ROLLCODE Hub ready via bundled CLI", {
+					url: hub.url,
+				});
 			} catch (error) {
-				observability.logger.error?.("Cline CLI hub ensure failed", { error });
+				observability.logger.error?.(
+					"ROLLCODE bundled CLI hub startup failed",
+					{ error },
+				);
 			}
 		}
 		await initializeSessionManager(ctx);

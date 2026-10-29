@@ -24,6 +24,13 @@ const desktopMocks = vi.hoisted(() => ({
 }));
 const { invoke } = desktopMocks;
 vi.mock("@/lib/desktop-client", () => ({ desktopClient: desktopMocks }));
+vi.mock("@/components/rollcode/credit-lounge", () => ({
+	CreditLounge: ({ collapsed }: { collapsed?: boolean }) => (
+		<button type="button" aria-label="Open simulated credit dashboard">
+			{collapsed ? null : "Usage"}
+		</button>
+	),
+}));
 
 let container: HTMLDivElement;
 let root: Root;
@@ -1102,7 +1109,7 @@ describe("AgentSidebar session organization", () => {
 			);
 		});
 
-		const logoButton = container.querySelector('[aria-label="Cline home"]');
+		const logoButton = container.querySelector('[aria-label="ROLLCODE home"]');
 		expect(logoButton).not.toBeNull();
 		expect(document.body.textContent).not.toContain("Version 1.2.3");
 
@@ -1150,7 +1157,7 @@ describe("AgentSidebar session organization", () => {
 			);
 		});
 
-		const logoButton = container.querySelector('[aria-label="Cline home"]');
+		const logoButton = container.querySelector('[aria-label="ROLLCODE home"]');
 		expect(logoButton).not.toBeNull();
 		await hover(logoButton as Element);
 
@@ -1221,7 +1228,7 @@ describe("AgentSidebar session organization", () => {
 			);
 		});
 
-		const logo = container.querySelector('[aria-label="Cline home"]');
+		const logo = container.querySelector('[aria-label="ROLLCODE home"]');
 		const actionsNav = container.querySelector(
 			'[aria-label="Sidebar actions"]',
 		);
@@ -1397,7 +1404,9 @@ describe("AgentSidebar session organization", () => {
 			);
 		});
 
-		expect(container.querySelector('[aria-label="Cline home"]')).not.toBeNull();
+		expect(
+			container.querySelector('[aria-label="ROLLCODE home"]'),
+		).not.toBeNull();
 		expect(
 			container.querySelector('[aria-label="Sidebar actions"]'),
 		).toBeNull();
@@ -1436,7 +1445,7 @@ describe("AgentSidebar session organization", () => {
 			container.querySelector('[aria-label="Settings sections"]'),
 		).not.toBeNull();
 		const leftAlignedButtons = [
-			"Cline home",
+			"ROLLCODE home",
 			"General",
 			"Account",
 			"Expand sidebar",

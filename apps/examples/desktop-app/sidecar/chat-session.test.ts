@@ -7,7 +7,7 @@ import {
 	writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import { SessionNotFoundError } from "@cline/core";
 import { resolveClineDir, setClineDir } from "@cline/shared/storage";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -688,7 +688,7 @@ describe("session forks", () => {
 		await restoreStarted;
 		try {
 			expect(ctx.restoringWorkspacePaths).toEqual(
-				new Set(["/workspace/project"]),
+				new Set([resolve("/workspace/project")]),
 			);
 			await expect(
 				handleChatSessionCommand(ctx, {
@@ -1088,7 +1088,7 @@ describe("session forks", () => {
 					},
 				],
 			]),
-			restoringWorkspacePaths: new Set(["/workspace/project"]),
+			restoringWorkspacePaths: new Set([resolve("/workspace/project")]),
 			...localRuntimeContext({ send }, { sessionIds: [sessionId] }),
 		} as unknown as SidecarContext;
 

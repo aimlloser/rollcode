@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { isDeepStrictEqual } from "node:util";
+import { rollLedger } from "./rollcode/ledger";
 import {
 	buildConnectionUpdate,
 	buildWorkspaceMetadata,
@@ -554,9 +555,9 @@ export function createDesktopMistakeLimitPrompt(
 				? `${detail.slice(0, MISTAKE_LIMIT_DETAIL_MAX_CHARS)}…`
 				: detail;
 		const question = [
-			"Cline detected repeated mistakes or tool calls and needs your guidance.",
+			"ROLLCODE detected repeated mistakes or tool calls and needs your guidance.",
 			truncatedDetail ? `Latest: ${truncatedDetail}` : "",
-			"How should Cline continue?",
+			"How should ROLLCODE continue?",
 		]
 			.filter((line) => line.length > 0)
 			.join("\n");
@@ -1389,7 +1390,7 @@ async function rebuildSessionForProviderChange(
 const HUB_RECONNECT_WINDOW_MS = 60_000;
 const HUB_RECONNECT_MAX_DELAY_MS = 5_000;
 const HUB_INTERRUPTED_TEXT =
-	"Interrupted: Cline Hub restarted. Send your message again to continue.";
+	"Interrupted: ROLLCODE Hub restarted. Send your message again to continue.";
 
 // Reconnect loops in flight, so stop/abort/reset can end them before they
 // rebuild a session the user has since walked away from.
@@ -1484,7 +1485,7 @@ async function reconnectSessionAfterHubLoss(
 		ctx,
 		sessionId,
 		"started",
-		"Cline Hub connection lost; reconnecting",
+		"ROLLCODE Hub connection lost; reconnecting",
 	);
 	const completion = Promise.resolve(existing?.completion)
 		.catch(() => undefined)
@@ -1512,8 +1513,8 @@ async function reconnectSessionAfterHubLoss(
 					sessionId,
 					"finished",
 					result === "failed"
-						? "Cline Hub reconnect gave up"
-						: "Cline Hub reconnected",
+						? "ROLLCODE Hub reconnect gave up"
+						: "ROLLCODE Hub reconnected",
 				);
 			return result;
 		},
@@ -1627,6 +1628,7 @@ async function handleSend(
 ): Promise<unknown> {
 	const sessionId = request.sessionId?.trim();
 	if (!sessionId) throw new Error("sessionId is required");
+	rollLedger().track(sessionId);
 	const prompt = request.prompt?.trim() ?? "";
 	const hasAttachments =
 		(request.attachments?.userImages?.length ?? 0) > 0 ||

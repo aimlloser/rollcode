@@ -496,28 +496,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cline-app"
-version = "0.1.0"
-dependencies = [
- "notify-rust",
- "objc2",
- "objc2-app-kit",
- "objc2-foundation",
- "portable-pty",
- "rfd",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tauri-plugin-notification",
- "tauri-plugin-single-instance",
- "tauri-plugin-updater",
- "tokio",
- "winreg 0.10.1",
- "zbus",
-]
-
-[[package]]
 name = "combine"
 version = "4.6.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3041,6 +3019,28 @@ dependencies = [
  "libc",
  "untrusted",
  "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "rollcode"
+version = "0.1.0"
+dependencies = [
+ "notify-rust",
+ "objc2",
+ "objc2-app-kit",
+ "objc2-foundation",
+ "portable-pty",
+ "rfd",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-notification",
+ "tauri-plugin-single-instance",
+ "tauri-plugin-updater",
+ "tokio",
+ "winreg 0.10.1",
+ "zbus",
 ]
 
 [[package]]

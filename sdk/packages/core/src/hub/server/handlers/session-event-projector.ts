@@ -363,6 +363,10 @@ async function projectAgentEvent(
 			ctx.buildEvent(
 				"agent.done",
 				{
+					runId: agentEvent.runId,
+					messageIds: agentEvent.messageIds,
+					parentAgentId: agentEvent.parentAgentId,
+					teamRole: event.payload.teamRole,
 					reason: agentEvent.reason,
 					text: agentEvent.text,
 					iterations: agentEvent.iterations,

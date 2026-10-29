@@ -112,6 +112,10 @@ describe("prompt format helpers", () => {
 		expect(performance.now() - started).toBeLessThan(1_000);
 		expect(result).toBe(hostile);
 	});
+	it("removes attributed mode notices without swallowing similarly named tags", () => {
+		expect(stripModeNotices('<mode_notice mode="act">Internal</mode_notice>\nHello')).toBe("Hello");
+		expect(stripModeNotices('<mode_notice_example>Keep this</mode_notice_example>')).toBe('<mode_notice_example>Keep this</mode_notice_example>');
+	});
 
 	it("bounds and unwraps session search display text", () => {
 		const oversized = "generate ".repeat(10_000);

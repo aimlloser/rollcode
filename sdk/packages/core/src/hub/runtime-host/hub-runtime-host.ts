@@ -571,6 +571,8 @@ function doneEventFromPayload(
 	const usage = parseDoneUsage(payload?.usage ?? result?.usage);
 	return {
 		type: "done",
+		runId: typeof payload?.runId === "string" ? payload.runId : undefined,
+		messageIds: Array.isArray(payload?.messageIds) ? payload.messageIds.filter((id): id is string => typeof id === "string") : undefined,
 		reason,
 		text:
 			typeof payload?.text === "string"

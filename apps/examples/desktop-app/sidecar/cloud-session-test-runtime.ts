@@ -33,7 +33,7 @@ export class TestCloudSessionController extends CloudSessionController {
 			clientIdentity: options.clientIdentity ?? {
 				prefix: "hub-cloud",
 				type: "hub-cloud",
-				displayName: "Cline Hub cloud session",
+				displayName: "ROLLCODE Hub cloud session",
 				source: "desktop",
 			},
 		});

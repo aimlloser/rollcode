@@ -701,9 +701,23 @@ export class NodeHubClient {
 
 	subscribe(
 		listener: (event: HubEventEnvelope) => void,
-		options?: { sessionId?: string },
+		options?: { sessionId?: string; sinceSequence?: number },
 	): () => void {
 		const sessionId = options?.sessionId?.trim() || undefined;
+		// A durable consumer can resume after a process restart. Seed only the
+		// first subscription; reconnects retain the newer in-memory cursor.
+		const key = this.subscriptionKeyForSessionId(sessionId);
+		if (
+			!this.lastEventSequenceByKey.has(key) &&
+			options?.sinceSequence !== undefined
+		) {
+			if (
+				!Number.isSafeInteger(options.sinceSequence) ||
+				options.sinceSequence < 0
+			)
+				throw new Error("Invalid subscription sequence");
+			this.lastEventSequenceByKey.set(key, options.sinceSequence);
+		}
 		const entry = { listener, sessionId };
 		this.listeners.add(entry);
 		this.adjustSubscriptionCount(sessionId, 1);

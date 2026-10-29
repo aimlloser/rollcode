@@ -22,6 +22,7 @@ import {
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { useResponseRolls } from "@/components/rollcode/use-response-rolls";
 import { toast } from "@/hooks/use-toast";
 import type {
 	ChatMessage,
@@ -130,6 +131,11 @@ function ChatMessagesImpl({
 	onFixCredentials,
 }: ChatMessagesProps) {
 	const hasMessages = messages.length > 0;
+	const responseRolls = useResponseRolls(
+		sessionId,
+		messages,
+		streamingMessageId,
+	);
 	// Scanned from the tail without copying: this component re-renders on
 	// every stream flush, so a reversed array clone per render would churn
 	// with transcript length.
@@ -604,6 +610,10 @@ function ChatMessagesImpl({
 												isStreaming={streamingMessageId === child.message.id}
 												key={child.message.id}
 												message={child.message}
+												completedRoll={responseRolls.byMessage.get(
+													child.message.id,
+												)}
+												onGamble={responseRolls.gamble}
 												onCopyMessage={handleCopyMessage}
 												onExpandImage={handleExpandImage}
 												wasCopied={copiedMessageId === child.message.id}
@@ -675,6 +685,8 @@ function ChatMessagesImpl({
 												isStreaming={streamingMessageId === message.id}
 												key={message.id}
 												message={message}
+												completedRoll={responseRolls.byMessage.get(message.id)}
+												onGamble={responseRolls.gamble}
 												runCount={userRunCountByMessage.get(message)}
 												onExpandImage={handleExpandImage}
 												onCopyMessage={handleCopyMessage}

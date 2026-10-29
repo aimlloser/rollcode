@@ -175,7 +175,7 @@ export function HubUpdateRequiredDialog() {
 			setUpdateHint(
 				error instanceof Error && error.message
 					? error.message
-					: "Updating the Cline Hub failed. Try again, or run 'cline doctor fix' in a terminal.",
+					: "Updating the ROLLCODE Hub failed. Try again, or run 'cline doctor fix' in a terminal.",
 			);
 			setPhase("idle");
 			return;
@@ -210,15 +210,15 @@ export function HubUpdateRequiredDialog() {
 			<AlertDialog open>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Cline Hub update required</AlertDialogTitle>
+						<AlertDialogTitle>ROLLCODE Hub update required</AlertDialogTitle>
 						<AlertDialogDescription>
-							Cline needs a newer Cline Hub, but the running one is still
+							ROLLCODE needs a newer ROLLCODE Hub, but the running one is still
 							serving {describeOutdatedHubSessions(mismatch)}.
 						</AlertDialogDescription>
 						<AlertDialogDescription>
-							Update Now stops that Hub and interrupts its sessions. Quit Cline
-							closes this app and leaves the Hub running, so you can update
-							later.
+							Update Now stops that Hub and interrupts its sessions. Quit
+							ROLLCODE closes this app and leaves the Hub running, so you can
+							update later.
 						</AlertDialogDescription>
 						{updateHint ? (
 							<AlertDialogDescription>{updateHint}</AlertDialogDescription>
@@ -232,7 +232,7 @@ export function HubUpdateRequiredDialog() {
 								void handleQuit();
 							}}
 						>
-							Quit Cline
+							Quit ROLLCODE
 						</AlertDialogCancel>
 						<AlertDialogAction
 							disabled={phase !== "idle"}
@@ -277,13 +277,13 @@ export function HubUpdateRequiredDialog() {
 		>
 			<AlertDialogContent>
 				<AlertDialogHeader>
-					<AlertDialogTitle>Cline Hub was updated</AlertDialogTitle>
+					<AlertDialogTitle>ROLLCODE Hub was updated</AlertDialogTitle>
 					<AlertDialogDescription>
-						Another Cline installation updated the shared Cline Hub
+						Another ROLLCODE installation updated the shared ROLLCODE Hub
 						{mismatch?.hubCoreVersion
 							? ` (core ${mismatch.hubCoreVersion})`
 							: ""}
-						, and it no longer matches this app. Update and restart Cline to
+						, and it no longer matches this app. Update and restart ROLLCODE to
 						stay in sync with the running Hub.
 					</AlertDialogDescription>
 					{updateHint ? (

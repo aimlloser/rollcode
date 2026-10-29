@@ -6,7 +6,6 @@ import {
 	AgentConversationLayout,
 	type AgentQuickAction,
 	AgentQuickActions,
-	AgentWelcomeHero,
 } from "@cline/ui";
 import { Cloud } from "lucide-react";
 import type { ReactNode } from "react";
@@ -482,8 +481,11 @@ export function WelcomeScreen({
 			hideWelcomeComposer={showCloudOnboarding}
 			welcomeHeader={
 				<div className="cline-view-enter">
-					<h1 className="sr-only">What would you like to build?</h1>
-					<AgentWelcomeHero />
+					<div className="rc-hero">
+						<div className="rc-hero-brand">rollcode<span>.</span></div>
+						<h1>What would you like to build?</h1>
+						<p>Tokens are expensive. Feeling lucky? 🎲</p>
+					</div>
 
 					<div className="mt-11 flex min-w-0 items-center gap-2">
 						{environmentSelector}

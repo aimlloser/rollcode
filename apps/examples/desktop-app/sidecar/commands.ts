@@ -1,5 +1,6 @@
 import { execFile, spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
+import { rollLedger } from "./rollcode/ledger";
 import {
 	existsSync,
 	lstatSync,
@@ -1953,6 +1954,32 @@ export async function handleCommand(
 	args?: Record<string, unknown>,
 	options?: { connection?: SidecarWebSocketClient },
 ): Promise<unknown> {
+	if (command === "rollcode_list") return rollLedger().list();
+	if (command === "rollcode_wallet") return rollLedger().wallet();
+	if (command === "rollcode_reset_wallet") {
+		if (typeof args?.requestId !== "string") throw new Error("Missing reset request id");
+		const wallet = rollLedger().resetWallet(args.requestId);
+		broadcastEvent(ctx, "rollcode_wallet", wallet);
+		return wallet;
+	}
+	if (command === "rollcode_capabilities") return { rouletteTokenChips: true, repeatGames: true, payoutVersion: 8 };
+	if (command === "rollcode_play") {
+		if (typeof args?.id !== "string") throw new Error("Completed task id required");
+		const roll = rollLedger().play(args.id, args.request);
+		broadcastEvent(ctx, "rollcode_roll", roll);
+		return roll;
+	}
+	if (command === "rollcode_gamble") {
+		if (typeof args?.id !== "string") throw new Error("Completed task id required");
+		const roll = rollLedger().gamble(args.id);
+		broadcastEvent(ctx, "rollcode_roll", roll);
+		return roll;
+	}
+	if (command === "rollcode_acknowledge") {
+		if (typeof args?.id !== "string") throw new Error("Roll id required");
+		rollLedger().acknowledge(args.id);
+		return { ok: true };
+	}
 	if (command === "retry_hub") {
 		ctx.hubStartup?.start();
 		return ctx.hubStartup?.status ?? null;
@@ -1964,7 +1991,7 @@ export async function handleCommand(
 		// Its close cleanup already ran, so nothing could cancel work (such as a
 		// browser sign-in) started for a connection that left while waiting.
 		if (options?.connection && !ctx.wsClients.has(options.connection)) {
-			throw new Error("The connection closed while Cline Hub was starting.");
+			throw new Error("The connection closed while ROLLCODE Hub was starting.");
 		}
 	}
 	const explicitEnvironment = requestedEnvironmentId(args);
@@ -2370,16 +2397,16 @@ export async function handleCommand(
 		const result = await upgradeManagedHub({
 			workspaceRoot: ctx.localWorkspaceRoot,
 			force: true,
-			reason: "Cline Desktop hub update",
+			reason: "ROLLCODE Desktop hub update",
 		});
 		if (result.outcome === "hub_not_older") {
 			throw new Error(
-				"The running Cline Hub is newer than this app, so it was not replaced. Update Cline instead.",
+				"The running ROLLCODE Hub is newer than this app, so it was not replaced. Update ROLLCODE instead.",
 			);
 		}
 		if (result.outcome === "still_busy") {
 			throw new Error(
-				"The running Cline Hub picked up new sessions before it could be replaced, so it was left running. Try again.",
+				"The running ROLLCODE Hub picked up new sessions before it could be replaced, so it was left running. Try again.",
 			);
 		}
 		// The mismatch is resolved: a null broadcast closes the dialog in

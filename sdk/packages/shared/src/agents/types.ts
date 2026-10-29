@@ -197,6 +197,9 @@ export interface AgentNoticeEvent extends AgentEventMetadata {
 
 export interface AgentDoneEvent extends AgentEventMetadata {
 	type: "done";
+	/** Stable runtime identity for per-response usage consumers. */
+	runId?: string;
+	messageIds?: string[];
 	/** The reason the agent stopped */
 	reason: AgentFinishReason;
 	/** Final text output */

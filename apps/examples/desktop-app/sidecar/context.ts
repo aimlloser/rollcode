@@ -32,6 +32,7 @@ import {
 } from "./feature-flags";
 import { recordHubActivity } from "./hub-admin";
 import { sessionLogPath } from "./paths";
+import { rollLedger } from "./rollcode/ledger";
 import type {
 	LiveSession,
 	PendingAskQuestion,
@@ -202,7 +203,7 @@ export function syncSidecarApprovalReadiness(
 								{
 									name: HUB_CLIENT_TOOL_APPROVAL_CAPABILITY,
 									description:
-										"Cline Code has a live user surface for tool review.",
+										"ROLLCODE has a live user surface for tool review.",
 								},
 							]
 						: [],
@@ -459,6 +460,7 @@ function handleAgentEvent(
 				sessionId,
 				"chat_done",
 				JSON.stringify({
+					runId: event.runId,
 					reason: event.reason,
 					text: event.text,
 					iterations: event.iterations,
@@ -914,11 +916,26 @@ export function handleHubLiveEvent(
 	ctx: SidecarContext,
 	event: {
 		event: string;
+		eventId?: string;
+		sourceHubId?: string;
+		timestamp?: number;
 		sessionId?: string;
 		sequence?: number;
 		payload?: Record<string, unknown>;
 	},
 ): void {
+	// Observe canonical completions, including queued turns, before UI filters.
+	// The ledger commits before any animation can receive the result.
+	try {
+		const roll = rollLedger().record(event);
+		if (roll) sendEvent(ctx, "rollcode_roll", roll);
+	} catch (error) {
+		ctx.logger?.error?.("ROLLCODE ledger failed", { error });
+		sendEvent(ctx, "rollcode_error", {
+			message:
+				"Could not save the simulated roll. Check local disk access and restart to replay completion events.",
+		});
+	}
 	if (event.event === "approval.requested") {
 		if (typeof event.payload?.agendaTaskId !== "string") return;
 		void handleHubApprovalRequest(ctx, event).catch((error) => {
@@ -1320,7 +1337,7 @@ export async function initializeSessionManager(
 			workspaceRoot: ctx.localWorkspaceRoot,
 			cwd: ctx.localWorkspaceRoot,
 			clientType: "code-sidecar",
-			displayName: "Cline Desktop sidecar",
+			displayName: "ROLLCODE Desktop sidecar",
 		},
 	});
 
@@ -1528,25 +1545,28 @@ export async function ensureSharedHubClient(
 				cwd: ctx.localWorkspaceRoot,
 			}));
 		if (!url) {
-			throw new Error("Unable to start or connect to the shared Cline Hub.");
+			throw new Error("Unable to start or connect to the shared ROLLCODE Hub.");
 		}
 
 		const client = new NodeHubClient({
 			url,
 			clientType: "code-sidecar-observer",
-			displayName: "Cline Desktop observer",
+			displayName: "ROLLCODE Desktop observer",
 			workspaceRoot: ctx.localWorkspaceRoot,
 			cwd: ctx.localWorkspaceRoot,
 		});
 		try {
 			await client.connect();
-			client.subscribe((event) => {
-				recordHubActivity(getSidecarContextOwner(ctx), event);
-				handleHubLiveEvent(
-					getEnvironmentContext(ctx, LOCAL_ENVIRONMENT_ID),
-					event,
-				);
-			});
+			client.subscribe(
+				(event) => {
+					recordHubActivity(getSidecarContextOwner(ctx), event);
+					handleHubLiveEvent(
+						getEnvironmentContext(ctx, LOCAL_ENVIRONMENT_ID),
+						event,
+					);
+				},
+				{ sinceSequence: 0 },
+			);
 			return client;
 		} catch (error) {
 			await client.dispose().catch(() => undefined);

@@ -78,6 +78,8 @@ export const ChatMessageSchema = z.object({
 	meta: z
 		.object({
 			stream: z.enum(["stdout", "stderr"]).optional(),
+			sourceMessageId: z.string().optional(),
+			rollRunId: z.string().optional(),
 			toolName: z.string().optional(),
 			toolCallId: z.string().optional(),
 			toolOutput: z.string().optional(),
