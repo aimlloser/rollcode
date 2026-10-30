@@ -8,6 +8,7 @@ import { games } from "./game-picker";
 import { PlayingCard } from "./playing-card";
 import { GameHistory } from "./game-history";
 import { tokenLabel } from "./game-units";
+import { TokenChangeBurst, roundTokenChanges } from "./token-change-burst";
 import { SLOT_SYMBOLS } from "../../../sidecar/rollcode/slots";
 import type { AutoGambaSnapshot } from "../../../sidecar/rollcode/auto-gamba";
 import type { PublicGame } from "../../../sidecar/rollcode/game-types";
@@ -140,6 +141,7 @@ function AutoGambaPlayer({
 					{game ? games.find((g) => g.id === game.kind)?.name : "Choosing game"}
 				</span>
 				<b
+					className="rc-auto-token-value"
 					aria-live="polite"
 					title={
 						job.status === "free"
@@ -150,6 +152,7 @@ function AutoGambaPlayer({
 					}
 				>
 					{tokenLabel(balance)}
+					<TokenChangeBurst events={roundTokenChanges([job.roll])} below />
 				</b>
 				{job.status !== "running" && (
 					<button

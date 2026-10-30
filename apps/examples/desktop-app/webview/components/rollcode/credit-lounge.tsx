@@ -15,6 +15,7 @@ import { GameHistory, getRoundHistory } from "./game-history";
 import { games } from "./game-picker";
 import { useDemoWallet } from "./use-demo-wallet";
 import { AutoGambaMonitor } from "./auto-gamba-monitor";
+import { TokenChangeBurst, roundTokenChanges } from "./token-change-burst";
 import {
 	creditAmount,
 	demoCredits,
@@ -165,6 +166,10 @@ export function CreditLounge({
 								: "Loading…"}
 					</span>
 				)}
+				<TokenChangeBurst
+					events={roundTokenChanges(rolls)}
+					ready={initialized.current}
+				/>
 			</button>
 			<Button
 				className={
