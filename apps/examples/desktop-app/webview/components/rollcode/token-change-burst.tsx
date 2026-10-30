@@ -18,11 +18,9 @@ export function roundTokenChanges(rolls: Roll[]): TokenChange[] {
 export function TokenChangeBurst({
 	events,
 	ready = true,
-	below = false,
 }: {
 	events: TokenChange[];
 	ready?: boolean;
-	below?: boolean;
 }) {
 	const seen = useRef<Set<string> | null>(null);
 	const timers = useRef(new Set<ReturnType<typeof setTimeout>>());
@@ -61,10 +59,7 @@ export function TokenChangeBurst({
 		[],
 	);
 	return (
-		<span
-			className={`rc-token-changes${below ? " rc-token-changes-below" : ""}`}
-			aria-hidden="true"
-		>
+		<span className="rc-token-changes" aria-hidden="true">
 			{bursts.map((event) => (
 				<span
 					key={event.id}

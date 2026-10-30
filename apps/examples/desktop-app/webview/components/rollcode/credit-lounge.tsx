@@ -156,6 +156,12 @@ export function CreditLounge({
 				<strong>
 					{wallet ? creditAmount(wallet.balanceTokens) : "—"}
 					{!collapsed && <small> credits</small>}
+					{collapsed && (
+						<TokenChangeBurst
+							events={roundTokenChanges(rolls)}
+							ready={initialized.current}
+						/>
+					)}
 				</strong>
 				{!collapsed && (
 					<span className="rc-demo-counter-tokens">
@@ -164,12 +170,12 @@ export function CreditLounge({
 							: walletError
 								? "Restart backend to connect"
 								: "Loading…"}
+						<TokenChangeBurst
+							events={roundTokenChanges(rolls)}
+							ready={initialized.current}
+						/>
 					</span>
 				)}
-				<TokenChangeBurst
-					events={roundTokenChanges(rolls)}
-					ready={initialized.current}
-				/>
 			</button>
 			<Button
 				className={

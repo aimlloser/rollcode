@@ -152,7 +152,7 @@ function AutoGambaPlayer({
 					}
 				>
 					{tokenLabel(balance)}
-					<TokenChangeBurst events={roundTokenChanges([job.roll])} below />
+					<TokenChangeBurst events={roundTokenChanges([job.roll])} />
 				</b>
 				{job.status !== "running" && (
 					<button
