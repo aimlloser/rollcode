@@ -60,14 +60,14 @@ export function TokenChangeBurst({
 	);
 	return (
 		<span className="rc-token-changes" aria-hidden="true">
-			{bursts.map((event) => (
+			{bursts.slice(-1).map((event) => (
 				<span
 					key={event.id}
 					className="rc-token-change"
 					data-change={event.tokens > 0 ? "win" : "loss"}
 				>
 					{event.tokens > 0 ? "+" : "−"}
-					{tokenAmount(Math.abs(event.tokens))} tokens
+					{tokenAmount(Math.abs(event.tokens))}
 				</span>
 			))}
 		</span>
