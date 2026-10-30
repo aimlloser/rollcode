@@ -8,6 +8,8 @@
 
 ROLLCODE is a Windows desktop fork of **[Cline](https://github.com/cline/cline)**. It builds on Cline’s coding agent, model integrations, tools, approvals, terminal, and workspaces, with a redesigned interface and a local credit system.
 
+> **Just for memes. 🎲** The game odds, multipliers, and payouts aren't properly set up or balanced yet. This is an experimental project built for fun.
+
 **Credits have no cash value and cannot be redeemed. Games change your local credit balance; your model provider’s actual API charges stay unchanged.**
 
 ## What’s inside
@@ -18,6 +20,7 @@ ROLLCODE is a Windows desktop fork of **[Cline](https://github.com/cline/cline)*
 - **Auto Gamba:** an optional setting plays random games for each new completed response until its token cost is free or reaches a chosen percentage reduction, with a live mini player and stop controls.
 - **A credit wallet:** 10,000 starting credits, a visible credit balance and token counter.
 - **Usage and history:** actual tokens, adjusted costs, per-response game history, and JSON export.
+- **Win/loss feedback:** green `+tokens` and red `−tokens` fade beside the token counter as games settle.
 - **Local storage:** balances and game outcomes persist on your device. No ROLLCODE hosted backend is required; inference uses your configured model provider.
 
 ## Credits
