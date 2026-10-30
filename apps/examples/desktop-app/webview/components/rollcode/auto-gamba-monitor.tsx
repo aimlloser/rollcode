@@ -1,8 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown, Dice5, History, Square, X } from "lucide-react";
 import { useAutoGamba } from "./use-auto-gamba";
+import { useFloatingAutoPlayers } from "./use-floating-auto-players";
 import { GameIcon } from "./game-icon";
 import { games } from "./game-picker";
 import { PlayingCard } from "./playing-card";
@@ -40,27 +41,60 @@ export function AutoGambaMonitor({ visible = true }: { visible?: boolean }) {
 			return next;
 		});
 	}, [state]);
-	if (!state?.enabled || !visible) return null;
-	const jobs = state.jobs.filter(
+	const jobs = (state?.jobs ?? []).filter(
 		(job) =>
 			!dismissed.has(job.id) &&
 			(job.status === "running" || tracked.has(job.id)),
 	);
-	return (
-		<>
-			{jobs.map((job) => (
-				<AutoGambaPlayer
-					key={job.id}
-					job={job}
-					error={error}
-					saving={saving}
-					stop={stop}
-					onDismiss={() =>
-						setDismissed((previous) => new Set(previous).add(job.id))
-					}
-				/>
-			))}
-		</>
+	const layout = useFloatingAutoPlayers(
+		jobs.map((job) => job.id),
+		!!state?.enabled && visible,
+	);
+	if (!state?.enabled || !visible) return null;
+	const players = layout.ids.map((id) => {
+		const job = jobs.find((item) => item.id === id);
+		if (!job) return null;
+		const box = layout.positions[id];
+		return (
+			<AutoGambaPlayer
+				key={job.id}
+				job={job}
+				error={error}
+				saving={saving}
+				stop={stop}
+				style={
+					layout.stack
+						? { position: "relative", width: "100%" }
+						: {
+								position: "fixed",
+								left: box?.left,
+								top: box?.top,
+								width: box?.width,
+							}
+				}
+				onDismiss={() =>
+					setDismissed((previous) => new Set(previous).add(job.id))
+				}
+			/>
+		);
+	});
+	return createPortal(
+		layout.stack ? (
+			<div
+				className="rc-auto-floating-stack"
+				style={{
+					left: layout.stack.left,
+					top: layout.stack.top,
+					width: layout.stack.width,
+					maxHeight: layout.stack.height,
+				}}
+			>
+				{players}
+			</div>
+		) : (
+			<>{players}</>
+		),
+		document.body,
 	);
 }
 
@@ -70,66 +104,22 @@ function AutoGambaPlayer({
 	saving,
 	stop,
 	onDismiss,
+	style,
 }: {
 	job: AutoGambaSnapshot["jobs"][number];
 	error: string;
 	saving: boolean;
 	stop: (id: string) => Promise<void>;
 	onDismiss: () => void;
+	style: CSSProperties;
 }) {
-	const [host, setHost] = useState<HTMLElement | null>(null);
-	const [inset, setInset] = useState(0);
-	useEffect(() => {
-		const findHost = () => {
-			const target =
-				Array.from(
-					document.querySelectorAll<HTMLElement>(
-						".rc-auto-player-mount[data-roll-id]",
-					),
-				).find((el) => el.dataset.rollId === job.id) ?? null;
-			setHost((previous) => (previous === target ? previous : target));
-		};
-		findHost();
-		const observer = new MutationObserver(findHost);
-		observer.observe(document.body, { childList: true, subtree: true });
-		return () => observer.disconnect();
-	}, [job.id]);
-	useEffect(() => {
-		if (!host) return;
-		const badge = Array.from(
-			document.querySelectorAll<HTMLElement>(".rc-token-trigger[data-roll-id]"),
-		).find((el) => el.dataset.rollId === job.id);
-		const align = () => {
-			if (!badge) return;
-			const panelWidth = Math.min(280, window.innerWidth - 24);
-			setInset(
-				Math.max(
-					0,
-					Math.min(
-						badge.getBoundingClientRect().left -
-							host.getBoundingClientRect().left,
-						host.clientWidth - panelWidth,
-					),
-				),
-			);
-		};
-		const observer = new ResizeObserver(align);
-		observer.observe(host);
-		if (badge) observer.observe(badge);
-		window.addEventListener("resize", align);
-		align();
-		return () => {
-			observer.disconnect();
-			window.removeEventListener("resize", align);
-		};
-	}, [host, job.id]);
-	if (!host) return null;
 	const game = job.roll.game;
 	const balance = job.roll.simulatedTokens ?? job.roll.tokens;
-	return createPortal(
+	return (
 		<section
-			className="rc-auto-monitor rc-auto-inline"
-			style={{ marginInlineStart: inset }}
+			className="rc-auto-monitor rc-auto-floating-card"
+			data-roll-id={job.id}
+			style={style}
 			aria-label="Auto Gamba live game"
 			onKeyDown={(event) => {
 				if (event.key === "Escape" && job.status !== "running") onDismiss();
@@ -206,8 +196,7 @@ function AutoGambaPlayer({
 					{job.error || error}
 				</p>
 			)}
-		</section>,
-		host,
+		</section>
 	);
 }
 

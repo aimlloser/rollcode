@@ -444,9 +444,6 @@ export const MessageBubble = memo(function MessageBubble({
 					) : null}
 				</MessageActions>
 			) : null}
-			{shouldRenderAssistantActions && completedRoll && onGamble ? (
-				<div className="rc-auto-player-mount" data-roll-id={completedRoll.id} />
-			) : null}
 		</AgentMessage>
 	);
 });
