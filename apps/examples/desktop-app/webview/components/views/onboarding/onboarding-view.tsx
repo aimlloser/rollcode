@@ -308,8 +308,8 @@ function WelcomeStep({ onContinue }: { onContinue: () => void }) {
 					Tokens are expensive. Feeling lucky? 🎲
 				</p>
 				<p className="mt-6 text-md text-muted-foreground">
-					WODE is powered by Cline’s AI coding agent. It reads your code,
-					edits files, runs commands, and works through tasks with you — in any
+					WODE reads your code, edits files, runs commands, and works through
+					tasks with you — in any
 					project on your machine.
 				</p>
 				<Button
