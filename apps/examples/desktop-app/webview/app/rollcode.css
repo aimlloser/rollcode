@@ -3236,9 +3236,10 @@ body {
 }
 .rc-token-changes {
 	position: absolute;
-	inset: 0;
+	top: -7px;
+	right: 0;
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: flex-end;
 	max-width: 100%;
 	overflow: hidden;
@@ -3297,7 +3298,7 @@ body {
 	line-height: 20px;
 }
 .rc-demo-counter-tokens .rc-token-changes {
-	justify-content: flex-start;
+	justify-content: flex-end;
 }
 .rc-auto-token-value {
 	display: inline-block;
