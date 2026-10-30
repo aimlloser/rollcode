@@ -61,7 +61,7 @@ function UpdateAction() {
 		checking || status.state === "checking" || status.state === "downloading";
 	const description =
 		status.state === "ready"
-			? `Version ${status.version} is downloaded and will be used the next time ROLLCODE starts.`
+			? `Version ${status.version} is downloaded and will be used the next time WODE starts.`
 			: status.state === "downloading"
 				? `Downloading version ${status.version ?? ""}…`
 				: status.state === "error" && status.error

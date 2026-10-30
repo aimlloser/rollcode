@@ -1,5 +1,5 @@
 import { Switch } from "@cline/ui";
-import { AutoGambaSettings } from "@/components/rollcode/auto-gamba-settings";
+import { AutoGambaSettings } from "@/components/wode/auto-gamba-settings";
 import { Minus, Plus, RotateCcw } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -932,7 +932,7 @@ function GeneralSettingsContent() {
 					<div className="flex flex-col gap-1">
 						<p className="text-base font-semibold text-foreground">App icon</p>
 						<p className="text-sm text-muted-foreground">
-							A little luck for your {appIconLocation}. Choose a ROLLCODE pixel
+							A little luck for your {appIconLocation}. Choose a WODE pixel
 							icon.
 						</p>
 						{appIconError ? (
@@ -1005,7 +1005,7 @@ function GeneralSettingsContent() {
 					<div className="flex flex-col gap-1">
 						<p className="text-base font-semibold text-foreground">Telemetry</p>
 						<p className="text-sm text-muted-foreground">
-							Enable error and usage reports to help improve ROLLCODE.
+							Enable error and usage reports to help improve WODE.
 						</p>
 						{telemetryError ? (
 							<p className="mt-2 text-xs text-destructive" role="alert">
@@ -1027,7 +1027,7 @@ function GeneralSettingsContent() {
 						</p>
 						<p className="text-sm text-muted-foreground">
 							Replay the first-run experience new users see when they open
-							ROLLCODE for the first time.
+							WODE for the first time.
 						</p>
 					</div>
 					<Button

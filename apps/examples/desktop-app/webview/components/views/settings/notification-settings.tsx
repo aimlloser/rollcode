@@ -18,7 +18,7 @@ const EVENT_COPY: Record<
 > = {
 	taskCompletion: {
 		label: "Task completed",
-		description: "When ROLLCODE finishes a task or turn.",
+		description: "When WODE finishes a task or turn.",
 	},
 	approvalNeeded: {
 		label: "Approval needed",
@@ -26,7 +26,7 @@ const EVENT_COPY: Record<
 	},
 	questionAsked: {
 		label: "Question asked",
-		description: "When ROLLCODE needs an answer before continuing.",
+		description: "When WODE needs an answer before continuing.",
 	},
 	sessionError: {
 		label: "Session error",
@@ -109,7 +109,7 @@ export function NotificationSettings() {
 						Desktop notifications
 					</p>
 					<p className="text-sm text-muted-foreground">
-						Notify only while the ROLLCODE window is in the background. Clicking
+						Notify only while the WODE window is in the background. Clicking
 						a notification opens its session.
 					</p>
 					{permission === "denied" ? (

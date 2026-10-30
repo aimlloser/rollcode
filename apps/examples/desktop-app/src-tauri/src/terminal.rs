@@ -195,7 +195,7 @@ pub fn terminal_spawn(
     }
     cmd.env("TERM", "xterm-256color");
     cmd.env("COLORTERM", "truecolor");
-    cmd.env("TERM_PROGRAM", "ROLLCODE");
+    cmd.env("TERM_PROGRAM", "WODE");
 
     let mut child = pair
         .slave

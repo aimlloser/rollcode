@@ -7,7 +7,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
-import type { Roll } from "../../../sidecar/rollcode/ledger";
+import type { Roll } from "../../../sidecar/wode/ledger";
 import { GamePicker, type GameId } from "./game-picker";
 import { GameArena } from "./game-arena";
 import { GameHistory } from "./game-history";

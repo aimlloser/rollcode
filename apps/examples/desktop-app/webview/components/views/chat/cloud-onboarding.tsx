@@ -82,14 +82,14 @@ export function CloudOnboardingCard({
 						</p>
 						<h2 className="mt-3 text-lg font-semibold text-foreground">
 							{isSignedOut
-								? "Run ROLLCODE in the cloud"
+								? "Run WODE in the cloud"
 								: isNoRepositories
-									? "Give ROLLCODE access to a repository"
+									? "Give WODE access to a repository"
 									: "Connect GitHub to get started"}
 						</h2>
 						<p className="mt-1.5 max-w-xl text-sm leading-relaxed text-muted-foreground">
 							Cloud sessions run on secure, isolated sandboxes on Cline's
-							infrastructure. ROLLCODE clones your repository, works on a
+							infrastructure. WODE clones your repository, works on a
 							branch, and keeps going even when you close the app — check back
 							in from any device.
 						</p>
@@ -129,7 +129,7 @@ export function CloudOnboardingCard({
 						index={3}
 						title="Start a session"
 					>
-						Pick a repo and branch here, describe the task, and ROLLCODE gets to
+						Pick a repo and branch here, describe the task, and WODE gets to
 						work in the cloud.
 					</OnboardingStep>
 				</ol>

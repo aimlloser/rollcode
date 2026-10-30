@@ -19,8 +19,8 @@ import {
 	type GameRequest,
 	type PublicGame,
 	type RouletteBet,
-} from "../../../sidecar/rollcode/game-types";
-import type { Roll } from "../../../sidecar/rollcode/ledger";
+} from "../../../sidecar/wode/game-types";
+import type { Roll } from "../../../sidecar/wode/ledger";
 import type { Gamble } from "./use-response-rolls";
 import { GameIcon } from "./game-icon";
 import { GameInfo } from "./game-info";

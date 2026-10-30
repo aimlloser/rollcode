@@ -1,8 +1,8 @@
 import { desktopClient, isTauriAvailable } from "@/lib/desktop-client";
 
-export const APP_ICON_STORAGE_KEY = "rollcode.app-icon.v1";
+export const APP_ICON_STORAGE_KEY = "wode.app-icon.v1";
 
-/** Pixel-art ROLLCODE icons bundled for the picker and native shell. */
+/** Pixel-art WODE icons bundled for the picker and native shell. */
 export const APP_ICONS = [
 	{ id: "lucky-dice", label: "Lucky Dice" },
 	{ id: "ace-high", label: "Ace High" },
@@ -52,6 +52,7 @@ export function readStoredAppIcon(): AppIconId {
 	try {
 		const stored =
 			window.localStorage.getItem(APP_ICON_STORAGE_KEY) ??
+			window.localStorage.getItem("rollcode.app-icon.v1") ??
 			window.localStorage.getItem("cline.code.app-icon.v1");
 		if (isRetiredAppIconId(stored)) {
 			const migrated = RETIRED_APP_ICON_MIGRATIONS[stored];

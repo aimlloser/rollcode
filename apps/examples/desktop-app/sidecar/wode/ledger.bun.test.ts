@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { RollLedger, multiplierFor } from "./ledger";
 
-describe("ROLLCODE ledger", () => {
+describe("WODE ledger", () => {
 	test("allocates the exact odds", () => {
 		const counts = new Map<number, number>();
 		for (let i = 0; i < 100; i++) {
@@ -21,7 +21,7 @@ describe("ROLLCODE ledger", () => {
 			expect(() => multiplierFor(invalid)).toThrow();
 	});
 	test("completion records normal cost; only an explicit roll draws, exactly once across windows and restarts", () => {
-		const dir = mkdtempSync(join(tmpdir(), "rollcode-"));
+		const dir = mkdtempSync(join(tmpdir(), "wode-"));
 		const path = join(dir, "ledger.sqlite");
 		let first = new RollLedger(path);
 		const second = new RollLedger(path);

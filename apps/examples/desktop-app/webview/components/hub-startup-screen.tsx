@@ -54,10 +54,10 @@ export function HubStartupScreen({
 		content = (
 			<>
 				<h1 className="text-base font-medium">
-					ROLLCODE's desktop backend isn't responding
+					WODE's desktop backend isn't responding
 				</h1>
 				<p className="text-sm text-muted-foreground">
-					ROLLCODE keeps trying in the background. Reload to try again now.
+					WODE keeps trying in the background. Reload to try again now.
 				</p>
 				<Button onClick={() => window.location.reload()}>Reload</Button>
 			</>
@@ -66,11 +66,11 @@ export function HubStartupScreen({
 		content = (
 			<>
 				<h1 className="text-base font-medium">
-					ROLLCODE couldn't connect to its Hub
+					WODE couldn't connect to its Hub
 				</h1>
 				<p className="text-sm text-muted-foreground">
 					{hub.error} Retry, or export diagnostics and share the file with the
-					ROLLCODE team if this keeps happening.
+					WODE team if this keeps happening.
 				</p>
 				<div className="flex gap-2">
 					<Button onClick={() => void desktopClient.invoke("retry_hub")}>
@@ -95,7 +95,7 @@ export function HubStartupScreen({
 					className="size-6 animate-spin text-muted-foreground"
 				/>
 				<output className="text-sm text-muted-foreground">
-					Starting ROLLCODE…
+					Starting WODE…
 				</output>
 			</>
 		);

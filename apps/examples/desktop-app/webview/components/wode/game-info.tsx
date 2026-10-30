@@ -4,12 +4,12 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
-import type { GameId } from "../../../sidecar/rollcode/game-types";
+import type { GameId } from "../../../sidecar/wode/game-types";
 
 export function GameInfo({ kind, chance }: { kind: GameId; chance: number }) {
 	const rules: Record<GameId, string> = {
 		slots:
-			"Pull the lever down and release, or use the Spin reels button. Each of the three reels independently picks one of four equally likely ROLLCODE icons using secure randomness. Three Jackpot icons make this task free (0×, 1/64 chance). Any other triple costs 0.25× (3/64); exactly one pair costs 0.5× (36/64); three different icons cost 2× (24/64). These are token-cost multipliers, not payout multipliers. Every spin uses the latest adjusted tokens and is saved exactly once. The reel animation reveals the saved result; it does not change the outcome.",
+			"Pull the lever down and release, or use the Spin reels button. Each of the three reels independently picks one of four equally likely WODE icons using secure randomness. Three Jackpot icons make this task free (0×, 1/64 chance). Any other triple costs 0.25× (3/64); exactly one pair costs 0.5× (36/64); three different icons cost 2× (24/64). These are token-cost multipliers, not payout multipliers. Every spin uses the latest adjusted tokens and is saved exactly once. The reel animation reveals the saved result; it does not change the outcome.",
 		blackjack:
 			"All-or-nothing token cost: any win, including blackjack, makes the staked tokens free (0×). A loss doubles the cost (2×); a push leaves it unchanged (1×). One shuffled deck; dealer stands on all 17s. No insurance, split or double.",
 		dice: `Your win chance is ${chance}%. Hitting the target gives a ${(chance / 99).toFixed(4)}× token-cost multiplier; missing it costs 2×. Over wins at or above the target; under wins below it. Rolls range from 0.00 to 99.99.`,

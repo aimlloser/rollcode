@@ -573,7 +573,7 @@ fn spawn_desktop_backend_process(context: &AppContext) -> Result<Child, String> 
         command
     } else {
         return Err(format!(
-            "desktop backend not found: needs the bundled ROLLCODE CLI runtime ({}) and backend bundle. checked under workspace_root={} and launch_cwd={}",
+            "desktop backend not found: needs the bundled WODE CLI runtime ({}) and backend bundle. checked under workspace_root={} and launch_cwd={}",
             if cli_path.is_some() { "found" } else { "missing" },
             context.workspace_root,
             context.launch_cwd
@@ -1761,9 +1761,9 @@ mod tests {
     fn backend_bundle_uses_only_the_running_apps_resource_directory() {
         let relative = Path::new("bin").join("desktop-backend").join("index.js");
         for resource_dir in [
-            Path::new("/Applications/ROLLCODE.app/Contents/Resources"),
-            Path::new("C:/Program Files/ROLLCODE"),
-            Path::new("/usr/lib/ROLLCODE"),
+            Path::new("/Applications/WODE.app/Contents/Resources"),
+            Path::new("C:/Program Files/WODE"),
+            Path::new("/usr/lib/WODE"),
             Path::new("/Applications/Cline.app/Contents/Resources"),
             Path::new("C:/Program Files/Cline"),
             Path::new("/usr/lib/Cline"),

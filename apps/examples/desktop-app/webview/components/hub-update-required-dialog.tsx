@@ -175,7 +175,7 @@ export function HubUpdateRequiredDialog() {
 			setUpdateHint(
 				error instanceof Error && error.message
 					? error.message
-					: "Updating the ROLLCODE Hub failed. Try again, or run 'cline doctor fix' in a terminal.",
+					: "Updating the WODE Hub failed. Try again, or run 'cline doctor fix' in a terminal.",
 			);
 			setPhase("idle");
 			return;
@@ -210,14 +210,14 @@ export function HubUpdateRequiredDialog() {
 			<AlertDialog open>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>ROLLCODE Hub update required</AlertDialogTitle>
+						<AlertDialogTitle>WODE Hub update required</AlertDialogTitle>
 						<AlertDialogDescription>
-							ROLLCODE needs a newer ROLLCODE Hub, but the running one is still
+							WODE needs a newer WODE Hub, but the running one is still
 							serving {describeOutdatedHubSessions(mismatch)}.
 						</AlertDialogDescription>
 						<AlertDialogDescription>
 							Update Now stops that Hub and interrupts its sessions. Quit
-							ROLLCODE closes this app and leaves the Hub running, so you can
+							WODE closes this app and leaves the Hub running, so you can
 							update later.
 						</AlertDialogDescription>
 						{updateHint ? (
@@ -232,7 +232,7 @@ export function HubUpdateRequiredDialog() {
 								void handleQuit();
 							}}
 						>
-							Quit ROLLCODE
+							Quit WODE
 						</AlertDialogCancel>
 						<AlertDialogAction
 							disabled={phase !== "idle"}
@@ -277,13 +277,13 @@ export function HubUpdateRequiredDialog() {
 		>
 			<AlertDialogContent>
 				<AlertDialogHeader>
-					<AlertDialogTitle>ROLLCODE Hub was updated</AlertDialogTitle>
+					<AlertDialogTitle>WODE Hub was updated</AlertDialogTitle>
 					<AlertDialogDescription>
-						Another ROLLCODE installation updated the shared ROLLCODE Hub
+						Another WODE installation updated the shared WODE Hub
 						{mismatch?.hubCoreVersion
 							? ` (core ${mismatch.hubCoreVersion})`
 							: ""}
-						, and it no longer matches this app. Update and restart ROLLCODE to
+						, and it no longer matches this app. Update and restart WODE to
 						stay in sync with the running Hub.
 					</AlertDialogDescription>
 					{updateHint ? (

@@ -9,8 +9,8 @@
  * See apps/examples/desktop-app/EXPERIMENTAL.md for the channel model.
  */
 
-export const STABLE_PRODUCT_NAME = "ROLLCODE";
-export const BETA_PRODUCT_NAME = "ROLLCODE Beta";
+export const STABLE_PRODUCT_NAME = "WODE";
+export const BETA_PRODUCT_NAME = "WODE Beta";
 
 export function isBetaVersion(version: string | null | undefined): boolean {
 	return typeof version === "string" && version.includes("-beta");

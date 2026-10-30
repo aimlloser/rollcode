@@ -18,8 +18,8 @@ import {
 } from "lucide-react";
 import { memo, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { ResponseGamba } from "@/components/rollcode/response-gamba";
-import type { Roll, Gamble } from "@/components/rollcode/use-response-rolls";
+import { ResponseGamba } from "@/components/wode/response-gamba";
+import type { Roll, Gamble } from "@/components/wode/use-response-rolls";
 import { resolveCredentialFailureAction } from "@/hooks/chat-session/helpers";
 import type {
 	ChatMessage,

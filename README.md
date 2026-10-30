@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="apps/examples/desktop-app/webview/public/app-icons/lucky-dice.png" width="96" alt="ROLLCODE pixel dice" />
+  <img src="apps/examples/desktop-app/webview/public/app-icons/lucky-dice.png" width="96" alt="WODE pixel dice" />
 </p>
 
-<h1 align="center">ROLLCODE</h1>
+<h1 align="center">WODE</h1>
 <p align="center"><strong>Tokens are expensive. Feeling lucky? 🎲</strong></p>
 <p align="center">A local AI coding agent with a twist: play games to win back the credits spent on your tasks.</p>
 
-ROLLCODE is a Windows desktop fork of **[Cline](https://github.com/cline/cline)**. It builds on Cline’s coding agent, model integrations, tools, approvals, terminal, and workspaces, with a redesigned interface and a local credit system.
+WODE is a Windows desktop fork of **[Cline](https://github.com/cline/cline)**. It builds on Cline’s coding agent, model integrations, tools, approvals, terminal, and workspaces, with a redesigned interface and a local credit system.
 
 > **Just for memes. 🎲** The game odds, multipliers, and payouts aren't properly set up or balanced yet. This is an experimental project built for fun.
 
@@ -21,7 +21,7 @@ ROLLCODE is a Windows desktop fork of **[Cline](https://github.com/cline/cline)*
 - **A credit wallet:** 10,000 starting credits, a visible credit balance and token counter.
 - **Usage and history:** actual tokens, adjusted costs, per-response game history, and JSON export.
 - **Win/loss feedback:** green `+tokens` and red `−tokens` fade beside the token counter as games settle.
-- **Local storage:** balances and game outcomes persist on your device. No ROLLCODE hosted backend is required; inference uses your configured model provider.
+- **Local storage:** balances and game outcomes persist on your device. No WODE hosted backend is required; inference uses your configured model provider.
 
 ## Credits
 
@@ -75,21 +75,21 @@ Requirements:
 - For the native Windows app: Rust stable with the MSVC toolchain, Visual Studio C++ Build Tools with the Windows SDK, and WebView2 Runtime.
 
 ```powershell
-# The ROLLCODE implementation currently lives on this branch.
-git clone --branch prod https://github.com/aimlloser/rollcode.git
-cd rollcode
+# The WODE implementation currently lives on this branch.
+git clone --branch wode https://github.com/aimlloser/rollcode.git wode
+cd wode
 
 bun install
 bun run build:sdk
 
 # Native Windows desktop app
-bun run rollcode:desktop
+bun run wode:desktop
 ```
 
 For development without the native shell:
 
 ```powershell
-bun run rollcode
+bun run wode
 ```
 
 Open `http://localhost:3125`. The local backend runs on `127.0.0.1:3126`. Optional upstream cloud and account features still use their respective services; they are not required for local use with your own API key.
@@ -99,25 +99,25 @@ SDK dependencies resolve through compiled files. Rebuild with `bun run build:sdk
 ## Build a Windows installer
 
 ```powershell
-bun run rollcode:build
+bun run wode:build
 ```
 
 The packaging script copies installers into `apps/examples/desktop-app/dist/desktop/`. Packaged users do not need Bun or Node.js installed.
 
-For additional development notes and accounting details, see [ROLLCODE.md](ROLLCODE.md). ROLLCODE is currently a development MVP.
+For additional development notes and accounting details, see [WODE.md](WODE.md). WODE is currently a development MVP.
 
 ## Persistence
 
-The credit ledger lives at `%USERPROFILE%\.rollcode\ledger.sqlite`. Model credentials, chats, and provider settings use Cline’s existing local storage.
+New installations store the credit ledger at `%USERPROFILE%\.wode\ledger.sqlite`. Existing installations reuse `%USERPROFILE%\.rollcode\ledger.sqlite` when no WODE ledger exists, preserving balances and history. `WODE_LEDGER_PATH` overrides the location; the previous environment variable remains supported. Model credentials, chats, and provider settings use Cline’s existing local storage.
 
-Game logic is modular under [`sidecar/rollcode`](apps/examples/desktop-app/sidecar/rollcode). The backend uses cryptographically secure randomness. SQLite transactions save game state, outcomes, and request receipts together, so retrying an action does not draw again or charge twice.
+Game logic is modular under [`sidecar/wode`](apps/examples/desktop-app/sidecar/wode). The backend uses cryptographically secure randomness. SQLite transactions save game state, outcomes, and request receipts together, so retrying an action does not draw again or charge twice.
 
 The wallet derives spending from saved response costs rather than replaying debit events. Keep the database and its WAL/SHM files together when backing up a running app, or quit before copying it.
 
 ## Built on Cline
 
-ROLLCODE is **forked from [cline/cline](https://github.com/cline/cline)**, including the [desktop implementation](https://github.com/cline/cline/tree/main/apps/examples/desktop-app). The underlying coding agent is reused rather than rebuilt.
+WODE is **forked from [cline/cline](https://github.com/cline/cline)**, including the [desktop implementation](https://github.com/cline/cline/tree/main/apps/examples/desktop-app). The underlying coding agent is reused rather than rebuilt.
 
-The upstream **[Apache License 2.0](LICENSE)**, copyright notices, and **[NOTICE](NOTICE)** are retained. ROLLCODE is an independent modification and is not endorsed by Cline. Bundled fonts retain their respective license notices.
+The upstream **[Apache License 2.0](LICENSE)**, copyright notices, and **[NOTICE](NOTICE)** are retained. WODE is an independent modification and is not endorsed by Cline. Bundled fonts retain their respective license notices.
 
-Game interfaces use original code and artwork inspired by casino games. ROLLCODE is not affiliated with Stake and does not include Stake branding or assets.
+Game interfaces use original code and artwork inspired by casino games. WODE is not affiliated with Stake and does not include Stake branding or assets.

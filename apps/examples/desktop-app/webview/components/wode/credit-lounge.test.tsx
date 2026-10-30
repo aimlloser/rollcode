@@ -45,7 +45,7 @@ test("completed tasks never automatically open the dashboard or gamble", async (
 	});
 	expect(document.querySelector('[role="dialog"]')).toBeNull();
 	expect(
-		invoke.mock.calls.every(([command]) => command === "rollcode_list"),
+		invoke.mock.calls.every(([command]) => command === "wode_list"),
 	).toBe(true);
 	await act(async () => {
 		(
@@ -59,7 +59,7 @@ test("completed tasks never automatically open the dashboard or gamble", async (
 		"Your API provider bills the normal amount",
 	);
 	expect(
-		invoke.mock.calls.every(([command]) => command === "rollcode_list"),
+		invoke.mock.calls.every(([command]) => command === "wode_list"),
 	).toBe(true);
 });
 
@@ -110,6 +110,6 @@ test("filters saved history without changing recorded outcomes", async () => {
 	await clickFilter("All");
 	expect(document.querySelectorAll("tbody tr")).toHaveLength(3);
 	expect(
-		invoke.mock.calls.every(([command]) => command === "rollcode_list"),
+		invoke.mock.calls.every(([command]) => command === "wode_list"),
 	).toBe(true);
 });

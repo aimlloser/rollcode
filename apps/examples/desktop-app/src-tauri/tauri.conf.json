@@ -1,8 +1,8 @@
 {
 	"$schema": "https://schema.tauri.app/config/2",
-	"productName": "ROLLCODE",
+	"productName": "WODE",
 	"version": "0.0.48",
-	"identifier": "app.rollcode.desktop",
+	"identifier": "app.wode.desktop",
 	"build": {
 		"beforeDevCommand": "bun run build:runtime && bun run dev:web",
 		"devUrl": "http://localhost:3125",
@@ -19,7 +19,7 @@
 		"windows": [
 			{
 				"label": "main",
-				"title": "ROLLCODE",
+				"title": "WODE",
 				"width": 1500,
 				"height": 980,
 				"resizable": true,
@@ -36,8 +36,8 @@
 		"active": true,
 		"targets": "all",
 		"category": "DeveloperTool",
-		"shortDescription": "ROLLCODE AI coding agent",
-		"longDescription": "Tokens are expensive. Feeling lucky? ROLLCODE coding agent with local adjusted token games. API charges remain unchanged.",
+		"shortDescription": "WODE AI coding agent",
+		"longDescription": "Tokens are expensive. Feeling lucky? WODE coding agent with local adjusted token games. API charges remain unchanged.",
 		"externalBin": ["bin/cline-cli"],
 		"resources": [
 			"icons/app/*.png",
@@ -47,7 +47,7 @@
 			"../../../../LICENSE",
 			"../../../../NOTICE"
 		],
-		"icon": ["icons/rollcode.png", "icons/rollcode.ico"],
+		"icon": ["icons/wode.png", "icons/wode.ico"],
 		"linux": {
 			"deb": {
 				"files": {

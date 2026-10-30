@@ -22,7 +22,7 @@ import {
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useResponseRolls } from "@/components/rollcode/use-response-rolls";
+import { useResponseRolls } from "@/components/wode/use-response-rolls";
 import { toast } from "@/hooks/use-toast";
 import type {
 	ChatMessage,

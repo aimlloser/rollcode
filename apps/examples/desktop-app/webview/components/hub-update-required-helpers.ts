@@ -82,6 +82,6 @@ export function resolveHubUpdateRestartDecision(
 	}
 	return {
 		action: "stay",
-		hint: "No app update is available to download yet. You can keep working - ROLLCODE stays connected to the updated Hub - and try again later.",
+		hint: "No app update is available to download yet. You can keep working - WODE stays connected to the updated Hub - and try again later.",
 	};
 }

@@ -6,7 +6,7 @@ import { RollLedger } from "./ledger";
 import type { GameRequest } from "./game-types";
 
 test("game decisions persist once across connections, retries, restart and stale clients", () => {
-	const dir = mkdtempSync(join(tmpdir(), "rollcode-games-")),
+	const dir = mkdtempSync(join(tmpdir(), "wode-games-")),
 		path = join(dir, "test.sqlite");
 	let a = new RollLedger(path);
 	const b = new RollLedger(path);

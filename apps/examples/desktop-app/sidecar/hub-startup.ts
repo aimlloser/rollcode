@@ -46,7 +46,7 @@ export class HubStartup {
 				);
 				this.setStatus({
 					state: "failed",
-					error: "ROLLCODE Hub did not respond within 30 seconds.",
+					error: "WODE Hub did not respond within 30 seconds.",
 				});
 			}
 		}, this.timeoutMs);
@@ -58,7 +58,7 @@ export class HubStartup {
 					this.onFailure(error);
 					this.setStatus({
 						state: "failed",
-						error: "ROLLCODE couldn't start or connect to its Hub.",
+						error: "WODE couldn't start or connect to its Hub.",
 					});
 				},
 			)

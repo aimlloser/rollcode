@@ -36,9 +36,9 @@
         "check": "bun biome check --diagnostic-level=error sdk/ apps/cli/ apps/cline-hub/ apps/examples/ && bun run build:sdk && bun run -F @cline/cli build && bun -F @cline/cline-hub build:webview && bun --parallel -F './sdk/packages/**' -F @cline/cli -F @cline/cline-hub typecheck && bun sdk/scripts/check-publish.ts",
         "version": "bun run types && bun sdk/scripts/version.ts",
         "release": "bun sdk/scripts/release.ts",
-        "rollcode": "bun -F @cline/code dev:headless",
-        "rollcode:desktop": "bun -F @cline/code dev",
-        "rollcode:build": "bun -F @cline/code package:desktop:windows"
+        "wode": "bun -F @cline/code dev:headless",
+        "wode:desktop": "bun -F @cline/code dev",
+        "wode:build": "bun -F @cline/code package:desktop:windows"
     },
     "lint-staged": {
         "sdk/**": [

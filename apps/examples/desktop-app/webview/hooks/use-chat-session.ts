@@ -2052,7 +2052,7 @@ export function useChatSession(environmentId: string) {
 						parsed.metadata as { hubReconnect?: unknown } | undefined
 					)?.hubReconnect;
 					if (hubReconnect === "started") {
-						setActivityLabel("Reconnecting to ROLLCODE Hub...");
+						setActivityLabel("Reconnecting to WODE Hub...");
 					} else if (hubReconnect === "finished") {
 						setActivityLabel(null);
 					}

@@ -161,7 +161,7 @@ export function GitHubConnectStep({ onContinue }: { onContinue: () => void }) {
 				Connect GitHub
 			</h1>
 			<p className="mt-2 text-sm text-muted-foreground">
-				Grant ROLLCODE access to your GitHub repositories to supercharge it with
+				Grant WODE access to your GitHub repositories to supercharge it with
 				real-world context. You can always do this later from your dashboard.
 			</p>
 

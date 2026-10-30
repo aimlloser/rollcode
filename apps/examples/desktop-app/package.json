@@ -36,7 +36,7 @@
 		"test:sidecar-startup": "bun test scripts/desktop-startup.test.ts",
 		"test:desktop-client": "vitest run webview/lib/desktop-client.test.ts --config vitest.config.ts",
 		"clean": "rm -rf webview/.next webview/out node_modules dist && (cd src-tauri && rm -rf target node_modules dist)",
-		"test:rollcode": "bun test sidecar/rollcode && vitest run webview/components/rollcode --config vitest.config.ts"
+		"test:wode": "bun test sidecar/wode && vitest run webview/components/wode --config vitest.config.ts"
 	},
 	"dependencies": {
 		"@ai-sdk/gateway": "^4.0.110",

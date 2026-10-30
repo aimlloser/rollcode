@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { tokenAmount } from "./game-units";
 import { getRoundHistory } from "./game-history";
-import type { Roll } from "../../../sidecar/rollcode/ledger";
+import type { Roll } from "../../../sidecar/wode/ledger";
 
 type TokenChange = { id: string; tokens: number };
 export function roundTokenChanges(rolls: Roll[]): TokenChange[] {

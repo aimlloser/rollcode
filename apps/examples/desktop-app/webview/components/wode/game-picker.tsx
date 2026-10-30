@@ -9,8 +9,8 @@ export const games = [
 	{ id: "slots", name: "Slots" },
 ] as const;
 
-export type { GameId } from "../../../sidecar/rollcode/game-types";
-import type { GameId } from "../../../sidecar/rollcode/game-types";
+export type { GameId } from "../../../sidecar/wode/game-types";
+import type { GameId } from "../../../sidecar/wode/game-types";
 
 export function GamePicker({
 	selected,

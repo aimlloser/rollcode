@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Switch } from "@cline/ui";
 import { useAutoGamba } from "./use-auto-gamba";
-import type { AutoStopMode } from "../../../sidecar/rollcode/auto-rules";
+import type { AutoStopMode } from "../../../sidecar/wode/auto-rules";
 
 export function AutoGambaSettings() {
 	const { state, error, saving, setEnabled, setRule } = useAutoGamba();

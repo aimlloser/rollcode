@@ -331,7 +331,7 @@ export function watchDesktopNotifications(): () => void {
 				eventType: "taskCompletion",
 				sessionId,
 				title: "Task completed",
-				body: "ROLLCODE finished working and the result is ready.",
+				body: "WODE finished working and the result is ready.",
 			});
 			return;
 		}
@@ -339,7 +339,7 @@ export function watchDesktopNotifications(): () => void {
 			eventType: "sessionError",
 			sessionId,
 			title: "Task failed",
-			body: detail || "ROLLCODE encountered an error while running this task.",
+			body: detail || "WODE encountered an error while running this task.",
 		});
 	};
 
@@ -450,10 +450,10 @@ export function watchDesktopNotifications(): () => void {
 			void notify({
 				eventType: "questionAsked",
 				sessionId,
-				title: "ROLLCODE has a question",
+				title: "WODE has a question",
 				body:
 					asNonEmptyString(item.question) ||
-					"Open this task to answer ROLLCODE's question.",
+					"Open this task to answer WODE's question.",
 			});
 		}),
 	];

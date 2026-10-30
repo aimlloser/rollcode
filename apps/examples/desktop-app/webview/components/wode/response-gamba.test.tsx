@@ -9,11 +9,11 @@ import {
 	startGame,
 	advanceGame,
 	type PrivateGame,
-} from "../../../sidecar/rollcode/game-engine";
+} from "../../../sidecar/wode/game-engine";
 import {
 	costMultiplier,
 	type GameRequest,
-} from "../../../sidecar/rollcode/game-types";
+} from "../../../sidecar/wode/game-types";
 const pending: Roll = {
 	id: "task:run",
 	runId: "run",

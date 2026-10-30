@@ -29,7 +29,7 @@ import { HubStartup } from "./hub-startup";
 import { createDesktopObservability } from "./observability";
 import { resolveWorkspaceRoot } from "./paths";
 import { startServer } from "./server";
-import { rollLedger } from "./rollcode/ledger";
+import { rollLedger } from "./wode/ledger";
 import { BunRuntime, SIDECAR_HOST, SIDECAR_MODE, SIDECAR_PORT } from "./types";
 
 const SHUTDOWN_TIMEOUT_MS = 5_000;
@@ -108,12 +108,12 @@ async function main(desktopCliPath?: string) {
 					desktopCliPath,
 					workspaceRoot,
 				);
-				observability.logger.log("ROLLCODE Hub ready via bundled CLI", {
+				observability.logger.log("WODE Hub ready via bundled CLI", {
 					url: hub.url,
 				});
 			} catch (error) {
 				observability.logger.error?.(
-					"ROLLCODE bundled CLI hub startup failed",
+					"WODE bundled CLI hub startup failed",
 					{ error },
 				);
 			}
@@ -141,9 +141,9 @@ async function main(desktopCliPath?: string) {
 		try {
 			const update = rollLedger().auto.tick();
 			for (const roll of update.rolls)
-				broadcastEvent(ctx, "rollcode_roll", roll);
+				broadcastEvent(ctx, "wode_roll", roll);
 			if (update.changed)
-				broadcastEvent(ctx, "rollcode_auto", rollLedger().auto.snapshot());
+				broadcastEvent(ctx, "wode_auto", rollLedger().auto.snapshot());
 		} catch (error) {
 			ctx.logger?.error?.("Auto Gamba worker failed", { error });
 		}

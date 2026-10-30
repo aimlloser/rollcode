@@ -3,10 +3,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ChatMessage } from "@/lib/chat-schema";
 import { desktopClient } from "@/lib/desktop-client";
-import type { Roll } from "../../../sidecar/rollcode/ledger";
-import type { GameRequest } from "../../../sidecar/rollcode/game-types";
+import type { Roll } from "../../../sidecar/wode/ledger";
+import type { GameRequest } from "../../../sidecar/wode/game-types";
 export type Gamble = (id: string, request?: GameRequest) => Promise<Roll>;
-export type { Roll } from "../../../sidecar/rollcode/ledger";
+export type { Roll } from "../../../sidecar/wode/ledger";
 
 /** Match immutable runtime identities, never approximate by timestamp or response text. */
 export function matchResponseRolls(
@@ -41,7 +41,7 @@ export function useResponseRolls(
 	const refresh = useCallback(async () => {
 		if (!sessionId) return;
 		try {
-			const result = await desktopClient.invoke<Roll[]>("rollcode_list");
+			const result = await desktopClient.invoke<Roll[]>("wode_list");
 			if (Array.isArray(result))
 				setRolls(result.filter((roll) => roll.sessionId === sessionId));
 		} catch {
@@ -52,7 +52,7 @@ export function useResponseRolls(
 		setRolls([]);
 		void refresh();
 		const stop = desktopClient.subscribe?.(
-			"rollcode_roll",
+			"wode_roll",
 			() => void refresh(),
 		);
 		const reconnect = desktopClient.subscribeTransportState?.(
@@ -73,7 +73,7 @@ export function useResponseRolls(
 					rouletteTokenChips?: boolean;
 					repeatGames?: boolean;
 					payoutVersion?: number;
-				}>("rollcode_capabilities");
+				}>("wode_capabilities");
 				supported =
 					capabilities?.repeatGames === true &&
 					capabilities.payoutVersion === 8 &&
@@ -84,11 +84,11 @@ export function useResponseRolls(
 			}
 			if (!supported)
 				throw new Error(
-					"The running backend is out of date. Restart ROLLCODE or your local backend to load the wallet, slot machine, and current payout rules. No game was started.",
+					"The running backend is out of date. Restart WODE or your local backend to load the wallet, slot machine, and current payout rules. No game was started.",
 				);
 		}
 		const result = await desktopClient.invoke<Roll>(
-			request ? "rollcode_play" : "rollcode_gamble",
+			request ? "wode_play" : "wode_gamble",
 			{ id, request },
 		);
 		if (!result || (!request && result.multiplier === null) || result.id !== id)
@@ -98,7 +98,7 @@ export function useResponseRolls(
 		setRolls((previous) =>
 			previous.map((roll) => (roll.id === result.id ? result : roll)),
 		);
-		window.dispatchEvent(new Event("rollcode-ledger-updated"));
+		window.dispatchEvent(new Event("wode-ledger-updated"));
 		return result;
 	}, []);
 	const byMessage = useMemo(

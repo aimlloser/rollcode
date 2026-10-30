@@ -10,10 +10,10 @@ import { PlayingCard } from "./playing-card";
 import { GameHistory } from "./game-history";
 import { tokenLabel } from "./game-units";
 import { TokenChangeBurst, roundTokenChanges } from "./token-change-burst";
-import { SLOT_SYMBOLS } from "../../../sidecar/rollcode/slots";
-import type { AutoGambaSnapshot } from "../../../sidecar/rollcode/auto-gamba";
-import type { PublicGame } from "../../../sidecar/rollcode/game-types";
-import { RED_NUMBERS } from "../../../sidecar/rollcode/game-types";
+import { SLOT_SYMBOLS } from "../../../sidecar/wode/slots";
+import type { AutoGambaSnapshot } from "../../../sidecar/wode/auto-gamba";
+import type { PublicGame } from "../../../sidecar/wode/game-types";
+import { RED_NUMBERS } from "../../../sidecar/wode/game-types";
 
 export function AutoGambaMonitor({ visible = true }: { visible?: boolean }) {
 	const { state, error, saving, stop } = useAutoGamba();

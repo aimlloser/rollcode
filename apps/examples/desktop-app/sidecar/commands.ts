@@ -1,6 +1,6 @@
 import { execFile, spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { rollLedger } from "./rollcode/ledger";
+import { rollLedger } from "./wode/ledger";
 import {
 	existsSync,
 	lstatSync,
@@ -1954,46 +1954,46 @@ export async function handleCommand(
 	args?: Record<string, unknown>,
 	options?: { connection?: SidecarWebSocketClient },
 ): Promise<unknown> {
-	if (command === "rollcode_list") return rollLedger().list();
-	if (command === "rollcode_auto") return rollLedger().auto.snapshot();
-	if (command === "rollcode_auto_rule") {
+	if (command === "wode_list") return rollLedger().list();
+	if (command === "wode_auto") return rollLedger().auto.snapshot();
+	if (command === "wode_auto_rule") {
 		const state = rollLedger().auto.setRule(args?.mode, args?.targetPercent);
-		broadcastEvent(ctx, "rollcode_auto", state);
+		broadcastEvent(ctx, "wode_auto", state);
 		return state;
 	}
-	if (command === "rollcode_auto_setting") {
+	if (command === "wode_auto_setting") {
 		if (typeof args?.enabled !== "boolean") throw new Error("Auto Gamba setting required");
 		const state = rollLedger().auto.setEnabled(args.enabled);
-		broadcastEvent(ctx, "rollcode_auto", state);
+		broadcastEvent(ctx, "wode_auto", state);
 		return state;
 	}
-	if (command === "rollcode_auto_stop") {
+	if (command === "wode_auto_stop") {
 		if (typeof args?.id !== "string") throw new Error("Response id required");
 		const state = rollLedger().auto.stop(args.id);
-		broadcastEvent(ctx, "rollcode_auto", state);
+		broadcastEvent(ctx, "wode_auto", state);
 		return state;
 	}
-	if (command === "rollcode_wallet") return rollLedger().wallet();
-	if (command === "rollcode_reset_wallet") {
+	if (command === "wode_wallet") return rollLedger().wallet();
+	if (command === "wode_reset_wallet") {
 		if (typeof args?.requestId !== "string") throw new Error("Missing reset request id");
 		const wallet = rollLedger().resetWallet(args.requestId);
-		broadcastEvent(ctx, "rollcode_wallet", wallet);
+		broadcastEvent(ctx, "wode_wallet", wallet);
 		return wallet;
 	}
-	if (command === "rollcode_capabilities") return { rouletteTokenChips: true, repeatGames: true, payoutVersion: 8 };
-	if (command === "rollcode_play") {
+	if (command === "wode_capabilities") return { rouletteTokenChips: true, repeatGames: true, payoutVersion: 8 };
+	if (command === "wode_play") {
 		if (typeof args?.id !== "string") throw new Error("Completed task id required");
 		const roll = rollLedger().play(args.id, args.request);
-		broadcastEvent(ctx, "rollcode_roll", roll);
+		broadcastEvent(ctx, "wode_roll", roll);
 		return roll;
 	}
-	if (command === "rollcode_gamble") {
+	if (command === "wode_gamble") {
 		if (typeof args?.id !== "string") throw new Error("Completed task id required");
 		const roll = rollLedger().gamble(args.id);
-		broadcastEvent(ctx, "rollcode_roll", roll);
+		broadcastEvent(ctx, "wode_roll", roll);
 		return roll;
 	}
-	if (command === "rollcode_acknowledge") {
+	if (command === "wode_acknowledge") {
 		if (typeof args?.id !== "string") throw new Error("Roll id required");
 		rollLedger().acknowledge(args.id);
 		return { ok: true };
@@ -2009,7 +2009,7 @@ export async function handleCommand(
 		// Its close cleanup already ran, so nothing could cancel work (such as a
 		// browser sign-in) started for a connection that left while waiting.
 		if (options?.connection && !ctx.wsClients.has(options.connection)) {
-			throw new Error("The connection closed while ROLLCODE Hub was starting.");
+			throw new Error("The connection closed while WODE Hub was starting.");
 		}
 	}
 	const explicitEnvironment = requestedEnvironmentId(args);
@@ -2415,16 +2415,16 @@ export async function handleCommand(
 		const result = await upgradeManagedHub({
 			workspaceRoot: ctx.localWorkspaceRoot,
 			force: true,
-			reason: "ROLLCODE Desktop hub update",
+			reason: "WODE Desktop hub update",
 		});
 		if (result.outcome === "hub_not_older") {
 			throw new Error(
-				"The running ROLLCODE Hub is newer than this app, so it was not replaced. Update ROLLCODE instead.",
+				"The running WODE Hub is newer than this app, so it was not replaced. Update WODE instead.",
 			);
 		}
 		if (result.outcome === "still_busy") {
 			throw new Error(
-				"The running ROLLCODE Hub picked up new sessions before it could be replaced, so it was left running. Try again.",
+				"The running WODE Hub picked up new sessions before it could be replaced, so it was left running. Try again.",
 			);
 		}
 		// The mismatch is resolved: a null broadcast closes the dialog in

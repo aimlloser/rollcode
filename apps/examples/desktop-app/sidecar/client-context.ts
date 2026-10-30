@@ -12,7 +12,7 @@ import { version } from "../package.json";
 export const DESKTOP_CLIENT_CONTEXT = {
 	name: "cline-desktop",
 	version,
-	platform: "ROLLCODE Desktop",
+	platform: "WODE Desktop",
 	platformVersion: version,
 	isMultiRoot: false,
 } as const satisfies ClientContext;

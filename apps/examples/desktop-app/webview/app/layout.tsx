@@ -5,10 +5,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { APP_FONT_SIZE_BOOTSTRAP_SCRIPT } from "@/lib/app-font-size";
 import { HUB_THEME_BOOTSTRAP_SCRIPT } from "@/lib/theme";
 import "./globals.css";
-import "./rollcode.css";
+import "./wode.css";
 
 export const metadata: Metadata = {
-	title: "ROLLCODE",
+	title: "WODE",
 	description: "Tokens are expensive. Feeling lucky? 🎲",
 	icons: {
 		icon: [

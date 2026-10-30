@@ -45,7 +45,7 @@ export type WhatsNewRelease =
 export const WHATS_NEW_RELEASES: WhatsNewRelease[] = [
 	{
 		id: "2026-10-connectors",
-		title: "Connect ROLLCODE to your apps",
+		title: "Connect WODE to your apps",
 		spotlight: "connectors",
 	},
 	{
@@ -55,7 +55,7 @@ export const WHATS_NEW_RELEASES: WhatsNewRelease[] = [
 			{
 				title: "SSH remotes",
 				description:
-					"The app stays on your laptop while ROLLCODE works on any machine you can SSH into.",
+					"The app stays on your laptop while WODE works on any machine you can SSH into.",
 				icon: Network,
 			},
 			{

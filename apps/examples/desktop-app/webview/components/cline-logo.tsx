@@ -6,11 +6,11 @@ export function ClineLogo({ className }: { className?: string }) {
 			aria-hidden="true"
 			className={cn("inline-block shrink-0 bg-current", className)}
 			style={{
-				maskImage: "url('/rollcode.svg')",
+				maskImage: "url('/wode.svg')",
 				maskPosition: "center",
 				maskRepeat: "no-repeat",
 				maskSize: "contain",
-				WebkitMaskImage: "url('/rollcode.svg')",
+				WebkitMaskImage: "url('/wode.svg')",
 				WebkitMaskPosition: "center",
 				WebkitMaskRepeat: "no-repeat",
 				WebkitMaskSize: "contain",

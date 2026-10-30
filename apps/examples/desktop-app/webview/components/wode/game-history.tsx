@@ -1,5 +1,5 @@
 import { tokenAmount } from "./game-units";
-import type { Roll, RoundHistory } from "../../../sidecar/rollcode/ledger";
+import type { Roll, RoundHistory } from "../../../sidecar/wode/ledger";
 import { games } from "./game-picker";
 import { GameIcon } from "./game-icon";
 

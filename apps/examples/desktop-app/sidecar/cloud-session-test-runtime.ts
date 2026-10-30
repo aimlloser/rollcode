@@ -33,7 +33,7 @@ export class TestCloudSessionController extends CloudSessionController {
 			clientIdentity: options.clientIdentity ?? {
 				prefix: "hub-cloud",
 				type: "hub-cloud",
-				displayName: "ROLLCODE Hub cloud session",
+				displayName: "WODE Hub cloud session",
 				source: "desktop",
 			},
 		});

@@ -234,7 +234,7 @@ export function ImportSessionsDialog({
 					<DialogTitle>Import sessions</DialogTitle>
 					<DialogDescription>
 						Bring your conversation history from other coding tools into
-						ROLLCODE. Imported sessions appear in your history and can be
+						WODE. Imported sessions appear in your history and can be
 						continued here.
 					</DialogDescription>
 				</DialogHeader>
@@ -259,7 +259,7 @@ export function ImportSessionsDialog({
 									No sessions found
 								</p>
 								<p className="max-w-sm text-sm text-muted-foreground">
-									ROLLCODE looks for local history from Claude Code, Codex, and
+									WODE looks for local history from Claude Code, Codex, and
 									opencode. Nothing importable turned up on this machine.
 								</p>
 							</div>

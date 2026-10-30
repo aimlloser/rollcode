@@ -95,8 +95,9 @@ apps/examples/desktop-app/webview/.next
 apps/examples/desktop-app/webview/next-env.d.ts
 apps/examples/desktop-app/.cursor/settings.json
 
-# Local ROLLCODE build tooling
+# Local WODE build tooling
 .tools/
+.wode/
 .rollcode/
 *.sqlite
 *.sqlite-wal

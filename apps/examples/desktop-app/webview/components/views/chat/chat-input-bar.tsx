@@ -593,7 +593,7 @@ function ChatInputBarImpl({
 			toast({
 				title: "Add a message to go with your attachments",
 				description:
-					"Describe what you want ROLLCODE to do with the attached files before sending.",
+					"Describe what you want WODE to do with the attached files before sending.",
 			});
 			return;
 		}
@@ -851,7 +851,7 @@ function ChatInputBarImpl({
 			variant: "destructive",
 			title: "Speech input failed",
 			description: isMicrophoneError
-				? "Check the microphone permission for ROLLCODE and try again."
+				? "Check the microphone permission for WODE and try again."
 				: message,
 		});
 	}, []);
@@ -1477,7 +1477,7 @@ function ChatInputBarImpl({
 												? "Agent is working... submit to queue another message, or Enter to send the first message from the queue"
 												: "Agent is working... submit to queue another message"
 											: executionTarget === "cloud"
-												? "Describe what ROLLCODE should do in this repository."
+												? "Describe what WODE should do in this repository."
 												: variant === "welcome"
 													? "Ask to make changes, @mention files, reference #PRs, or run /commands."
 													: "Enter your question or type / for commands or @ for context"

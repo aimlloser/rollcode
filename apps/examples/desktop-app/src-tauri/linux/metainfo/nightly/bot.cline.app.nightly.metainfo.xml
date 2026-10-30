@@ -10,17 +10,17 @@
   own copy of this file under linux/metainfo/<channel>/.
 -->
 <component type="desktop-application">
-	<id>app.rollcode.desktop.nightly</id>
-	<launchable type="desktop-id">ROLLCODE Nightly.desktop</launchable>
-	<name>ROLLCODE Nightly</name>
+	<id>app.wode.desktop.nightly</id>
+	<launchable type="desktop-id">WODE Nightly.desktop</launchable>
+	<name>WODE Nightly</name>
 	<summary>AI coding agent</summary>
-	<developer id="app.rollcode">
-		<name>ROLLCODE contributors</name>
+	<developer id="app.wode">
+		<name>WODE contributors</name>
 	</developer>
 	<metadata_license>CC0-1.0</metadata_license>
 	<project_license>Apache-2.0</project_license>
 	<description>
-		<p>ROLLCODE is an AI coding agent based on Cline, with local simulated token games. It reads your code, edits files, runs commands, and works through tasks with you in any project on your machine.</p>
+		<p>WODE is an AI coding agent based on Cline, with local simulated token games. It reads your code, edits files, runs commands, and works through tasks with you in any project on your machine.</p>
 	</description>
 	<url type="homepage">https://cline.bot</url>
 	<url type="help">https://docs.cline.bot/usage/cline-desktop</url>

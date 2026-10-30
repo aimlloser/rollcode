@@ -10,7 +10,7 @@ import {
 	DialogDescription,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import type { Roll } from "../../../sidecar/rollcode/ledger";
+import type { Roll } from "../../../sidecar/wode/ledger";
 import { GameHistory, getRoundHistory } from "./game-history";
 import { games } from "./game-picker";
 import { useDemoWallet } from "./use-demo-wallet";
@@ -19,7 +19,7 @@ import { TokenChangeBurst, roundTokenChanges } from "./token-change-burst";
 import {
 	creditAmount,
 	demoCredits,
-} from "../../../sidecar/rollcode/demo-wallet";
+} from "../../../sidecar/wode/demo-wallet";
 
 const tokens = (value: number) =>
 	value.toLocaleString(undefined, { maximumFractionDigits: 2 });
@@ -61,7 +61,7 @@ export function CreditLounge({
 	const [search, setSearch] = useState("");
 	const refresh = useCallback(async () => {
 		try {
-			setRolls(await desktopClient.invoke<Roll[]>("rollcode_list"));
+			setRolls(await desktopClient.invoke<Roll[]>("wode_list"));
 			setError("");
 			initialized.current = true;
 		} catch {
@@ -72,8 +72,8 @@ export function CreditLounge({
 	}, []);
 	useEffect(() => {
 		void refresh();
-		const stop = desktopClient.subscribe("rollcode_roll", () => void refresh());
-		const stopError = desktopClient.subscribe("rollcode_error", () =>
+		const stop = desktopClient.subscribe("wode_roll", () => void refresh());
+		const stopError = desktopClient.subscribe("wode_error", () =>
 			setError(
 				"Could not save a game. Check disk access and restart to recover.",
 			),
@@ -83,9 +83,9 @@ export function CreditLounge({
 		});
 		const interval = setInterval(() => void refresh(), 15000);
 		const update = () => void refresh();
-		window.addEventListener("rollcode-ledger-updated", update);
+		window.addEventListener("wode-ledger-updated", update);
 		return () => {
-			window.removeEventListener("rollcode-ledger-updated", update);
+			window.removeEventListener("wode-ledger-updated", update);
 			stop();
 			stopError();
 			stopState();
@@ -129,7 +129,7 @@ export function CreditLounge({
 		);
 		const a = document.createElement("a");
 		a.href = url;
-		a.download = "rollcode-ledger.json";
+		a.download = "wode-ledger.json";
 		a.click();
 		setTimeout(() => URL.revokeObjectURL(url), 1000);
 	}
@@ -203,7 +203,7 @@ export function CreditLounge({
 							<span className="rc-appmark">
 								<Dice5 size={19} />
 							</span>
-							rollcode<span className="rc-brand-dot">.</span>
+							wode<span className="rc-brand-dot">.</span>
 						</div>
 						<span className="rc-local">Stored on this device</span>
 					</header>

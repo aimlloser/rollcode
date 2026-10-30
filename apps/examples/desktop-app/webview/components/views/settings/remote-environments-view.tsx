@@ -613,7 +613,7 @@ export function RemoteEnvironmentsContent() {
 									value={selectedRuntime.test}
 								/>
 								<StatusBadge
-									label="ROLLCODE setup"
+									label="WODE setup"
 									value={selectedRuntime.bootstrap}
 								/>
 							</div>
@@ -670,7 +670,7 @@ export function RemoteEnvironmentsContent() {
 						<AlertDialogTitle>Delete SSH host?</AlertDialogTitle>
 						<AlertDialogDescription>
 							{deleteTarget
-								? `Delete “${deleteTarget.name}” from remote environments? Projects and ROLLCODE session data remain on the remote host.`
+								? `Delete “${deleteTarget.name}” from remote environments? Projects and WODE session data remain on the remote host.`
 								: "Delete this SSH host from remote environments?"}
 						</AlertDialogDescription>
 					</AlertDialogHeader>

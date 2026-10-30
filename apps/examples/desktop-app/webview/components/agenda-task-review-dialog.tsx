@@ -74,7 +74,7 @@ export function AgendaTaskReviewDialog({
 									value={
 										task.modelSelection
 											? `${task.modelSelection.providerId}/${task.modelSelection.modelId ?? "default"}`
-											: "ROLLCODE default"
+											: "WODE default"
 									}
 								/>
 								{task.cwd ? (

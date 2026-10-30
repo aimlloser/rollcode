@@ -1,8 +1,8 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
 import { desktopClient } from "@/lib/desktop-client";
-import type { AutoGambaSnapshot } from "../../../sidecar/rollcode/auto-gamba";
-import type { AutoStopMode } from "../../../sidecar/rollcode/auto-rules";
+import type { AutoGambaSnapshot } from "../../../sidecar/wode/auto-gamba";
+import type { AutoStopMode } from "../../../sidecar/wode/auto-rules";
 
 export function useAutoGamba() {
 	const [state, setState] = useState<AutoGambaSnapshot | null>(null);
@@ -11,7 +11,7 @@ export function useAutoGamba() {
 	const refresh = useCallback(async () => {
 		try {
 			const value =
-				await desktopClient.invoke<AutoGambaSnapshot>("rollcode_auto");
+				await desktopClient.invoke<AutoGambaSnapshot>("wode_auto");
 			if (
 				!value ||
 				typeof value.enabled !== "boolean" ||
@@ -29,8 +29,8 @@ export function useAutoGamba() {
 	useEffect(() => {
 		void refresh();
 		const stops = [
-			desktopClient.subscribe("rollcode_auto", () => void refresh()),
-			desktopClient.subscribe("rollcode_roll", () => void refresh()),
+			desktopClient.subscribe("wode_auto", () => void refresh()),
+			desktopClient.subscribe("wode_roll", () => void refresh()),
 			desktopClient.subscribeTransportState(() => void refresh()),
 		];
 		const interval = setInterval(() => void refresh(), 3000);
@@ -62,9 +62,9 @@ export function useAutoGamba() {
 		error,
 		saving,
 		setEnabled: (enabled: boolean) =>
-			change("rollcode_auto_setting", { enabled }),
+			change("wode_auto_setting", { enabled }),
 		setRule: (mode: AutoStopMode, targetPercent: number) =>
-			change("rollcode_auto_rule", { mode, targetPercent }),
-		stop: (id: string) => change("rollcode_auto_stop", { id }),
+			change("wode_auto_rule", { mode, targetPercent }),
+		stop: (id: string) => change("wode_auto_stop", { id }),
 	};
 }

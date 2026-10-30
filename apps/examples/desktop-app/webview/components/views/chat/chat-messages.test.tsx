@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChatMessage } from "@/lib/chat-schema";
 import { MAX_LIVE_COMMAND_OUTPUT_CHARS } from "@/lib/command-output";
 import { ChatMessages } from "./chat-messages";
-vi.mock("@/components/rollcode/use-response-rolls", () => ({
+vi.mock("@/components/wode/use-response-rolls", () => ({
 	useResponseRolls: () => ({ byMessage: new Map(), gamble: vi.fn() }),
 }));
 

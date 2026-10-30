@@ -1,6 +1,6 @@
 import { loadSqliteDb, type SqliteDb } from "@cline/shared/db";
 import { randomInt } from "node:crypto";
-import { mkdirSync } from "node:fs";
+import { existsSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { homedir } from "node:os";
 import {
@@ -412,8 +412,14 @@ export class RollLedger {
 
 let ledger: RollLedger | undefined;
 export function rollLedger() {
+	const defaultPath = join(homedir(), ".wode", "ledger.sqlite");
+	// Reuse the previous installation's ledger without copying an active SQLite database.
+	const legacyPath = join(homedir(), ".rollcode", "ledger.sqlite");
 	return (ledger ??= new RollLedger(
-		process.env.ROLLCODE_LEDGER_PATH ||
-			join(homedir(), ".rollcode", "ledger.sqlite"),
+		process.env.WODE_LEDGER_PATH ||
+			process.env.ROLLCODE_LEDGER_PATH ||
+			(existsSync(defaultPath) || !existsSync(legacyPath)
+				? defaultPath
+				: legacyPath),
 	));
 }

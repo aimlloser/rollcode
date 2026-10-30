@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef, useState, type CSSProperties, type PointerEvent } from "react";
-import type { PublicGame } from "../../../sidecar/rollcode/game-types";
-import { SLOT_SYMBOLS } from "../../../sidecar/rollcode/slots";
+import type { PublicGame } from "../../../sidecar/wode/game-types";
+import { SLOT_SYMBOLS } from "../../../sidecar/wode/slots";
 
 type SlotState = Extract<PublicGame, { kind: "slots" }>;
 

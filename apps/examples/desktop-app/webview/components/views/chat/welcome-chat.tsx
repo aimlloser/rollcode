@@ -482,7 +482,7 @@ export function WelcomeScreen({
 			welcomeHeader={
 				<div className="cline-view-enter">
 					<div className="rc-hero">
-						<div className="rc-hero-brand">rollcode<span>.</span></div>
+						<div className="rc-hero-brand">wode<span>.</span></div>
 						<h1>What would you like to build?</h1>
 						<p>Tokens are expensive. Feeling lucky? 🎲</p>
 					</div>

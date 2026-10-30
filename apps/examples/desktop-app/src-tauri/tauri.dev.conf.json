@@ -1,5 +1,5 @@
 {
 	"$schema": "https://schema.tauri.app/config/2",
-	"productName": "ROLLCODE Dev",
-	"identifier": "app.rollcode.desktop.dev"
+	"productName": "WODE Dev",
+	"identifier": "app.wode.desktop.dev"
 }

@@ -7,7 +7,7 @@ import {
 	WHEEL,
 	type PublicGame,
 	type RouletteBet,
-} from "../../../sidecar/rollcode/game-types";
+} from "../../../sidecar/wode/game-types";
 type State<K extends PublicGame["kind"]> = Extract<PublicGame, { kind: K }>;
 function betName(bet: string) {
 	return bet.startsWith("n")

@@ -10,9 +10,9 @@ if (Test-Path (Join-Path $taskLocalRust 'toolchains')) {
 }
 if (-not (Get-Command bun -ErrorAction SilentlyContinue)) { throw 'Install Bun 1.4.2 or newer, then rerun this script.' }
 switch ($Mode) {
-    'desktop' { bun run rollcode:desktop }
-    'web' { bun run rollcode }
-    'build' { bun run rollcode:build }
-    'test' { bun run --cwd apps/examples/desktop-app test:rollcode }
+    'desktop' { bun run wode:desktop }
+    'web' { bun run wode }
+    'build' { bun run wode:build }
+    'test' { bun run --cwd apps/examples/desktop-app test:wode }
 }
 exit $LASTEXITCODE

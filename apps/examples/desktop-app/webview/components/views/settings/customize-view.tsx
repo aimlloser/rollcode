@@ -137,7 +137,7 @@ export function CustomizeView({
 						</Button>
 					) : undefined
 				}
-				description="Extend what ROLLCODE can do and how it works. Explore the marketplace for more options."
+				description="Extend what WODE can do and how it works. Explore the marketplace for more options."
 				title="Customize"
 			/>
 

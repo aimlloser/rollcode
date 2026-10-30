@@ -302,13 +302,13 @@ function WelcomeStep({ onContinue }: { onContinue: () => void }) {
 					<AgentWelcomeHero variant="bot-only" />
 				</div>
 				<h1 className="mt-5 text-4xl font-semibold text-foreground">
-					ROLLCODE
+					WODE
 				</h1>
 				<p className="mt-2 text-lg text-foreground">
 					Tokens are expensive. Feeling lucky? 🎲
 				</p>
 				<p className="mt-6 text-md text-muted-foreground">
-					ROLLCODE is powered by Cline’s AI coding agent. It reads your code,
+					WODE is powered by Cline’s AI coding agent. It reads your code,
 					edits files, runs commands, and works through tasks with you — in any
 					project on your machine.
 				</p>
@@ -508,10 +508,10 @@ function ConnectStep({
 					<ArrowLeft className="size-4" />
 				</IconButton>
 				<h1 className="mt-6 text-2xl font-semibold tracking-tight text-foreground">
-					Set up ROLLCODE
+					Set up WODE
 				</h1>
 				<p className="mt-4 text-sm text-muted-foreground">
-					Choose how ROLLCODE connects to models. You can add more providers
+					Choose how WODE connects to models. You can add more providers
 					anytime in Settings.
 				</p>
 			</div>
@@ -930,8 +930,8 @@ function ImportHistoryStep({
 				</h1>
 				<p className="mt-3 text-md text-muted-foreground">
 					{imported
-						? "Your sessions are in ROLLCODE's history now. You can import more anytime from the Sessions page."
-						: `ROLLCODE found ${found.count} session${found.count === 1 ? "" : "s"} from ${toolList} on this machine. Import them to keep your past conversations — and continue them here.`}
+						? "Your sessions are in WODE's history now. You can import more anytime from the Sessions page."
+						: `WODE found ${found.count} session${found.count === 1 ? "" : "s"} from ${toolList} on this machine. Import them to keep your past conversations — and continue them here.`}
 				</p>
 				{imported ? (
 					<Button
