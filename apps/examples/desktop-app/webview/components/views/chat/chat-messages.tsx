@@ -10,7 +10,8 @@ import {
 	MessageScrollerViewport,
 } from "@cline/ui/components/message-scroller";
 import { Loader2 } from "lucide-react";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FollowLatestMessage } from "./follow-latest-message";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -250,6 +251,11 @@ function ChatMessagesImpl({
 			item.message.role === "user" &&
 			!isSystemSteeringMessage(item.message),
 	);
+	const viewportRef = useRef<HTMLDivElement>(null);
+	const contentRef = useRef<HTMLDivElement>(null);
+	const latestUserItem = renderItems[lastUserItemIndex];
+	const latestUserId =
+		latestUserItem?.type === "message" ? latestUserItem.message.id : undefined;
 	// Mid-run the thinking indicator's replacement (the next tool or thinking
 	// row) joins the tight run group, so the indicator must sit at that same
 	// tight offset; only at the start of a run, directly under the user
@@ -559,11 +565,18 @@ function ChatMessagesImpl({
 			scrollMargin={24}
 		>
 			<MessageScroller className="isolate h-full min-h-0 min-w-0">
+				<FollowLatestMessage
+					viewportRef={viewportRef}
+					contentRef={contentRef}
+					latestUserId={latestUserId}
+				/>
 				<MessageScrollerViewport
+					ref={viewportRef}
 					aria-label="Agent conversation"
 					className="h-full min-h-0 min-w-0"
 				>
 					<MessageScrollerContent
+						ref={contentRef}
 						className={cn(
 							"mx-auto w-full min-w-0 max-w-[calc(var(--breakpoint-lg)+3rem)] gap-4",
 							showIdleDetails ? "p-0" : "pt-6 pb-16 pl-12 pr-6",
